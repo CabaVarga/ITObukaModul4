@@ -47,13 +47,12 @@ namespace Dan01.Controllers
             StringBuilder sb = new StringBuilder();
 
             sb.Append("<html>\n\t<head>\n\t\t<title>Moja grupa</title>\n\t</head>\n\t<body>");
-            sb.Append("\n\t\t<table>\n\t\t\t<tr>\n\t\t\t\t<th>Broj</th>\n\t\t\t\t<th>Ime</th>\n\t\t\t\t<th>Prezime</th>\n\t\t\t</tr>");
+            sb.Append("\n\t\t<table>\n\t\t\t<tr><th>Broj</th><th>Ime</th><th>Prezime</th></tr>");
     
             int broj = 1;
             for (int i = 0; i < grupa.GetLength(0); i++)
             {
-                sb.AppendFormat("\n\t\t\t<tr>\n\t\t\t\t<td>{0}</td>\n\t\t\t\t<td>{1}</td>\n\t\t\t\t<td>{2}</td>\n\t\t\t</tr>", broj, grupa[i, 0], grupa[i, 1]);
-                sb.AppendLine();
+                sb.AppendFormat("\n\t\t\t<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>", broj, grupa[i, 0], grupa[i, 1]);
                 broj++;
             }
 
