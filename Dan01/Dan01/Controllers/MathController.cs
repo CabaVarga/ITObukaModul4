@@ -39,6 +39,13 @@ namespace Dan01.Controllers
             return array;
         }
 
+        // The following two methods introduce a dilemma
+        // Is it OK to use GET with a non-empty body or better to use POST
+        // Neither are semantically clean, btw...
+        // The old school approach would be to parameterize the url and use a GET
+        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET (request has body : NO)
+        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST
+
         // POST: /math/sortarray
         [Route("math/sortarray")]
         [HttpPost]
@@ -49,7 +56,7 @@ namespace Dan01.Controllers
             return incoming;            
         }
 
-        // GET: /math/minmax
+        // POST: /math/minmax
         [Route("math/minmax")]
         [HttpPost]
         public Dictionary<string, int> FindMinMax([FromBody]int[] incoming)
