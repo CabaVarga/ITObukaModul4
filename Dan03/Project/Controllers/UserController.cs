@@ -147,6 +147,7 @@ namespace Project.Controllers
             return user;
         }
 
+        /*
         // Zadatak 1.8
         [Route("project/users/changePassword/{id}")]
         [HttpPut]
@@ -163,6 +164,25 @@ namespace Project.Controllers
 
             return user;
         }
+        */
+
+        // Zadatak 1.8, drugi nacin
+        [Route("project/users/changePassword/{id}")]
+        [HttpPut]
+        public UserModel PutChangeUserPassword(int id, [FromUri]string oldPass, [FromUri]string newPass)
+        {
+            UserModel user = GetDB().Find(x => x.id == id);
+            if (user != null)
+            {
+                if (user.password == oldPass)
+                {
+                    user.password = newPass;
+                }
+            }
+
+            return user;
+        }
+
 
         // Zadatak 1.9
         [Route("project/users/{id}")]
