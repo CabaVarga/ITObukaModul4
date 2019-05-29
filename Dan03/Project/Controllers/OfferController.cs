@@ -24,6 +24,7 @@ namespace Project.Controllers
             };
         }
         
+        // Zadatak 3.3
         [Route("project/offers")]
         [HttpGet]
         public List<OfferModel> GetOffers()
