@@ -8,7 +8,7 @@ namespace data_access.Models
 {
     public class DataAccessContext : DbContext
     {
-        public DataAccessContext() : base("DataAccessConnection")
+        public DataAccessContext() : base("MySqlConnection")
         {
             Database.SetInitializer<DataAccessContext>(
                 new DropCreateDatabaseIfModelChanges<DataAccessContext>());
