@@ -225,7 +225,7 @@ namespace rep_uow.Controllers
         {
             var names = db.UserRepository
                 .Get(
-                    filter: u => u.Name != null && u.Name.Substring(0,1) == letter,
+                    filter: u => u.Name != null && u.Name.StartsWith(letter), //u.Name.Substring(0,1) == letter,
                     orderBy: v => v.OrderBy(w => w.Name))
                 .Select( x => x.Name );
 
