@@ -105,5 +105,69 @@ namespace Dan07.Controllers
              
             return Ok(addresses);
         }
+
+        // ZADATAK 2.2 a
+        // POST ili PUT? api/Addresses/{addressId}/add-user/{userId}
+        [ResponseType(typeof(void))]
+        [HttpPut]
+        [Route("api/Addresses/{addressId}/add-user/{userId}")]
+        public IHttpActionResult PutUserToAddressUsers(int addressId, int userId)
+        {
+            Address address = db.AddressRepository.GetByID(addressId);
+            
+            if (address == null)
+            {
+                return BadRequest();
+            }
+
+            User user = db.UserRepository.GetByID(userId);
+
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            // What to do if the User already has an associated address?
+            // Should we just replace it from here?
+            // TEST 1: user has no existing address
+            // TEST 2: user has existing address
+            // TEST: write to debug the User and Address data before and after the Update (PUT)
+            address.Users.Add(user);
+            db.Save();
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        // ZADATAK 2.2 b
+        // DELETE: api/Addresses/{addressId}/remove-user/{userId}
+        [ResponseType(typeof(void))]
+        [HttpDelete]
+        [Route("api/Addresses/{addressId}/remove-user/{userId}")]
+        public IHttpActionResult DeleteUserFromAddressUsers(int addressId, int userId)
+        {
+            Address address = db.AddressRepository.GetByID(addressId);
+
+            if (address == null)
+            {
+                return BadRequest();
+            }
+
+            User user = db.UserRepository.GetByID(userId);
+
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            if (!address.Users.Contains(user))
+            {
+                return BadRequest();
+            }
+            
+            address.Users.Remove(user);
+            db.Save();
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
     }
 }

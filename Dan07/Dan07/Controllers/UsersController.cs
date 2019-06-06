@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -80,5 +81,39 @@ namespace Dan07.Controllers
 
             return Ok(user);
         }
+
+        // ZADATAK 2.1
+        // DELETE: api/Users/{userId}/delete-address/{addressId}
+        [ResponseType(typeof(Address))]
+        [HttpDelete]
+        [Route("api/Users/{userId}/delete-address/{addressId}")]
+        public IHttpActionResult DeleteAddressFromUser(int userId, int addressId)
+        {
+            // check if provided userId is valid
+            User user = db.UserRepository.GetByID(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // check if provided addressId is valid AND is the Users address
+            Address address = db.AddressRepository.GetByID(addressId);
+            if (address == null || user.AddressID != addressId)
+            {
+                return NotFound();
+            }
+
+            user.AddressID = null;
+            db.Save();
+            foreach (var u in address.Users)
+            {
+                Debug.WriteLine("UserID: {0}, Name: {1}, AddressID: {2}", u.UserID, u.Name, u.AddressID);
+            }
+            
+            return Ok(address);
+        }
+
+
+
     }
 }
