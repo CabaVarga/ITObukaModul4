@@ -113,7 +113,53 @@ namespace Dan07.Controllers
             return Ok(address);
         }
 
+        // ZADATAK 2.3
+        // POST api/Users/Full?userid=34&name=csaba&email=csaba@gmail.com&addressid=34&street=balkanska&city=belgrade
+        [HttpPost]
+        [Route("api/Users/Full")]
+        public IHttpActionResult PostNewCompleteUser(int userid, string name, string email, int addressid, string street, string city)
+        {
+            User user = new User() { UserID = userid, Name = name, Email = email };
 
+            // provera postojanja adrese - kako?
+            List<Address> existing = (List<Address>)db.AddressRepository.Get(filter: x => x.Street == street && x.City == city);
+            if (existing.Count == 1)
+            {
+                user.AddressID = existing[0].AddressID;
+            }
 
+            Address address = new Address() { AddressID = addressid, Street = street, City = city };
+            db.AddressRepository.Insert(address);
+            db.UserRepository.Insert(user);
+
+            user.AddressID = addressid;
+
+            db.Save();
+
+            return Ok(user);
+        }
+
+        // Sa prezentacije, slajd 113
+               
+        [ResponseType(typeof(User))]
+        [Route("api/users/{id}/address/{addressId}", Name = "AddAddress")]
+        [HttpPut]
+        public IHttpActionResult PutAddress(int id, int addressId = 0)
+        {
+            User user = db.UserRepository.GetByID(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            Address address = db.AddressRepository.GetByID(addressId);
+            if (address == null)
+            {
+                return NotFound();
+            }
+            user.Address = address;
+            db.UserRepository.Update(user);
+            db.Save(); // automatski ce biti sacuvana i adresa
+            return CreatedAtRoute("AddAddress", new { id = user.UserID, addressId = address.AddressID }, user);
+        }
     }
 }
