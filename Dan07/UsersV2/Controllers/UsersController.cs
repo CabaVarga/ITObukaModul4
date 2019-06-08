@@ -120,22 +120,33 @@ namespace UsersV2.Controllers
         public IHttpActionResult PostNewUserWithAddress([FromBody] User user)
         {
             Address address = user.Address;
-            if (db.AddressRepository.Get().Contains(address))
+
+            List<Address> savedAddress = db.AddressRepository.Get(
+                filter: a => a.Street == address.Street &&
+                    a.City == address.City &&
+                    a.Country == address.Country).ToList();
+
+            /*
+            if
+            (db.AddressRepository.Get().Contains(address))
             {
                 Debug.WriteLine("Address found in repo");
                 db.UserRepository.Insert(user);
                 db.Save();
                 return Ok(user);
             }
+            */
 
-            db.AddressRepository.Insert(address);
+            // db.AddressRepository.Insert(address);
+            if (savedAddress.Count != 0)
+            {
+                user.Address = savedAddress[0];
+            }
+
             db.UserRepository.Insert(user);
 
             db.Save();
             return Ok(user);
-            
-
         }
-
     }
 }
