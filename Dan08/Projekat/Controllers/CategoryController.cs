@@ -9,20 +9,21 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Projekat.Models;
+using Projekat.Repositories;
 
 namespace Projekat.Controllers
 {
     public class CategoryController : ApiController
     {
-        private DataAccessContext db = new DataAccessContext();
+        private UnitOfWork db = new UnitOfWork();
 
         // GET: project/categories
         // ZADATAK 2.2.3
         [Route("project/categories")]
         [HttpGet]
-        public IQueryable<CategoryModel> GetcategoryModels()
+        public IEnumerable<CategoryModel> GetcategoryModels()
         {
-            return db.categoryModels;
+            return db.CategoryRepository.Get();
         }
 
         // GET: project/categories/4
@@ -31,7 +32,7 @@ namespace Projekat.Controllers
         [ResponseType(typeof(CategoryModel))]
         public IHttpActionResult GetCategoryModel(int id)
         {
-            CategoryModel categoryModel = db.categoryModels.Find(id);
+            CategoryModel categoryModel = db.CategoryRepository.GetByID(id);
             if (categoryModel == null)
             {
                 return NotFound();
@@ -56,23 +57,8 @@ namespace Projekat.Controllers
                 return BadRequest();
             }
 
-            db.Entry(categoryModel).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CategoryModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            db.CategoryRepository.Update(categoryModel);
+            db.Save();
 
             return StatusCode(HttpStatusCode.NoContent);
         }
@@ -89,8 +75,8 @@ namespace Projekat.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.categoryModels.Add(categoryModel);
-            db.SaveChanges();
+            db.CategoryRepository.Insert(categoryModel);
+            db.Save();
 
             return CreatedAtRoute("SingleCategoryById", new { id = categoryModel.id }, categoryModel);
         }
@@ -102,30 +88,16 @@ namespace Projekat.Controllers
         [ResponseType(typeof(CategoryModel))]
         public IHttpActionResult DeleteCategoryModel(int id)
         {
-            CategoryModel categoryModel = db.categoryModels.Find(id);
+            CategoryModel categoryModel = db.CategoryRepository.GetByID(id);
             if (categoryModel == null)
             {
                 return NotFound();
             }
 
-            db.categoryModels.Remove(categoryModel);
-            db.SaveChanges();
+            db.CategoryRepository.Delete(categoryModel);
+            db.Save();
 
             return Ok(categoryModel);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool CategoryModelExists(int id)
-        {
-            return db.categoryModels.Count(e => e.id == id) > 0;
         }
     }
 }

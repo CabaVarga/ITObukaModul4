@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -11,8 +12,12 @@ namespace Projekat.Models
 
         public int id { get; set; }
 
+        [Required]
+        [StringLength(45)]
         public string offer_name { get; set; }
 
+        [Required]
+        [StringLength(200)]
         public string offer_description { get; set; }
 
         public DateTime offer_created { get; set; }

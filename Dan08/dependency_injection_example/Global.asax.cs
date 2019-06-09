@@ -11,7 +11,9 @@ namespace dependency_injection_example
     {
         protected void Application_Start()
         {
+            UnityConfig.RegisterComponents();
             GlobalConfiguration.Configure(WebApiConfig.Register);
+
         }
     }
 }

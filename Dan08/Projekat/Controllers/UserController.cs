@@ -10,20 +10,21 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Projekat.Models;
+using Projekat.Repositories;
 
 namespace Projekat.Controllers
 {
     public class UserController : ApiController
     {
-        private DataAccessContext db = new DataAccessContext();
+        private UnitOfWork db = new UnitOfWork();
 
         // GET: /project/users
         // ZADATAK 2.1.3
         [Route("project/users")]
         [HttpGet]
-        public IQueryable<UserModel> GetuserModels()
+        public IEnumerable<UserModel> GetuserModels()
         {
-            return db.userModels;
+            return db.UserRepository.Get();
         }
 
         // GET: project/users/4
@@ -33,7 +34,7 @@ namespace Projekat.Controllers
         [ResponseType(typeof(UserModel))]
         public IHttpActionResult GetUserModel(int id)
         {
-            UserModel userModel = db.userModels.Find(id);
+            UserModel userModel = db.UserRepository.GetByID(id);
             if (userModel == null)
             {
                 return NotFound();
@@ -62,30 +63,18 @@ namespace Projekat.Controllers
             }
 
             // ZAHTEV: ne menjati user_role ni password
-            UserModel savedUser = db.userModels.Find(id);
+            UserModel savedUser = db.UserRepository.GetByID(id);
+            
+
+            string savedPassword = db.UserRepository.GetByID(id).password;
+            UserModel.UserRoles savedRole = db.UserRepository.GetByID(id).user_role;
             // Let's try this one out
-            db.Entry(savedUser).State = EntityState.Detached;
+            userModel.password = savedPassword;
+            userModel.user_role = savedRole;
 
-            userModel.password = savedUser.password;
-            userModel.user_role = savedUser.user_role;
-
-            db.Entry(userModel).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            // savedUser = userModel;
+            db.UserRepository.Update(userModel);
+            db.Save();
 
             return StatusCode(HttpStatusCode.NoContent);
         }
@@ -106,8 +95,8 @@ namespace Projekat.Controllers
             // OVO se zahteva u zadatku 2.1.5
             userModel.user_role = UserModel.UserRoles.ROLE_CUSTOMER;
 
-            db.userModels.Add(userModel);
-            db.SaveChanges();
+            db.UserRepository.Insert(userModel);
+            db.Save();
 
             return CreatedAtRoute("SingleUserById", new { id = userModel.id }, userModel);
         }
@@ -119,33 +108,19 @@ namespace Projekat.Controllers
         [ResponseType(typeof(UserModel))]
         public IHttpActionResult DeleteUserModel(int id)
         {
-            UserModel userModel = db.userModels.Find(id);
+            UserModel userModel = db.UserRepository.GetByID(id);
             if (userModel == null)
             {
                 return NotFound();
             }
 
-            db.userModels.Remove(userModel);
-            db.SaveChanges();
+            db.UserRepository.Delete(userModel);
+            db.Save();
 
             return Ok(userModel);
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool UserModelExists(int id)
-        {
-            return db.userModels.Count(e => e.id == id) > 0;
-        }
-
-        // DONE: CRUD - 2.1.3 (get all), 2.1.4 (get one), 2.1.5 (add new), 2.1.6 (update one)
+         // DONE: CRUD - 2.1.3 (get all), 2.1.4 (get one), 2.1.5 (add new), 2.1.6 (update one)
         // and 2.1.9 (delete one)
         // TODO: 2.1.7 (change role), 2.1.8 (change password), 2.1.9 (return by username)
 
@@ -156,14 +131,14 @@ namespace Projekat.Controllers
         [ResponseType(typeof(UserModel))]
         public IHttpActionResult ChangeUserRoleForUser(int id, UserModel.UserRoles role)
         {
-            UserModel userModel = db.userModels.Find(id);
+            UserModel userModel = db.UserRepository.GetByID(id);
             if (userModel == null)
             {
                 return NotFound();
             }
 
             userModel.user_role = role;
-            db.SaveChanges();
+            db.Save();
 
             return Ok(userModel);
 
@@ -178,7 +153,7 @@ namespace Projekat.Controllers
         public IHttpActionResult ChangePasswordForUser(int id, [FromBody]Dictionary<string, string> oldNewPass)
         // another scheme, by using the URI: [FromUri]string oldPass, [FromUri]string newPass
         {
-            UserModel userModel = db.userModels.Find(id);
+            UserModel userModel = db.UserRepository.GetByID(id);
             if (userModel == null)
             {
                 return NotFound();
@@ -190,7 +165,7 @@ namespace Projekat.Controllers
             }
 
             userModel.password = oldNewPass["newPass"];
-            db.SaveChanges();
+            db.Save();
 
             return Ok(userModel);
 
@@ -204,7 +179,9 @@ namespace Projekat.Controllers
         [ResponseType(typeof(UserModel))]
         public IHttpActionResult GetUserByUsername(string username)
         {
-            List<UserModel> userModel = db.userModels.Where(u => u.username == username).ToList();
+            List<UserModel> userModel = db.UserRepository.Get(
+                filter: u => u.username == username).ToList();
+
             if (userModel.Count == 0)
             {
                 return NotFound();

@@ -9,20 +9,21 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Projekat.Models;
+using Projekat.Repositories;
 
 namespace Projekat.Controllers
 {
     public class OfferController : ApiController
     {
-        private DataAccessContext db = new DataAccessContext();
+        private UnitOfWork db = new UnitOfWork();
 
         // GET: project/offers
         // ZADATAK 2.3.3
         [Route("project/offers")]
         [HttpGet]
-        public IQueryable<OfferModel> GetofferModels()
+        public IEnumerable<OfferModel> GetofferModels()
         {
-            return db.offerModels;
+            return db.OfferRepository.Get();
         }
 
         // GET: project/offers/3
@@ -32,7 +33,7 @@ namespace Projekat.Controllers
         [ResponseType(typeof(OfferModel))]
         public IHttpActionResult GetOfferModel(int id)
         {
-            OfferModel offerModel = db.offerModels.Find(id);
+            OfferModel offerModel = db.OfferRepository.GetByID(id);
             if (offerModel == null)
             {
                 return NotFound();
@@ -59,29 +60,8 @@ namespace Projekat.Controllers
             }
 
 
-            // HMMM something is fishy here... 
-            // btw, it'll throw an exception if savedModel is null hehe
-            OfferModel savedModel = db.offerModels.Find(id);
-            db.Entry(savedModel).State = EntityState.Detached;
-
-            offerModel.offer_status = savedModel.offer_status;
-            db.Entry(offerModel).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OfferModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            db.OfferRepository.Update(offerModel);
+            db.Save();
 
             return StatusCode(HttpStatusCode.NoContent);
         }
@@ -98,8 +78,8 @@ namespace Projekat.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.offerModels.Add(offerModel);
-            db.SaveChanges();
+            db.OfferRepository.Insert(offerModel);
+            db.Save();
 
             return CreatedAtRoute("SingleOfferById", new { id = offerModel.id }, offerModel);
         }
@@ -111,30 +91,16 @@ namespace Projekat.Controllers
         [ResponseType(typeof(OfferModel))]
         public IHttpActionResult DeleteOfferModel(int id)
         {
-            OfferModel offerModel = db.offerModels.Find(id);
+            OfferModel offerModel = db.OfferRepository.GetByID(id);
             if (offerModel == null)
             {
                 return NotFound();
             }
 
-            db.offerModels.Remove(offerModel);
-            db.SaveChanges();
+            db.OfferRepository.Delete(offerModel);
+            db.Save();
 
             return Ok(offerModel);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool OfferModelExists(int id)
-        {
-            return db.offerModels.Count(e => e.id == id) > 0;
         }
 
         // PUT: project/offers/changeOffer/3/status/WAIT_FOR_APPROVAL
@@ -145,30 +111,15 @@ namespace Projekat.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutOfferModel(int id, OfferModel.OfferStatus status)
         {
-            if (db.offerModels.Find(id) == null) 
+            if (db.OfferRepository.GetByID(id) == null) 
             {
                 return NotFound();
             }
 
-            OfferModel savedModel = db.offerModels.Find(id);
+            OfferModel savedModel = db.OfferRepository.GetByID(id);
             savedModel.offer_status = status;
-            db.Entry(savedModel).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OfferModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            // db.OfferRepository.Update(savedModel);
+            db.Save();
 
             return StatusCode(HttpStatusCode.NoContent);
         }
@@ -180,9 +131,8 @@ namespace Projekat.Controllers
         [ResponseType(typeof(IEnumerable<OfferModel>))]
         public IHttpActionResult GetOffersInGivenPriceRange(decimal lowerPrice, decimal upperPrice)
         {
-            return Ok(db.offerModels.
-                Where(o => o.action_price >= lowerPrice && o.action_price <= upperPrice).
-                ToList());
+            return Ok(db.OfferRepository.Get(
+                filter: o => o.action_price >= lowerPrice && o.action_price <= upperPrice));
         }
 
         // ONE LINE OF COMMENT ADDED.
