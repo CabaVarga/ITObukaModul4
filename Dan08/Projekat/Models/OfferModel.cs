@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -47,5 +48,8 @@ namespace Projekat.Models
         public virtual CategoryModel categoryModel { get; set; }
 
         public virtual UserModel userModel { get; set; }
+
+        [JsonIgnore]
+        public ICollection<BillModel> billModels { get; set; }
     }
 }

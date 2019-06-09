@@ -110,7 +110,7 @@ namespace Projekat.Controllers
         [Route("project/offers/changeOffer/{id}/status/{status}")]
         [HttpPut]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutOfferModel(int id, OfferModel.OfferStatus status)
+        public IHttpActionResult PutOfferModelChangeStatus(int id, OfferModel.OfferStatus status)
         {
             if (db.OfferRepository.GetByID(id) == null)
             {

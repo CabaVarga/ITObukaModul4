@@ -17,5 +17,7 @@ namespace Projekat.Models
         public DbSet<UserModel> userModels { get; set; }
         public DbSet<CategoryModel> categoryModels { get; set; }
         public DbSet<OfferModel> offerModels { get; set; }
+        public DbSet<BillModel> billModels { get; set; }
+
     }
 }
