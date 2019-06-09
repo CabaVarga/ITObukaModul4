@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -111,7 +112,7 @@ namespace Projekat.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutOfferModel(int id, OfferModel.OfferStatus status)
         {
-            if (db.OfferRepository.GetByID(id) == null) 
+            if (db.OfferRepository.GetByID(id) == null)
             {
                 return NotFound();
             }
@@ -137,6 +138,82 @@ namespace Projekat.Controllers
 
         // ONE LINE OF COMMENT ADDED.
         // FIRST TIME TO TRY BRANCHING, SAVING THE 'OLD' version
+
+        // ZADATAK 3.2.2
+        // PUT project/offers/{id}/updateCategory
+        [Route("project/offers/{id}/updateCategory")]
+        [HttpPut]
+        [ResponseType(typeof(void))]
+        public IHttpActionResult PutOfferChangeCategory(int id, CategoryModel category)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            OfferModel offerModel = db.OfferRepository.GetByID(id);
+            if (offerModel == null)
+            {
+                return NotFound();
+            }
+
+            CategoryModel existingCategory = db.CategoryRepository.Get(
+                filter: c => c.category_name == category.category_name &&
+                    c.category_description == category.category_description).FirstOrDefault();
+
+            if (existingCategory != null)
+            {
+                offerModel.categoryModel = existingCategory;
+            }
+            else
+            {
+                offerModel.categoryModel = category;
+            }
+
+            db.OfferRepository.Update(offerModel);
+            db.Save();
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        // mislim da iznad ipak treba preko categoryId ali videcemo...
+        // na to me je navelo postojanje zadatka 3.2.4
+
+        // ZADATAK 3.2.4
+        // PUT project/offers/{id}/updateCategory
+        [Route("project/offers/{offerId}/add-created-by/{userId}")]
+        [HttpPut]
+        [ResponseType(typeof(void))]
+        public IHttpActionResult PutOfferAddCreator(int offerId, int userId)
+        {
+            OfferModel offerModel = db.OfferRepository.GetByID(offerId);
+            if (offerModel == null)
+            {
+                return NotFound();
+            }
+
+            // Treba li dodati logiku da se ne moze menjati created-by?
+            UserModel aUserModel = db.UserRepository.GetByID(userId);
+            if (aUserModel == null)
+            {
+                return NotFound();
+            }
+
+            if (aUserModel.user_role != UserModel.UserRoles.ROLE_SELLER)
+            {
+                return BadRequest("User is not authorized to create an offer");
+            }
+
+            // offerModel.offer_created_by = userId;
+            offerModel.userModel = aUserModel;
+            // db.UserRepository.Update(userModel);
+            Debug.WriteLine("OfferModel.UserModel is: " + offerModel.userModel.id);
+            db.OfferRepository.Update(offerModel);
+
+            db.Save();
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
 
     }
 }

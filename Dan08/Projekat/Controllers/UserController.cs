@@ -62,11 +62,10 @@ namespace Projekat.Controllers
                 return BadRequest();
             }
 
+            // Simply for trying out why my commits do not show up....
+
             // ZAHTEV: ne menjati user_role ni password
             UserModel savedUser = db.UserRepository.GetByID(id);
-
-            // Simply for trying out why my commits do not show up....
-            
 
             string savedPassword = db.UserRepository.GetByID(id).password;
             UserModel.UserRoles savedRole = db.UserRepository.GetByID(id).user_role;
@@ -74,9 +73,21 @@ namespace Projekat.Controllers
             userModel.password = savedPassword;
             userModel.user_role = savedRole;
 
+            // lets try brute force...
+            savedUser.first_name = userModel.first_name;
+            savedUser.last_name = userModel.last_name;
+            savedUser.email = userModel.email;
+            savedUser.username = userModel.username;
+
             // savedUser = userModel;
-            db.UserRepository.Update(userModel);
+            // db.UserRepository.Update(userModel);
+            db.UserRepository.Update(savedUser);
             db.Save();
+
+
+
+
+
 
             return StatusCode(HttpStatusCode.NoContent);
         }

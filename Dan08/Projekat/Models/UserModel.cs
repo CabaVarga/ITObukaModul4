@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,8 +9,9 @@ namespace Projekat.Models
 {
     public class UserModel
     {
-        public enum UserRoles { ROLE_CUSTOMER, ROLE_ADMIN, ROLE_SELLE };
+        public enum UserRoles { ROLE_CUSTOMER, ROLE_ADMIN, ROLE_SELLER };
 
+        [Key]
         public int id { get; set; }
 
         [Required]
@@ -32,6 +34,10 @@ namespace Projekat.Models
         [StringLength(45)]
         public string email { get; set; }
 
-        public UserRoles user_role { get; set; }               
+        public UserRoles user_role { get; set; }
+        
+        // Navigation properties
+        [JsonIgnore]
+        public IEnumerable<OfferModel> offerModels { get; set; }
     }
 }
