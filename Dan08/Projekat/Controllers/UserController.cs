@@ -64,6 +64,8 @@ namespace Projekat.Controllers
 
             // ZAHTEV: ne menjati user_role ni password
             UserModel savedUser = db.UserRepository.GetByID(id);
+
+            // Simply for trying out why my commits do not show up....
             
 
             string savedPassword = db.UserRepository.GetByID(id).password;
