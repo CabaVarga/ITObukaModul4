@@ -84,11 +84,6 @@ namespace Projekat.Controllers
             db.UserRepository.Update(savedUser);
             db.Save();
 
-
-
-
-
-
             return StatusCode(HttpStatusCode.NoContent);
         }
 

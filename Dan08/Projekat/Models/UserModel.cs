@@ -38,7 +38,7 @@ namespace Projekat.Models
         
         // Navigation properties
         [JsonIgnore]
-        public ICollection<OfferModel> offerModels { get; set; }
+        public virtual ICollection<OfferModel> offerModels { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<BillModel> billModels { get; set; }

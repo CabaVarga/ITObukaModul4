@@ -50,6 +50,6 @@ namespace Projekat.Models
         public virtual UserModel userModel { get; set; }
 
         [JsonIgnore]
-        public ICollection<BillModel> billModels { get; set; }
+        public virtual ICollection<BillModel> billModels { get; set; }
     }
 }

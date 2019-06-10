@@ -14,7 +14,7 @@ using Projekat.Repositories;
 
 namespace Projekat.Controllers
 {
-    public class BillModelsController : ApiController
+    public class BillController : ApiController
     {
         private UnitOfWork db = new UnitOfWork();
 
@@ -210,6 +210,41 @@ namespace Projekat.Controllers
              */
 
             return Ok(bills);
+        }
+
+        // ZADATAK 3.3.10
+        // GET project/bills/findByCategory/{categoryId}
+        [Route("project/bills/findByCategory/{categoryId}")]
+        [HttpGet]
+        [ResponseType(typeof(IEnumerable<BillModel>))]
+        public IHttpActionResult GetBillsByCategory(int categoryId)
+        {
+            CategoryModel category = db.CategoryRepository.GetByID(categoryId);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            List<OfferModel> offers = category.offerModels.ToList();
+            List<BillModel> bills = new List<BillModel>();
+
+            foreach (var offer in offers)
+            {
+                bills.AddRange(offer.billModels);
+            }
+
+            return Ok(bills);
+        }
+
+        // ZADATAK 3.3.11
+        // GET project/bills/findByDate/{startDate}/and/{endDate}
+        [Route("project/bills/findByDate/{startDate}/and/{endDate}")]
+        [HttpGet]
+        [ResponseType(typeof(IEnumerable<BillModel>))]
+        public IHttpActionResult GetBillsInDateRange(DateTime startDate, DateTime endDate)
+        {
+            return Ok(db.BillRepository.Get(
+                filter: b => b.billCreated >= startDate && b.billCreated <= endDate));
         }
     }
 }
