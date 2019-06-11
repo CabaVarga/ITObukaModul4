@@ -13,6 +13,7 @@ namespace Projekat.Repositories
         private GenericRepository<OfferModel> offerRepository;
         private GenericRepository<CategoryModel> categoryRepository;
         private GenericRepository<BillModel> billRepository;
+        private GenericRepository<VoucherModel> voucherRepository;
         
         public GenericRepository<UserModel> UserRepository
         {
@@ -58,6 +59,18 @@ namespace Projekat.Repositories
                     this.billRepository = new GenericRepository<BillModel>(context);
                 }
                 return billRepository;
+            }
+        }
+
+        public GenericRepository<VoucherModel> VoucherRepository
+        {
+            get
+            {
+                if (this.voucherRepository == null)
+                {
+                    this.voucherRepository = new GenericRepository<VoucherModel>(context);
+                }
+                return voucherRepository;
             }
         }
 

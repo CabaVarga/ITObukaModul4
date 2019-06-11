@@ -51,5 +51,8 @@ namespace Projekat.Models
 
         [JsonIgnore]
         public virtual ICollection<BillModel> billModels { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<VoucherModel> voucherModels { get; set; }
     }
 }

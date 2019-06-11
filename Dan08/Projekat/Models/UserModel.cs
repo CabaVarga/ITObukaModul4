@@ -35,7 +35,7 @@ namespace Projekat.Models
         public string email { get; set; }
 
         public UserRoles user_role { get; set; }
-        
+
         // Navigation properties
         [JsonIgnore]
         public virtual ICollection<OfferModel> offerModels { get; set; }
@@ -43,5 +43,8 @@ namespace Projekat.Models
         [JsonIgnore]
         public virtual ICollection<BillModel> billModels { get; set; }
         // public IEnumerable<BillModel> billModels { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<VoucherModel> voucherModels { get; set; }
     }
 }
