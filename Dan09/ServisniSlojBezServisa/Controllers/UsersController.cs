@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ServisniSlojBezServisa.Models;
-using ServisniSlojBezServisa.Repositories;
 using ServisniSlojBezServisa.Services;
 
 namespace ServisniSlojBezServisa.Controllers
@@ -108,6 +101,15 @@ namespace ServisniSlojBezServisa.Controllers
             // db.Save();
 
             return Ok(user);
+        }
+
+        // Added functionality
+        [ResponseType(typeof(IEnumerable<User>))]
+        [Route("api/users/by-name/{name}")]
+        [HttpGet]
+        public IHttpActionResult GetUsersByName (string name)
+        {
+            return Ok(usersService.GetUsersByName(name));
         }
     }
 }

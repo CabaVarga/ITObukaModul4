@@ -1,9 +1,6 @@
 ﻿using ServisniSlojBezServisa.Models;
 using ServisniSlojBezServisa.Repositories;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace ServisniSlojBezServisa.Services
 {
@@ -65,6 +62,13 @@ namespace ServisniSlojBezServisa.Services
             }
 
             return user;
+        }
+
+        // Added functionality
+        public IEnumerable<User> GetUsersByName(string name)
+        {
+            return db.UsersRepository.Get(
+                filter: u => u.Name == name);
         }
     }
 }

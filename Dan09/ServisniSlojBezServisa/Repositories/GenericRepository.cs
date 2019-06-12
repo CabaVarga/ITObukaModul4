@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Web;
 
 namespace ServisniSlojBezServisa.Repositories
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
-        internal DbContext context;
         internal DbSet<TEntity> dbSet;
+        internal DbContext context;
 
         public GenericRepository(DbContext context)
         {

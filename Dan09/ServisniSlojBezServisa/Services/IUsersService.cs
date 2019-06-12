@@ -1,23 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using ServisniSlojBezServisa.Models;
 
 namespace ServisniSlojBezServisa.Services
 {
-    
-        public interface IUsersService
-        {
-            IEnumerable<User> GetAllUsers();
 
-            User GetUser(int id);
+    public interface IUsersService
+    {
+        IEnumerable<User> GetAllUsers();
 
-            User CreateUser(User user);
+        User GetUser(int id);
 
-            User UpdateUser(int id, string name, string email);
+        User CreateUser(User user);
 
-            User DeleteUser(int id);
-        }
-    
+        User UpdateUser(int id, string name, string email);
+
+        User DeleteUser(int id);
+
+        // Added functionality
+        IEnumerable<User> GetUsersByName(string name);
+    }
+
 }
