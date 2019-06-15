@@ -60,6 +60,9 @@
     <Compile Include="Models\ProjectTest.cs" />
     <Compile Include="Models\EmployeeProjectTest.cs" />
     <Compile Include="Models\ProjectContextTest.cs" />
+    <Compile Include="Services\EmployeesServiceTest.cs" />
+    <Compile Include="Services\ProjectsServiceTest.cs" />
+    <Compile Include="Services\EmployeeProjectsServiceTest.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
