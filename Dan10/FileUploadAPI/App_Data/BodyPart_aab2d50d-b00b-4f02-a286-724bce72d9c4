@@ -1,0 +1,151 @@
+<Project>
+  <Name>BankClient</Name>
+  <ProjectItem type="NClass.DiagramEditor.ClassDiagram.Diagram" assembly="NClass.DiagramEditor, Version=2.4.1823.0, Culture=neutral, PublicKeyToken=null">
+    <Name>Client</Name>
+    <Language>CSharp</Language>
+    <Entities>
+      <Entity type="Class">
+        <Name>Client</Name>
+        <Access>Public</Access>
+        <Location left="248" top="57" />
+        <Size width="258" height="415" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">protected internal int ClientID</Member>
+        <Member type="Property">public string Ime { get; set; }</Member>
+        <Member type="Property">public string Prezime { get; set; }</Member>
+        <Member type="Property">public int JMBG { get; set; }</Member>
+        <Member type="Property">public char Pol { get; set; }</Member>
+        <Member type="Property">public DateTime DatumRodjenja { get; set; }</Member>
+        <Member type="Property">public Adresa MestoRodjenja { get; set; }</Member>
+        <Member type="Property">public Adresa MestoPrebivalista { get; set; }</Member>
+        <Member type="Property">public EmailAdresa Email { get; set; }</Member>
+        <Member type="Property">public Telefon[] Telefoni { get; set; }</Member>
+        <Member type="Property">public Racun[] Racuni { get; set; }</Member>
+        <Member type="Property">public PlatnaKartica[] PlatneKartice { get; set; }</Member>
+        <Member type="Property">public Kredit[] Krediti { get; set; }</Member>
+        <Member type="Property">public Usluga[] OstaleUsluge { get; set; }</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Racun</Name>
+        <Access>Public</Access>
+        <Location left="557" top="240" />
+        <Size width="162" height="216" />
+        <Collapsed>True</Collapsed>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>PlatnaKartica</Name>
+        <Access>Public</Access>
+        <Location left="557" top="297" />
+        <Size width="162" height="216" />
+        <Collapsed>True</Collapsed>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Kredit</Name>
+        <Access>Public</Access>
+        <Location left="557" top="359" />
+        <Size width="162" height="216" />
+        <Collapsed>True</Collapsed>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Usluga</Name>
+        <Access>Public</Access>
+        <Location left="861" top="297" />
+        <Size width="162" height="216" />
+        <Collapsed>True</Collapsed>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Klijent</Name>
+        <Access>Public</Access>
+        <Location left="357" top="740" />
+        <Size width="162" height="216" />
+        <Collapsed>True</Collapsed>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>FizickoLice</Name>
+        <Access>Public</Access>
+        <Location left="153" top="864" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">int newField</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>PravnoLice</Name>
+        <Access>Public</Access>
+        <Location left="357" top="864" />
+        <Size width="162" height="216" />
+        <Collapsed>True</Collapsed>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Poljoprivrednik</Name>
+        <Access>Public</Access>
+        <Location left="557" top="864" />
+        <Size width="162" height="216" />
+        <Collapsed>True</Collapsed>
+        <Modifier>None</Modifier>
+      </Entity>
+    </Entities>
+    <Relationships>
+      <Relationship type="Association" first="0" second="1">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>511</X>
+          <Y>264</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartRole>Ima</StartRole>
+        <StartMultiplicity>1</StartMultiplicity>
+        <EndMultiplicity>0..*</EndMultiplicity>
+      </Relationship>
+      <Relationship type="Association" first="0" second="2">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>534</X>
+          <Y>322</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+        <StartMultiplicity>1</StartMultiplicity>
+        <EndMultiplicity>0..*</EndMultiplicity>
+      </Relationship>
+      <Relationship type="Generalization" first="3" second="4">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Generalization" first="1" second="4">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>645</X>
+          <Y>205</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Generalization" first="2" second="4">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Generalization" first="6" second="5">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Generalization" first="7" second="5">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Generalization" first="8" second="5">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+    </Relationships>
+  </ProjectItem>
+</Project>
