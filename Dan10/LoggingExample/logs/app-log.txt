@@ -1,0 +1,5 @@
+2019-06-15 17:10:37.5910|INFO|LoggingExample.Controllers.UsersController|Requesting usernames
+2019-06-15 17:16:15.0243|INFO|LoggingExample.Controllers.UsersController|Requesting usernames
+2019-06-15 17:16:16.2144|INFO|LoggingExample.Controllers.UsersController|Requesting usernames
+2019-06-15 17:27:03.1844|INFO|LoggingExample.Controllers.UsersController|Requesting usernames
+2019-06-15 17:31:24.2573|DEBUG|LoggingExample.Controllers.UsersController|Requesting usernames

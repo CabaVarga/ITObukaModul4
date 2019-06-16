@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileUploadAPI", "FileUpload
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggingExample", "LoggingExample\LoggingExample.csproj", "{EF70E890-FDD5-4963-9CDB-FF79F5934763}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Homework", "Homework\Homework.csproj", "{C9058E73-1285-49C4-96CA-1AF35C1694CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{EF70E890-FDD5-4963-9CDB-FF79F5934763}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF70E890-FDD5-4963-9CDB-FF79F5934763}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF70E890-FDD5-4963-9CDB-FF79F5934763}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9058E73-1285-49C4-96CA-1AF35C1694CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9058E73-1285-49C4-96CA-1AF35C1694CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9058E73-1285-49C4-96CA-1AF35C1694CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9058E73-1285-49C4-96CA-1AF35C1694CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
