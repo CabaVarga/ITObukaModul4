@@ -20,7 +20,10 @@ namespace Homework.Repositories
         [Dependency]
         public IGenericRepository<User> UsersRepository { get; set; }
 
-         public void Save()
+        [Dependency]
+        public IGenericRepository<FileResource> FileResourcesRepository { get; set; }
+
+        public void Save()
         {
             context.SaveChanges();
         }

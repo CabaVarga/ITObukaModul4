@@ -111,9 +111,52 @@ namespace Homework.Services
 
         private bool EmailExists(string email)
         {
-            return db.UsersRepository.Get(
-                        filter: u => u.Email == email)
-                    .Count() == 0;  
+            return db
+                .UsersRepository.Get(filter: u => u.Email == email)
+                .Count() == 0;  
+        }
+
+        // Borko
+        public IEnumerable<User> GetUsersFromFile(string rootpath)
+        {
+            StreamReader sr = null;
+            List<User> users = new List<User>();
+
+            try
+            {
+                sr = new StreamReader(rootpath);
+
+                while (true)
+                {
+                    string line = sr.ReadLine();
+
+                    if (line == null)
+                    {
+                        break;
+                    }
+                    int position = line.IndexOf(",");
+                    if (position < 0)
+                    {
+                        continue;
+                    }
+                    User newUser = new User();
+                    newUser.Name = line.Substring(0, position);
+                    newUser.Email = line.Substring(position + 1);
+                    users.Add(newUser);
+                }
+                return users;
+            }
+            //catch (IOException e)
+            //{
+            //    Console.WriteLine(e.Message);
+            //}
+            finally
+            {
+                if (sr != null)
+                {
+                    sr.Close();
+                }
+            }
         }
     }
 }

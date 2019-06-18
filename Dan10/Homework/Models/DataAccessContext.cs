@@ -15,5 +15,6 @@ namespace Homework.Models
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<FileResource> FileResources { get; set; }
     }
 }

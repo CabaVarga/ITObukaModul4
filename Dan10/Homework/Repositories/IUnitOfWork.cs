@@ -9,6 +9,7 @@ namespace Homework.Repositories
     public interface IUnitOfWork
     {
         IGenericRepository<User> UsersRepository { get;  }
+        IGenericRepository<FileResource> FileResourcesRepository { get; }
 
         void Save();
     }

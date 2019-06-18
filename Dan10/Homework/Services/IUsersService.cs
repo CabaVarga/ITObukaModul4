@@ -19,5 +19,8 @@ namespace Homework.Services
         User DeleteUser(int id);
 
         IEnumerable<User> CreateNewUsersFromFile(string path);
+
+        // borko
+        IEnumerable<User> GetUsersFromFile(string rootpath);
     }
 }

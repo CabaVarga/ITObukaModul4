@@ -22,10 +22,12 @@ namespace Homework
             container.RegisterType<IUnitOfWork, UnitOfWork>();
 
             container.RegisterType<IGenericRepository<User>, GenericRepository<User>>();
+            container.RegisterType<IGenericRepository<FileResource>, GenericRepository<FileResource>>();
 
             container.RegisterType<DbContext, DataAccessContext>(new HierarchicalLifetimeManager());
 
             container.RegisterType<IUsersService, UsersService>();
+            container.RegisterType<IFileResourcesService, FileResourcesService>();
             
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
         }
