@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Projekat.Models
 {
-    public class BillModel
+    public class Bill
     {
         [Key]
         public int id { get; set; }
@@ -18,8 +18,8 @@ namespace Projekat.Models
         public DateTime billCreated { get; set; }
 
         // Navigation properties:
-        public virtual OfferModel offerModel { get; set; }
+        public virtual Offer offerModel { get; set; }
 
-        public virtual UserModel userModel { get; set; }
+        public virtual User userModel { get; set; }
     }
 }

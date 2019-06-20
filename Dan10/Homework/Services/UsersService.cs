@@ -1,5 +1,6 @@
 ﻿using Homework.Models;
 using Homework.Repositories;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,8 +9,10 @@ using System.Web;
 
 namespace Homework.Services
 {
+
     public class UsersService : IUsersService
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         private IUnitOfWork db;
 
         public UsersService(IUnitOfWork db)
@@ -83,83 +86,45 @@ namespace Homework.Services
             {
                 string line;
                 string[] data;
+                int lineNum = 0;
 
                 while ((line = sr.ReadLine()) != null)
                 {
+                    lineNum++;
+
                     data = line.Split(',');
-                    users.Add(new User() { Name = data[0], Email = data[1] });
+
+                    string name = data[0];
+                    string email = data[1];
+
+                    if (EmailExists(email))
+                    {
+                        // User will not be created - log the line number in the input file
+                        logger.Error(String.Format("Creating user at line {0} failed. Reason: duplicate email address.", lineNum));
+                        continue;
+                    }
+
+                    User createdUser = new User() { Name = name, Email = email };
+                    users.Add(createdUser);
+                    db.UsersRepository.Insert(createdUser);
                 }
             }
 
-            if (users.Count != 0)
-            {
-                BulkCreateUsers(users);
-            }
+            db.Save();
 
             return users;
         }
 
-        private void BulkCreateUsers(IEnumerable<User> users)
-        {
-            foreach (var user in users)
-            {
-                // UNUTAR OBRADE
-                db.UsersRepository.Insert(user);
-            }
-
-            db.Save();
-        }
         #region Zadatak 1.3
         private bool EmailExists(string email)
         {
-            return db
+             bool count = db
                 .UsersRepository.Get(filter: u => u.Email == email)
-                .Count() != 0;  
+                .Count() != 0;
+            return count;
         }
         #endregion
 
-
-        // Borko
-        public IEnumerable<User> GetUsersFromFile(string rootpath)
-        {
-            StreamReader sr = null;
-            List<User> users = new List<User>();
-
-            try
-            {
-                sr = new StreamReader(rootpath);
-
-                while (true)
-                {
-                    string line = sr.ReadLine();
-
-                    if (line == null)
-                    {
-                        break;
-                    }
-                    int position = line.IndexOf(",");
-                    if (position < 0)
-                    {
-                        continue;
-                    }
-                    User newUser = new User();
-                    newUser.Name = line.Substring(0, position);
-                    newUser.Email = line.Substring(position + 1);
-                    users.Add(newUser);
-                }
-                return users;
-            }
-            //catch (IOException e)
-            //{
-            //    Console.WriteLine(e.Message);
-            //}
-            finally
-            {
-                if (sr != null)
-                {
-                    sr.Close();
-                }
-            }
-        }
+        
     }
 }

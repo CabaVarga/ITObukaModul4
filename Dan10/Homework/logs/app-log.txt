@@ -1,0 +1,8 @@
+2019-06-21 01:04:30.6553|ERROR|Homework.Services.UsersService|Creating user at line 1 failed. Reason: duplicate email address.
+2019-06-21 01:04:30.6953|ERROR|Homework.Services.UsersService|Creating user at line 2 failed. Reason: duplicate email address.
+2019-06-21 01:04:34.8225|ERROR|Homework.Services.UsersService|Creating user at line 1 failed. Reason: duplicate email address.
+2019-06-21 01:04:34.8225|ERROR|Homework.Services.UsersService|Creating user at line 2 failed. Reason: duplicate email address.
+2019-06-21 01:04:34.9675|ERROR|Homework.Services.UsersService|Creating user at line 3 failed. Reason: duplicate email address.
+2019-06-21 01:04:34.9675|ERROR|Homework.Services.UsersService|Creating user at line 4 failed. Reason: duplicate email address.
+2019-06-21 01:04:34.9805|ERROR|Homework.Services.UsersService|Creating user at line 5 failed. Reason: duplicate email address.
+2019-06-21 01:04:34.9805|ERROR|Homework.Services.UsersService|Creating user at line 6 failed. Reason: duplicate email address.

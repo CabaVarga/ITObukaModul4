@@ -8,10 +8,10 @@ using System.Web;
 
 namespace Projekat.Models
 {
-    public class OfferModel
-    {
-        public enum OfferStatus { WAIT_FOR_APPROVING, APPROVED, DECLINED, EXPIRED };
+    public enum OfferStatus { WAIT_FOR_APPROVING, APPROVED, DECLINED, EXPIRED };
 
+    public class Offer
+    {
         [Key]
         public int id { get; set; }
 
@@ -45,14 +45,14 @@ namespace Projekat.Models
 
         // Navigation properties
         // WITHOUT VIRTUAL JSON WON'T SERIALIZE THE RELATED ENTITIES?
-        public virtual CategoryModel categoryModel { get; set; }
+        public virtual Category categoryModel { get; set; }
 
-        public virtual UserModel userModel { get; set; }
-
-        [JsonIgnore]
-        public virtual ICollection<BillModel> billModels { get; set; }
+        public virtual User userModel { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<VoucherModel> voucherModels { get; set; }
+        public virtual ICollection<Bill> billModels { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Voucher> voucherModels { get; set; }
     }
 }

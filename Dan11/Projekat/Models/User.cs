@@ -7,10 +7,10 @@ using System.Web;
 
 namespace Projekat.Models
 {
-    public class UserModel
-    {
-        public enum UserRoles { ROLE_CUSTOMER, ROLE_ADMIN, ROLE_SELLER };
+    public enum UserRoles { ROLE_CUSTOMER, ROLE_ADMIN, ROLE_SELLER };
 
+    public class User
+    {
         [Key]
         public int id { get; set; }
 
@@ -38,13 +38,13 @@ namespace Projekat.Models
 
         // Navigation properties
         [JsonIgnore]
-        public virtual ICollection<OfferModel> offerModels { get; set; }
+        public virtual ICollection<Offer> offerModels { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<BillModel> billModels { get; set; }
+        public virtual ICollection<Bill> billModels { get; set; }
         // public IEnumerable<BillModel> billModels { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<VoucherModel> voucherModels { get; set; }
+        public virtual ICollection<Voucher> voucherModels { get; set; }
     }
 }

@@ -20,17 +20,17 @@ namespace Projekat.Controllers
 
         // GET: api/BillModels
         [Route("project/bills")]
-        public IEnumerable<BillModel> GetbillModels()
+        public IEnumerable<Bill> GetbillModels()
         {
             return db.BillRepository.Get();
         }
 
         // GET: api/BillModels/5
         [Route("project/bills/{id}", Name = "SingleBillById")]
-        [ResponseType(typeof(BillModel))]
+        [ResponseType(typeof(Bill))]
         public IHttpActionResult GetBillModel(int id)
         {
-            BillModel billModel = db.BillRepository.GetByID(id);
+            Bill billModel = db.BillRepository.GetByID(id);
             if (billModel == null)
             {
                 return NotFound();
@@ -42,7 +42,7 @@ namespace Projekat.Controllers
         // PUT: api/BillModels/5
         [Route("project/bills/{id}")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutBillModel(int id, BillModel billModel)
+        public IHttpActionResult PutBillModel(int id, Bill billModel)
         {
             if (!ModelState.IsValid)
             {
@@ -54,7 +54,7 @@ namespace Projekat.Controllers
                 return BadRequest();
             }
 
-            BillModel billToChange = db.BillRepository.GetByID(id);
+            Bill billToChange = db.BillRepository.GetByID(id);
             if (billToChange == null)
             {
                 return NotFound();
@@ -75,8 +75,8 @@ namespace Projekat.Controllers
 
         // POST: api/BillModels
         [Route("project/bills")]
-        [ResponseType(typeof(BillModel))]
-        public IHttpActionResult PostBillModel(BillModel billModel)
+        [ResponseType(typeof(Bill))]
+        public IHttpActionResult PostBillModel(Bill billModel)
         {
             if (!ModelState.IsValid)
             {
@@ -91,10 +91,10 @@ namespace Projekat.Controllers
 
         // DELETE: api/BillModels/5
         [Route("project/bills/{id}")]
-        [ResponseType(typeof(BillModel))]
+        [ResponseType(typeof(Bill))]
         public IHttpActionResult DeleteBillModel(int id)
         {
-            BillModel billModel = db.BillRepository.GetByID(id);
+            Bill billModel = db.BillRepository.GetByID(id);
             if (billModel == null)
             {
                 return NotFound();
@@ -113,14 +113,14 @@ namespace Projekat.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutConnectBillAndOffer(int billId, int offerId)
         {
-            BillModel bill = db.BillRepository.GetByID(billId);
+            Bill bill = db.BillRepository.GetByID(billId);
 
             if (bill == null)
             {
                 return NotFound();
             }
 
-            OfferModel offer = db.OfferRepository.GetByID(offerId);
+            Offer offer = db.OfferRepository.GetByID(offerId);
 
             if (offer == null)
             {
@@ -141,23 +141,23 @@ namespace Projekat.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutConnectBillAnUser(int billId, int userId)
         {
-            BillModel bill = db.BillRepository.GetByID(billId);
+            Bill bill = db.BillRepository.GetByID(billId);
 
             if (bill == null)
             {
                 return NotFound();
             }
 
-            UserModel user = db.UserRepository.GetByID(userId);
+            User user = db.UserRepository.GetByID(userId);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            if (user.user_role != UserModel.UserRoles.ROLE_CUSTOMER)
+            if (user.user_role != Models.User.UserRoles.ROLE_CUSTOMER)
             {
-                return BadRequest("User is not a customer");
+                return base.BadRequest("User is not a customer");
             }
 
             bill.userModel = user;
@@ -171,10 +171,10 @@ namespace Projekat.Controllers
         // GET project/bills/findByBuyer/{buyerId}
         [Route("project/bills/findByBuyer/{buyerId}")]
         [HttpGet]
-        [ResponseType(typeof(IEnumerable<BillModel>))]
+        [ResponseType(typeof(IEnumerable<Bill>))]
         public IHttpActionResult GetAllBillsOfUser(int buyerId)
         {
-            UserModel buyer = db.UserRepository.GetByID(buyerId);
+            User buyer = db.UserRepository.GetByID(buyerId);
 
             if (buyer == null)
             {
@@ -188,7 +188,7 @@ namespace Projekat.Controllers
 
             // THIS ONLY WORKED AFTER CHANGED NAVIGATION PROPERTY FROM IENUMERABLE TO ICOLLECTION...
             // see here: https://stackoverflow.com/a/32997694/4486196
-            IEnumerable<BillModel> bills =
+            IEnumerable<Bill> bills =
                 db.UserRepository.
                 Get(
                     filter: u => u.id == buyerId,
@@ -216,17 +216,17 @@ namespace Projekat.Controllers
         // GET project/bills/findByCategory/{categoryId}
         [Route("project/bills/findByCategory/{categoryId}")]
         [HttpGet]
-        [ResponseType(typeof(IEnumerable<BillModel>))]
+        [ResponseType(typeof(IEnumerable<Bill>))]
         public IHttpActionResult GetBillsByCategory(int categoryId)
         {
-            CategoryModel category = db.CategoryRepository.GetByID(categoryId);
+            Category category = db.CategoryRepository.GetByID(categoryId);
             if (category == null)
             {
                 return NotFound();
             }
 
-            List<OfferModel> offers = category.offerModels.ToList();
-            List<BillModel> bills = new List<BillModel>();
+            List<Offer> offers = category.offerModels.ToList();
+            List<Bill> bills = new List<Bill>();
 
             foreach (var offer in offers)
             {
@@ -240,7 +240,7 @@ namespace Projekat.Controllers
         // GET project/bills/findByDate/{startDate}/and/{endDate}
         [Route("project/bills/findByDate/{startDate}/and/{endDate}")]
         [HttpGet]
-        [ResponseType(typeof(IEnumerable<BillModel>))]
+        [ResponseType(typeof(IEnumerable<Bill>))]
         public IHttpActionResult GetBillsInDateRange(DateTime startDate, DateTime endDate)
         {
             return Ok(db.BillRepository.Get(

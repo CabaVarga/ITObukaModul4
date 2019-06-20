@@ -9,14 +9,14 @@ namespace Projekat.Services
 {
     interface IUsersService
     {
-        IEnumerable<UserModel> GetAllUsers();
+        IEnumerable<User> GetAllUsers();
 
-        UserModel GetUser(int id);
+        User GetUser(int id);
 
-        UserModel CreateUser(UserModel user);
+        User CreateUser(User user);
 
-        UserModel UpdateUser(int id, string name, string email, string city);
+        User UpdateUser(int id, string name, string email, string city);
 
-        UserModel DeleteUser(int id);
+        User DeleteUser(int id);
     }
 }

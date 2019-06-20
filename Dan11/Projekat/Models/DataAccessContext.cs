@@ -14,11 +14,11 @@ namespace Projekat.Models
                 new DropCreateDatabaseIfModelChanges<DataAccessContext>());
         }
 
-        public DbSet<UserModel> userModels { get; set; }
-        public DbSet<CategoryModel> categoryModels { get; set; }
-        public DbSet<OfferModel> offerModels { get; set; }
-        public DbSet<BillModel> billModels { get; set; }
-        public DbSet<VoucherModel> voucherModels { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Offer> Offers { get; set; }
+        public DbSet<Bill> Bills { get; set; }
+        public DbSet<Voucher> Voucher { get; set; }
 
     }
 }

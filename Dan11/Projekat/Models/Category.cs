@@ -7,7 +7,7 @@ using System.Web;
 
 namespace Projekat.Models
 {
-    public class CategoryModel
+    public class Category
     {
         [Key]
         public int id { get; set; }
@@ -22,6 +22,6 @@ namespace Projekat.Models
 
         // Navigation properties
         [JsonIgnore]
-        public virtual ICollection<OfferModel> offerModels { get; set; }
+        public virtual ICollection<Offer> offerModels { get; set; }
     }
 }

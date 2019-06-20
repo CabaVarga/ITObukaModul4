@@ -102,12 +102,15 @@ namespace Homework.Controllers
         [HttpPost]
         public async Task<HttpResponseMessage> PostUsersFromFile()
         {
+            Dictionary<string, string> responseMessage = new Dictionary<string, string>();
+            IEnumerable<User> loadedUsers = new List<User>();
+
             // Check if the request contains multipart/form-data.
             if (!Request.Content.IsMimeMultipartContent())
             {
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
             }
-
+            
             string root = HttpContext.Current.Server.MapPath("~/App_Data");
 
             var provider = new MultipartFormDataStreamProvider(root);
@@ -127,12 +130,16 @@ namespace Homework.Controllers
                     // Maybe connect with Service here?
 
                     // ZADATAK 1.2:
-                    usersService.CreateNewUsersFromFile(file.LocalFileName);
-
-                    Trace.WriteLine("Users created successfully");
+                    // TODO Add some helper message to the response, based on the output
+                    // Something like "23 new Users successfully loaded into database"
+                    // Loading failed for x users, check the logs for the details
+                    loadedUsers = usersService.CreateNewUsersFromFile(file.LocalFileName);
                 }
 
-                return Request.CreateResponse(HttpStatusCode.OK);
+                responseMessage.Add("Result",
+                    String.Format("{0} users successfully loaded into the database", loadedUsers.Count()));
+
+                return Request.CreateResponse(HttpStatusCode.OK, responseMessage);
             }
 
             catch (System.Exception e)
@@ -141,50 +148,6 @@ namespace Homework.Controllers
             }
         }
         #endregion
-
-
-
-
-        // borko
-        [Route("api/borko")]
-        [HttpPost]
-        public async Task<HttpResponseMessage> PostFormData()
-        {
-            // Check if the request contains multipart/form-data.
-            if (!Request.Content.IsMimeMultipartContent())
-            {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
-            }
-            string root = HttpContext.Current.Server.MapPath("~/App_Data");//gde se cuva fajl na serveru
-            var provider = new MultipartFormDataStreamProvider(root);//klasa koja daje string do foldera gde se fajl smesta i dodeljuje novo ime fajlu
-            string serverpath = null;
-            try
-            {
-                // Read the form data.
-                await Request.Content.ReadAsMultipartAsync(provider);
-                // This illustrates how to get the file names. //ovo treba staviti u service sloj i odatle se dobija gde je fajl sacuvan i kako se zove
-                foreach (MultipartFileData file in provider.FileData)
-                {
-                    serverpath = file.LocalFileName;
-                }
-
-                // IEnumerable<User> usersFromFile = usersService.CreateNewUsersFromFile(serverpath);
-                IEnumerable<User> usersFromFile = usersService.GetUsersFromFile(serverpath);
-
-                foreach (var user in usersFromFile)
-                {
-                    Trace.WriteLine(user.Name);
-                    usersService.CreateUser(user);
-                }
-
-                return Request.CreateResponse(HttpStatusCode.OK);
-            }
-            catch (System.Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
-            }
-        }
-
 
         /// <summary>
         /// Variation of the exercise from the class.

@@ -22,7 +22,7 @@ namespace Projekat.Controllers
         // ZADATAK 2.1.3
         [Route("project/users")]
         [HttpGet]
-        public IEnumerable<UserModel> GetuserModels()
+        public IEnumerable<User> GetuserModels()
         {
             return db.UsersRepository.Get();
         }
@@ -31,10 +31,10 @@ namespace Projekat.Controllers
         // ZADATAK 2.1.4
         [Route("project/users/{id}")]
         [HttpGet]
-        [ResponseType(typeof(UserModel))]
+        [ResponseType(typeof(User))]
         public IHttpActionResult GetUserModel(int id)
         {
-            UserModel userModel = db.UsersRepository.GetByID(id);
+            User userModel = db.UsersRepository.GetByID(id);
             if (userModel == null)
             {
                 return NotFound();
@@ -48,7 +48,7 @@ namespace Projekat.Controllers
         [Route("project/users/{id}")]
         [HttpPut]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutUserModel(int id, UserModel userModel)
+        public IHttpActionResult PutUserModel(int id, User userModel)
         {
             if (!ModelState.IsValid)
             {
@@ -65,10 +65,10 @@ namespace Projekat.Controllers
             // Simply for trying out why my commits do not show up....
 
             // ZAHTEV: ne menjati user_role ni password
-            UserModel savedUser = db.UsersRepository.GetByID(id);
+            User savedUser = db.UsersRepository.GetByID(id);
 
             string savedPassword = db.UsersRepository.GetByID(id).password;
-            UserModel.UserRoles savedRole = db.UsersRepository.GetByID(id).user_role;
+            User.UserRoles savedRole = db.UsersRepository.GetByID(id).user_role;
             // Let's try this one out
             userModel.password = savedPassword;
             userModel.user_role = savedRole;
@@ -90,9 +90,9 @@ namespace Projekat.Controllers
         // POST: project/users
         // ZADATAK 2.1.5
         [Route("project/users")]
-        [ResponseType(typeof(UserModel))]
+        [ResponseType(typeof(User))]
         [HttpPost]
-        public IHttpActionResult PostUserModel(UserModel userModel)
+        public IHttpActionResult PostUserModel(User userModel)
         {
             if (!ModelState.IsValid)
             {
@@ -101,7 +101,7 @@ namespace Projekat.Controllers
             }
 
             // OVO se zahteva u zadatku 2.1.5
-            userModel.user_role = UserModel.UserRoles.ROLE_CUSTOMER;
+            userModel.user_role = Models.User.UserRoles.ROLE_CUSTOMER;
 
             db.UsersRepository.Insert(userModel);
             db.Save();
@@ -113,10 +113,10 @@ namespace Projekat.Controllers
         // ZADATAK 2.1.9
         [Route("project/users/{id}", Name = "SingleUserById")]
         [HttpDelete]
-        [ResponseType(typeof(UserModel))]
+        [ResponseType(typeof(User))]
         public IHttpActionResult DeleteUserModel(int id)
         {
-            UserModel userModel = db.UsersRepository.GetByID(id);
+            User userModel = db.UsersRepository.GetByID(id);
             if (userModel == null)
             {
                 return NotFound();
@@ -136,10 +136,10 @@ namespace Projekat.Controllers
         // ZADATAK 2.1.7
         [Route("project/users/change/{id}/role/{role}")]
         [HttpPut]
-        [ResponseType(typeof(UserModel))]
-        public IHttpActionResult ChangeUserRoleForUser(int id, UserModel.UserRoles role)
+        [ResponseType(typeof(User))]
+        public IHttpActionResult ChangeUserRoleForUser(int id, User.UserRoles role)
         {
-            UserModel userModel = db.UsersRepository.GetByID(id);
+            User userModel = db.UsersRepository.GetByID(id);
             if (userModel == null)
             {
                 return NotFound();
@@ -157,11 +157,11 @@ namespace Projekat.Controllers
         // ZADATAK 2.1.8
         [Route("project/users/changePassword/{id}")]
         [HttpPut]
-        [ResponseType(typeof(UserModel))]
+        [ResponseType(typeof(User))]
         public IHttpActionResult ChangePasswordForUser(int id, [FromBody]Dictionary<string, string> oldNewPass)
         // another scheme, by using the URI: [FromUri]string oldPass, [FromUri]string newPass
         {
-            UserModel userModel = db.UsersRepository.GetByID(id);
+            User userModel = db.UsersRepository.GetByID(id);
             if (userModel == null)
             {
                 return NotFound();
@@ -184,10 +184,10 @@ namespace Projekat.Controllers
         // ZADATAK 2.10
         [Route("project/users/by-username/{username}")]
         [HttpGet]
-        [ResponseType(typeof(UserModel))]
+        [ResponseType(typeof(User))]
         public IHttpActionResult GetUserByUsername(string username)
         {
-            List<UserModel> userModel = db.UsersRepository.Get(
+            List<User> userModel = db.UsersRepository.Get(
                 filter: u => u.username == username).ToList();
 
             if (userModel.Count == 0)

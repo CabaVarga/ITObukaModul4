@@ -9,14 +9,14 @@ namespace Projekat.Services
 {
     interface IVouchersService
     {
-        IEnumerable<VoucherModel> GetAllVouchers();
+        IEnumerable<Voucher> GetAllVouchers();
 
-        VoucherModel GetVoucher(int id);
+        Voucher GetVoucher(int id);
 
-        VoucherModel CreateVoucher(VoucherModel voucher);
+        Voucher CreateVoucher(Voucher voucher);
 
-        VoucherModel UpdateVoucher(int id, string name, string email, string city);
+        Voucher UpdateVoucher(int id, string name, string email, string city);
 
-        VoucherModel DeleteVoucher(int id);
+        Voucher DeleteVoucher(int id);
     }
 }

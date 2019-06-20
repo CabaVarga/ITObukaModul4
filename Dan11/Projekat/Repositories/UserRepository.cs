@@ -7,13 +7,13 @@ using System.Data.Entity;
 
 namespace Projekat.Repositories
 {
-    public class UserRepository : GenericRepository<UserModel>
+    public class UserRepository : GenericRepository<User>
     {
         public UserRepository(DataAccessContext context) : base(context) { }
 
-        public IQueryable<UserModel> GetSomeUsers()
+        public IQueryable<User> GetSomeUsers()
         {
-            var stuff = context.userModels.
+            var stuff = context.Users.
                 Include(u => u.offerModels).
                 Select(u => new
                 {

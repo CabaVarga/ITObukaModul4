@@ -16,17 +16,17 @@ namespace Projekat.Services
             this.db = db;
         }
 
-        public IEnumerable<UserModel> GetAllUsers()
+        public IEnumerable<User> GetAllUsers()
         {
             return db.UsersRepository.Get();
         }
 
-        public UserModel GetUser(int id)
+        public User GetUser(int id)
         {
             return db.UsersRepository.GetByID(id);
         }
 
-        public UserModel CreateUser(UserModel user)
+        public User CreateUser(User user)
         {
             db.UsersRepository.Insert(user);
             db.Save();
@@ -34,10 +34,10 @@ namespace Projekat.Services
             return user;
         }
 
-        public UserModel UpdateUser(int id, string firstName, string lastName, 
+        public User UpdateUser(int id, string firstName, string lastName, 
             string email, string city)
         {
-            UserModel user = db.UsersRepository.GetByID(id);
+            User user = db.UsersRepository.GetByID(id);
 
             if (user != null)
             {
@@ -53,9 +53,9 @@ namespace Projekat.Services
             return user;
         }
 
-        public UserModel DeleteUser(int id)
+        public User DeleteUser(int id)
         {
-            UserModel user = db.UsersRepository.GetByID(id);
+            User user = db.UsersRepository.GetByID(id);
 
             if (user != null)
             {

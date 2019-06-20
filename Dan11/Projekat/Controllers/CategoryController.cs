@@ -21,7 +21,7 @@ namespace Projekat.Controllers
         // ZADATAK 2.2.3
         [Route("project/categories")]
         [HttpGet]
-        public IEnumerable<CategoryModel> GetcategoryModels()
+        public IEnumerable<Category> GetcategoryModels()
         {
             return db.CategoryRepository.Get();
         }
@@ -29,10 +29,10 @@ namespace Projekat.Controllers
         // GET: project/categories/4
         // ZADATAK 2.2.7
         [Route("project/categories/{id}", Name = "SingleCategoryById")]
-        [ResponseType(typeof(CategoryModel))]
+        [ResponseType(typeof(Category))]
         public IHttpActionResult GetCategoryModel(int id)
         {
-            CategoryModel categoryModel = db.CategoryRepository.GetByID(id);
+            Category categoryModel = db.CategoryRepository.GetByID(id);
             if (categoryModel == null)
             {
                 return NotFound();
@@ -45,7 +45,7 @@ namespace Projekat.Controllers
         // ZADATAK 2.2.5
         [Route("project/categories/{id}")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutCategoryModel(int id, CategoryModel categoryModel)
+        public IHttpActionResult PutCategoryModel(int id, Category categoryModel)
         {
             if (!ModelState.IsValid)
             {
@@ -67,8 +67,8 @@ namespace Projekat.Controllers
         // ZADATAK: 2.2.4
         [Route("project/categories")]
         [HttpPost]
-        [ResponseType(typeof(CategoryModel))]
-        public IHttpActionResult PostCategoryModel(CategoryModel categoryModel)
+        [ResponseType(typeof(Category))]
+        public IHttpActionResult PostCategoryModel(Category categoryModel)
         {
             if (!ModelState.IsValid)
             {
@@ -85,10 +85,10 @@ namespace Projekat.Controllers
         // ZADATAK: 2.2.6
         [Route("project/categories/{id}")]
         [HttpDelete]
-        [ResponseType(typeof(CategoryModel))]
+        [ResponseType(typeof(Category))]
         public IHttpActionResult DeleteCategoryModel(int id)
         {
-            CategoryModel categoryModel = db.CategoryRepository.GetByID(id);
+            Category categoryModel = db.CategoryRepository.GetByID(id);
             if (categoryModel == null)
             {
                 return NotFound();

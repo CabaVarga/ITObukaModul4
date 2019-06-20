@@ -22,7 +22,7 @@ namespace Projekat.Controllers
         // ZADATAK 2.3.3
         [Route("project/offers")]
         [HttpGet]
-        public IEnumerable<OfferModel> GetofferModels()
+        public IEnumerable<Offer> GetofferModels()
         {
             return db.OfferRepository.Get();
         }
@@ -31,10 +31,10 @@ namespace Projekat.Controllers
         // ZADATAK 2.3.7
         [HttpGet]
         [Route("project/offers/{id}", Name = "SingleOfferById")]
-        [ResponseType(typeof(OfferModel))]
+        [ResponseType(typeof(Offer))]
         public IHttpActionResult GetOfferModel(int id)
         {
-            OfferModel offerModel = db.OfferRepository.GetByID(id);
+            Offer offerModel = db.OfferRepository.GetByID(id);
             if (offerModel == null)
             {
                 return NotFound();
@@ -48,7 +48,7 @@ namespace Projekat.Controllers
         [Route("project/offers/{id}")]
         [HttpPut]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutOfferModel(int id, OfferModel offerModel)
+        public IHttpActionResult PutOfferModel(int id, Offer offerModel)
         {
             if (!ModelState.IsValid)
             {
@@ -71,8 +71,8 @@ namespace Projekat.Controllers
         // ZADATAK 2.3.4
         [Route("project/offers")]
         [HttpPost]
-        [ResponseType(typeof(OfferModel))]
-        public IHttpActionResult PostOfferModel(OfferModel offerModel)
+        [ResponseType(typeof(Offer))]
+        public IHttpActionResult PostOfferModel(Offer offerModel)
         {
             if (!ModelState.IsValid)
             {
@@ -89,10 +89,10 @@ namespace Projekat.Controllers
         // ZADATAK 2.3.6
         [Route("project/offers/{id}")]
         [HttpDelete]
-        [ResponseType(typeof(OfferModel))]
+        [ResponseType(typeof(Offer))]
         public IHttpActionResult DeleteOfferModel(int id)
         {
-            OfferModel offerModel = db.OfferRepository.GetByID(id);
+            Offer offerModel = db.OfferRepository.GetByID(id);
             if (offerModel == null)
             {
                 return NotFound();
@@ -110,14 +110,14 @@ namespace Projekat.Controllers
         [Route("project/offers/changeOffer/{id}/status/{status}")]
         [HttpPut]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutOfferModelChangeStatus(int id, OfferModel.OfferStatus status)
+        public IHttpActionResult PutOfferModelChangeStatus(int id, Offer.OfferStatus status)
         {
             if (db.OfferRepository.GetByID(id) == null)
             {
                 return NotFound();
             }
 
-            OfferModel savedModel = db.OfferRepository.GetByID(id);
+            Offer savedModel = db.OfferRepository.GetByID(id);
             savedModel.offer_status = status;
             // db.OfferRepository.Update(savedModel);
             db.Save();
@@ -129,7 +129,7 @@ namespace Projekat.Controllers
         // ZADATAK 2.3.9
         [Route("project/offers/findByPrice/{lowerPrice}/and/{upperPrice}/")]
         [HttpGet]
-        [ResponseType(typeof(IEnumerable<OfferModel>))]
+        [ResponseType(typeof(IEnumerable<Offer>))]
         public IHttpActionResult GetOffersInGivenPriceRange(decimal lowerPrice, decimal upperPrice)
         {
             return Ok(db.OfferRepository.Get(
@@ -144,20 +144,20 @@ namespace Projekat.Controllers
         [Route("project/offers/{id}/updateCategory")]
         [HttpPut]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutOfferChangeCategory(int id, CategoryModel category)
+        public IHttpActionResult PutOfferChangeCategory(int id, Category category)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            OfferModel offerModel = db.OfferRepository.GetByID(id);
+            Offer offerModel = db.OfferRepository.GetByID(id);
             if (offerModel == null)
             {
                 return NotFound();
             }
 
-            CategoryModel existingCategory = db.CategoryRepository.Get(
+            Category existingCategory = db.CategoryRepository.Get(
                 filter: c => c.category_name == category.category_name &&
                     c.category_description == category.category_description).FirstOrDefault();
 
@@ -186,22 +186,22 @@ namespace Projekat.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutOfferAddCreator(int offerId, int userId)
         {
-            OfferModel offerModel = db.OfferRepository.GetByID(offerId);
+            Offer offerModel = db.OfferRepository.GetByID(offerId);
             if (offerModel == null)
             {
                 return NotFound();
             }
 
             // Treba li dodati logiku da se ne moze menjati created-by?
-            UserModel aUserModel = db.UserRepository.GetByID(userId);
+            User aUserModel = db.UserRepository.GetByID(userId);
             if (aUserModel == null)
             {
                 return NotFound();
             }
 
-            if (aUserModel.user_role != UserModel.UserRoles.ROLE_SELLER)
+            if (aUserModel.user_role != Models.User.UserRoles.ROLE_SELLER)
             {
-                return BadRequest("User is not authorized to create an offer");
+                return base.BadRequest("User is not authorized to create an offer");
             }
 
             // offerModel.offer_created_by = userId;

@@ -4,11 +4,11 @@ namespace Projekat.Repositories
 {
     public interface IUnitOfWork
     {
-        IGenericRepository<BillModel> BillsRepository { get; }
-        IGenericRepository<CategoryModel> CategoriesRepository { get; }
-        IGenericRepository<OfferModel> OffersRepository { get; }
-        IGenericRepository<UserModel> UsersRepository { get; }
-        IGenericRepository<VoucherModel> VouchersRepository { get; }
+        IGenericRepository<Bill> BillsRepository { get; }
+        IGenericRepository<Category> CategoriesRepository { get; }
+        IGenericRepository<Offer> OffersRepository { get; }
+        IGenericRepository<User> UsersRepository { get; }
+        IGenericRepository<Voucher> VouchersRepository { get; }
 
 
         void Save();

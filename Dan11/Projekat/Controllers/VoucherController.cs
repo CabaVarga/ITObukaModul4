@@ -19,17 +19,17 @@ namespace Projekat.Controllers
 
         // GET: api/Voucher
         [Route("project/vouchers")]
-        public IEnumerable<VoucherModel> GetvoucherModels()
+        public IEnumerable<Voucher> GetvoucherModels()
         {
             return db.VoucherRepository.Get();
         }
 
         // GET: api/Voucher/5
         [Route("project/vouchers/{id}", Name = "SingleVoucherById")]
-        [ResponseType(typeof(VoucherModel))]
+        [ResponseType(typeof(Voucher))]
         public IHttpActionResult GetVoucherModel(int id)
         {
-            VoucherModel voucherModel = db.VoucherRepository.GetByID(id);
+            Voucher voucherModel = db.VoucherRepository.GetByID(id);
             if (voucherModel == null)
             {
                 return NotFound();
@@ -41,7 +41,7 @@ namespace Projekat.Controllers
         // PUT: api/Voucher/5
         [Route("project/vouchers/{id}")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutVoucherModel(int id, VoucherModel voucherModel)
+        public IHttpActionResult PutVoucherModel(int id, Voucher voucherModel)
         {
             if (!ModelState.IsValid)
             {
@@ -61,8 +61,8 @@ namespace Projekat.Controllers
 
         // POST: api/Voucher
         [Route("project/vouchers")]
-        [ResponseType(typeof(VoucherModel))]
-        public IHttpActionResult PostVoucherModel(VoucherModel voucherModel)
+        [ResponseType(typeof(Voucher))]
+        public IHttpActionResult PostVoucherModel(Voucher voucherModel)
         {
             if (!ModelState.IsValid)
             {
@@ -77,10 +77,10 @@ namespace Projekat.Controllers
 
         // DELETE: api/Voucher/5
         [Route("project/vouchers/{id}")]
-        [ResponseType(typeof(VoucherModel))]
+        [ResponseType(typeof(Voucher))]
         public IHttpActionResult DeleteVoucherModel(int id)
         {
-            VoucherModel voucherModel = db.VoucherRepository.GetByID(id);
+            Voucher voucherModel = db.VoucherRepository.GetByID(id);
             if (voucherModel == null)
             {
                 return NotFound();
@@ -108,7 +108,7 @@ namespace Projekat.Controllers
                 return NotFound();
             }
 
-            OfferModel offer = db.OfferRepository.GetByID(offerId);
+            Offer offer = db.OfferRepository.GetByID(offerId);
 
             if (offer == null)
             {
@@ -136,16 +136,16 @@ namespace Projekat.Controllers
                 return NotFound();
             }
 
-            UserModel user = db.UserRepository.GetByID(userId);
+            User user = db.UserRepository.GetByID(userId);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            if (user.user_role != UserModel.UserRoles.ROLE_CUSTOMER)
+            if (user.user_role != Models.User.UserRoles.ROLE_CUSTOMER)
             {
-                return BadRequest("User is not a customer");
+                return base.BadRequest("User is not a customer");
             }
 
             voucher.userModel = user;

@@ -9,66 +9,66 @@ namespace Projekat.Repositories
     public class UnitOfWork : IDisposable, IUnitOfWork
     {
         private DataAccessContext context = new DataAccessContext();
-        private GenericRepository<UserModel> usersRepository;
-        private GenericRepository<OfferModel> offersRepository;
-        private GenericRepository<CategoryModel> categoriesRepository;
-        private GenericRepository<BillModel> billsRepository;
-        private GenericRepository<VoucherModel> vouchersRepository;
+        private GenericRepository<User> usersRepository;
+        private GenericRepository<Offer> offersRepository;
+        private GenericRepository<Category> categoriesRepository;
+        private GenericRepository<Bill> billsRepository;
+        private GenericRepository<Voucher> vouchersRepository;
         
-        public GenericRepository<UserModel> UsersRepository
+        public GenericRepository<User> UsersRepository
         {
             get
             {
                 if (this.usersRepository == null)
                 {
-                    this.usersRepository = new GenericRepository<UserModel>(context);
+                    this.usersRepository = new GenericRepository<User>(context);
                 }
                 return usersRepository;
             }
         }
 
-        public GenericRepository<OfferModel> OffersRepository
+        public GenericRepository<Offer> OffersRepository
         {
             get
             {
                 if (this.offersRepository == null)
                 {
-                    this.offersRepository = new GenericRepository<OfferModel>(context);
+                    this.offersRepository = new GenericRepository<Offer>(context);
                 }
                 return offersRepository;
             }
         }
-        public GenericRepository<CategoryModel> CategoriesRepository
+        public GenericRepository<Category> CategoriesRepository
         {
             get
             {
                 if (this.categoriesRepository == null)
                 {
-                    this.categoriesRepository = new GenericRepository<CategoryModel>(context);
+                    this.categoriesRepository = new GenericRepository<Category>(context);
                 }
                 return categoriesRepository;
             }
         }
 
-        public GenericRepository<BillModel> BillsRepository
+        public GenericRepository<Bill> BillsRepository
         {
             get
             {
                 if (this.billsRepository == null)
                 {
-                    this.billsRepository = new GenericRepository<BillModel>(context);
+                    this.billsRepository = new GenericRepository<Bill>(context);
                 }
                 return billsRepository;
             }
         }
 
-        public GenericRepository<VoucherModel> VouchersRepository
+        public GenericRepository<Voucher> VouchersRepository
         {
             get
             {
                 if (this.vouchersRepository == null)
                 {
-                    this.vouchersRepository = new GenericRepository<VoucherModel>(context);
+                    this.vouchersRepository = new GenericRepository<Voucher>(context);
                 }
                 return vouchersRepository;
             }
