@@ -103,18 +103,21 @@ namespace Homework.Services
         {
             foreach (var user in users)
             {
+                // UNUTAR OBRADE
                 db.UsersRepository.Insert(user);
             }
 
             db.Save();
         }
-
+        #region Zadatak 1.3
         private bool EmailExists(string email)
         {
             return db
                 .UsersRepository.Get(filter: u => u.Email == email)
-                .Count() == 0;  
+                .Count() != 0;  
         }
+        #endregion
+
 
         // Borko
         public IEnumerable<User> GetUsersFromFile(string rootpath)

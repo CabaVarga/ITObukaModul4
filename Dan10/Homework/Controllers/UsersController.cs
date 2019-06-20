@@ -23,6 +23,72 @@ namespace Homework.Controllers
             this.fileResourcesService = fileResourcesService;
         }
 
+        #region Functionality for 1.1 - 1.4
+        [Route("api/users")]
+        public IHttpActionResult GetUsers()
+        {
+            return Ok(usersService.GetAllUsers());
+        }
+
+        [Route("api/users/{id}")]
+        public IHttpActionResult GetUserByID(int id)
+        {
+            User user = usersService.GetUser(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+        }
+
+        [Route("api/users")]
+        [HttpPost]
+        public IHttpActionResult PostUser([FromBody] User user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            User createdUser = usersService.CreateUser(user);
+
+            if (createdUser == null)
+            {
+                return BadRequest("Could not create user. Invalid email");
+            }
+
+            return Ok(createdUser);
+        }
+
+        [Route("api/users/{id}")]
+        [HttpPut]
+        public IHttpActionResult PostUser(int id, [FromBody] User user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            if (id != user.Id)
+            {
+                return BadRequest();
+            }
+
+            User updatedUser = usersService.UpdateUser(id, user.Name, user.Email, user.City);
+
+            if (updatedUser == null)
+            {
+                return BadRequest("Could not create user. Invalid email");
+            }
+
+            return Ok(updatedUser);
+        }
+
+        #endregion
+
+        #region Zadatak 1.1
         /// <summary>
         /// It will create new users and save them to the database, based on the file provided by the user.
         /// The file should be an ordinary textual file, with the following structure:
@@ -32,7 +98,7 @@ namespace Homework.Controllers
         /// 
         /// </summary>
         /// <returns>OK HTTP Status code, empty payload</returns>
-        [Route("api/users")]
+        [Route("api/users/from-file")]
         [HttpPost]
         public async Task<HttpResponseMessage> PostUsersFromFile()
         {
@@ -59,6 +125,8 @@ namespace Homework.Controllers
                     // FULLY LOAD FILE, provide UsersService method with localFileName as argument,
                     // Let the service do all the work...
                     // Maybe connect with Service here?
+
+                    // ZADATAK 1.2:
                     usersService.CreateNewUsersFromFile(file.LocalFileName);
 
                     Trace.WriteLine("Users created successfully");
@@ -72,7 +140,7 @@ namespace Homework.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
             }
         }
-
+        #endregion
 
 
 
@@ -180,6 +248,9 @@ namespace Homework.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
             }
         }
+        #region Zadatak 2
+
+        #endregion
 
     }
 }

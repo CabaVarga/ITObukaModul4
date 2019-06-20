@@ -20,6 +20,8 @@ namespace Homework.Services
 
         IEnumerable<User> CreateNewUsersFromFile(string path);
 
+        // FileResource GetFileResourceForUser(int id);
+
         // borko
         IEnumerable<User> GetUsersFromFile(string rootpath);
     }

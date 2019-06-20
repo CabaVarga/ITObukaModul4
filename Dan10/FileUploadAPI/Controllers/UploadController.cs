@@ -93,9 +93,10 @@ namespace FileUploadAPI.Controllers
             }
         }
 
+        #region Zadatak 2
         [Route("api/download/{filename}")]
         [HttpGet]
-        public async Task<HttpResponseMessage> GetUploadedFileByFilename(string filename)
+        public IHttpActionResult GetUploadedFileByFilename(string filename)
         {
             // 1. Build the path
             string root = HttpContext.Current.Server.MapPath("~/App_Data");
@@ -106,18 +107,26 @@ namespace FileUploadAPI.Controllers
             // 3. Check if file exists
             if (!File.Exists(root))
             {
-                return Request.CreateResponse(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
             // 4. Start building the multipart message
             var response = Request.CreateResponse();
-            var messsage = new MultipartFormDataContent();
-            messsage.Add(
-                new StreamContent(File.OpenRead(root)));
+            var message = new MultipartFormDataContent();
+            var fileContent = new StreamContent(File.OpenRead(root));
+            fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("inline")
+            {
+                FileName = filename
+            };
 
-            //
-            // temporary
-            return Request.CreateResponse(HttpStatusCode.OK);
+            message.Add(fileContent);
+
+            // 5. Add multipart message to 'main' message
+            
+            response.Content = message;
+
+            // 6. Return as IHttpActionResult by calling the ResponseMessage method
+            return ResponseMessage(response);
 
         }
 
@@ -141,7 +150,7 @@ namespace FileUploadAPI.Controllers
             };
             return ResponseMessage(result);
         }
-
+        #endregion
 
     }
 }
