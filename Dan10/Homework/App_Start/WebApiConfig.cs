@@ -19,6 +19,11 @@ namespace Homework
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.Routes.MapHttpRoute(
+                name: "FileResource",
+                routeTemplate: "api/fileresources/{id}"
+            );
         }
     }
 }

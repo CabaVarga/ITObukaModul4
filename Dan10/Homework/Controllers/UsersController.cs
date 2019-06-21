@@ -157,13 +157,15 @@ namespace Homework.Controllers
         /// <returns>Status code with empty payload.</returns>
         [Route("api/users/{id}/upload")]
         [HttpPost]
-        public async Task<HttpResponseMessage> UploadFileForUser(int id)
+        public async Task<IHttpActionResult> UploadFileForUser(int id)
         {
             // Check if user exists
             User owner = usersService.GetUser(id);
+            int fileId = 0;
+
             if (owner == null)
             {
-                return Request.CreateResponse(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
             // Check if the request contains multipart/form-data.
@@ -196,19 +198,22 @@ namespace Homework.Controllers
 
                     // If a user can create a FileResource, should I add that capability to the UsersService?
 
-                    fileResourcesService.CreateFileResource(fileResource); // probably need method with parameters
+                    var fr = fileResourcesService.CreateFileResource(fileResource); // probably need method with parameters
+                    fileId = fr.Id;
+                    return CreatedAtRoute("FileResource", new { id = fileId }, fr);
 
                 }
+
                 var returnMessage = Request.CreateResponse(HttpStatusCode.OK);
+                
                 // We need to add info about the newly created resource...
                 // By using the CreatedAtRoute() method, probably
-
-                return returnMessage;   // Request.CreateResponse(HttpStatusCode.OK);
+                return Ok();   // Request.CreateResponse(HttpStatusCode.OK);
             }
 
             catch (System.Exception e)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+                return InternalServerError(e);
             }
         }
         #region Zadatak 2
