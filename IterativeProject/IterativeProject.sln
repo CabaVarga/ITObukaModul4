@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project_1st", "Project_1st\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project_2nd", "Project_2nd\Project_2nd.csproj", "{6254FCEE-1691-4729-B786-EDFBD53A3302}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project_3rd", "Projekat\Project_3rd.csproj", "{F4691EC2-8098-44DA-9822-A24BE6731CB1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project_3rd", "Project_3rd\Project_3rd.csproj", "{F4691EC2-8098-44DA-9822-A24BE6731CB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
