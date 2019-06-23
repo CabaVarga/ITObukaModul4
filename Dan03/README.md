@@ -5,4 +5,4 @@ Odgovarajuci kontroleri.
 REST endpoints.
 Biznis logika uvodjenjem *user_role* i *offer_status*
 
-Osnova aplikacija za kasnije nadogradnje nakon uvodjenja rada sa Entity Framework-om, pa uvodjenja Repozitorijuma i UnitOfWork pa servisa.
+Osnovna aplikacija za kasnije nadogradnje nakon uvodjenja rada sa Entity Framework-om, pa uvodjenja Repozitorijuma i UnitOfWork pa servisa.
