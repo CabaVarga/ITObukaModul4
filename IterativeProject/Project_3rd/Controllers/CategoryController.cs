@@ -15,7 +15,12 @@ namespace Project_3rd.Controllers
 {
     public class CategoryController : ApiController
     {
-        private UnitOfWork db = new UnitOfWork();
+        private IUnitOfWork db;
+
+        public CategoryController(IUnitOfWork db)
+        {
+            this.db = db;
+        }
 
         // GET: project/categories
         // ZADATAK 2.2.3
@@ -23,7 +28,7 @@ namespace Project_3rd.Controllers
         [HttpGet]
         public IEnumerable<CategoryModel> GetcategoryModels()
         {
-            return db.CategoryRepository.Get();
+            return db.CategoriesRepository.Get();
         }
 
         // GET: project/categories/4
@@ -32,7 +37,7 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(CategoryModel))]
         public IHttpActionResult GetCategoryModel(int id)
         {
-            CategoryModel categoryModel = db.CategoryRepository.GetByID(id);
+            CategoryModel categoryModel = db.CategoriesRepository.GetByID(id);
             if (categoryModel == null)
             {
                 return NotFound();
@@ -57,7 +62,7 @@ namespace Project_3rd.Controllers
                 return BadRequest();
             }
 
-            db.CategoryRepository.Update(categoryModel);
+            db.CategoriesRepository.Update(categoryModel);
             db.Save();
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -75,7 +80,7 @@ namespace Project_3rd.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.CategoryRepository.Insert(categoryModel);
+            db.CategoriesRepository.Insert(categoryModel);
             db.Save();
 
             return CreatedAtRoute("SingleCategoryById", new { id = categoryModel.id }, categoryModel);
@@ -88,13 +93,13 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(CategoryModel))]
         public IHttpActionResult DeleteCategoryModel(int id)
         {
-            CategoryModel categoryModel = db.CategoryRepository.GetByID(id);
+            CategoryModel categoryModel = db.CategoriesRepository.GetByID(id);
             if (categoryModel == null)
             {
                 return NotFound();
             }
 
-            db.CategoryRepository.Delete(categoryModel);
+            db.CategoriesRepository.Delete(categoryModel);
             db.Save();
 
             return Ok(categoryModel);

@@ -16,13 +16,18 @@ namespace Project_3rd.Controllers
 {
     public class BillController : ApiController
     {
-        private UnitOfWork db = new UnitOfWork();
+        private IUnitOfWork db;
+
+        public BillController(IUnitOfWork db)
+        {
+            this.db = db;
+        }
 
         // GET: api/BillModels
         [Route("project/bills")]
         public IEnumerable<BillModel> GetbillModels()
         {
-            return db.BillRepository.Get();
+            return db.BillsRepository.Get();
         }
 
         // GET: api/BillModels/5
@@ -30,7 +35,7 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(BillModel))]
         public IHttpActionResult GetBillModel(int id)
         {
-            BillModel billModel = db.BillRepository.GetByID(id);
+            BillModel billModel = db.BillsRepository.GetByID(id);
             if (billModel == null)
             {
                 return NotFound();
@@ -54,7 +59,7 @@ namespace Project_3rd.Controllers
                 return BadRequest();
             }
 
-            BillModel billToChange = db.BillRepository.GetByID(id);
+            BillModel billToChange = db.BillsRepository.GetByID(id);
             if (billToChange == null)
             {
                 return NotFound();
@@ -62,12 +67,12 @@ namespace Project_3rd.Controllers
 
             // IF THE EXCEPTION HAPPENS, try different stuff...
             // Just as I thought...
-            // db.BillRepository.Update(billModel);
+            // db.BillsRepository.Update(billModel);
 
             billToChange.paymentMade = billModel.paymentMade;
             billToChange.paymentCancelled = billModel.paymentCancelled;
 
-            db.BillRepository.Update(billToChange);
+            db.BillsRepository.Update(billToChange);
             db.Save();
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -83,7 +88,7 @@ namespace Project_3rd.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.BillRepository.Insert(billModel);
+            db.BillsRepository.Insert(billModel);
             db.Save();
 
             return CreatedAtRoute("SingleBillById", new { id = billModel.id }, billModel);
@@ -94,13 +99,13 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(BillModel))]
         public IHttpActionResult DeleteBillModel(int id)
         {
-            BillModel billModel = db.BillRepository.GetByID(id);
+            BillModel billModel = db.BillsRepository.GetByID(id);
             if (billModel == null)
             {
                 return NotFound();
             }
 
-            db.BillRepository.Delete(billModel);
+            db.BillsRepository.Delete(billModel);
             db.Save();
 
             return Ok(billModel);
@@ -113,14 +118,14 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutConnectBillAndOffer(int billId, int offerId)
         {
-            BillModel bill = db.BillRepository.GetByID(billId);
+            BillModel bill = db.BillsRepository.GetByID(billId);
 
             if (bill == null)
             {
                 return NotFound();
             }
 
-            OfferModel offer = db.OfferRepository.GetByID(offerId);
+            OfferModel offer = db.OffersRepository.GetByID(offerId);
 
             if (offer == null)
             {
@@ -128,7 +133,7 @@ namespace Project_3rd.Controllers
             }
 
             bill.offerModel = offer;
-            db.BillRepository.Update(bill);
+            db.BillsRepository.Update(bill);
             db.Save();
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -141,14 +146,14 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutConnectBillAnUser(int billId, int userId)
         {
-            BillModel bill = db.BillRepository.GetByID(billId);
+            BillModel bill = db.BillsRepository.GetByID(billId);
 
             if (bill == null)
             {
                 return NotFound();
             }
 
-            UserModel user = db.UserRepository.GetByID(userId);
+            UserModel user = db.UsersRepository.GetByID(userId);
 
             if (user == null)
             {
@@ -161,7 +166,7 @@ namespace Project_3rd.Controllers
             }
 
             bill.userModel = user;
-            db.BillRepository.Update(bill);
+            db.BillsRepository.Update(bill);
             db.Save();
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -174,7 +179,7 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(IEnumerable<BillModel>))]
         public IHttpActionResult GetAllBillsOfUser(int buyerId)
         {
-            UserModel buyer = db.UserRepository.GetByID(buyerId);
+            UserModel buyer = db.UsersRepository.GetByID(buyerId);
 
             if (buyer == null)
             {
@@ -189,7 +194,7 @@ namespace Project_3rd.Controllers
             // THIS ONLY WORKED AFTER CHANGED NAVIGATION PROPERTY FROM IENUMERABLE TO ICOLLECTION...
             // see here: https://stackoverflow.com/a/32997694/4486196
             IEnumerable<BillModel> bills =
-                db.UserRepository.
+                db.UsersRepository.
                 Get(
                     filter: u => u.id == buyerId,
                     includeProperties: "billModels").
@@ -219,7 +224,7 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(IEnumerable<BillModel>))]
         public IHttpActionResult GetBillsByCategory(int categoryId)
         {
-            CategoryModel category = db.CategoryRepository.GetByID(categoryId);
+            CategoryModel category = db.CategoriesRepository.GetByID(categoryId);
             if (category == null)
             {
                 return NotFound();
@@ -243,7 +248,7 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(IEnumerable<BillModel>))]
         public IHttpActionResult GetBillsInDateRange(DateTime startDate, DateTime endDate)
         {
-            return Ok(db.BillRepository.Get(
+            return Ok(db.BillsRepository.Get(
                 filter: b => b.billCreated >= startDate && b.billCreated <= endDate));
         }
     }

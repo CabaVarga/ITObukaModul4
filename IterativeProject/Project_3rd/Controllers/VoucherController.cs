@@ -15,13 +15,18 @@ namespace Project_3rd.Controllers
 {
     public class VoucherController : ApiController
     {
-        private UnitOfWork db = new UnitOfWork();
+        private IUnitOfWork db;
+
+        public VoucherController(IUnitOfWork db)
+        {
+            this.db = db;
+        }
 
         // GET: api/Voucher
         [Route("project/vouchers")]
         public IEnumerable<VoucherModel> GetvoucherModels()
         {
-            return db.VoucherRepository.Get();
+            return db.VouchersRepository.Get();
         }
 
         // GET: api/Voucher/5
@@ -29,7 +34,7 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(VoucherModel))]
         public IHttpActionResult GetVoucherModel(int id)
         {
-            VoucherModel voucherModel = db.VoucherRepository.GetByID(id);
+            VoucherModel voucherModel = db.VouchersRepository.GetByID(id);
             if (voucherModel == null)
             {
                 return NotFound();
@@ -53,7 +58,7 @@ namespace Project_3rd.Controllers
                 return BadRequest();
             }
 
-            db.VoucherRepository.Update(voucherModel);
+            db.VouchersRepository.Update(voucherModel);
             db.Save();
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -69,7 +74,7 @@ namespace Project_3rd.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.VoucherRepository.Insert(voucherModel);
+            db.VouchersRepository.Insert(voucherModel);
             db.Save();
 
             return CreatedAtRoute("SingleVoucherById", new { id = voucherModel.id }, voucherModel);
@@ -80,13 +85,13 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(VoucherModel))]
         public IHttpActionResult DeleteVoucherModel(int id)
         {
-            VoucherModel voucherModel = db.VoucherRepository.GetByID(id);
+            VoucherModel voucherModel = db.VouchersRepository.GetByID(id);
             if (voucherModel == null)
             {
                 return NotFound();
             }
 
-            db.VoucherRepository.Delete(id);
+            db.VouchersRepository.Delete(id);
             db.Save();
 
             return Ok(voucherModel);
@@ -101,14 +106,14 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutConnectBillAndOffer(int voucherId, int offerId)
         {
-            var voucher = db.VoucherRepository.GetByID(voucherId);
+            var voucher = db.VouchersRepository.GetByID(voucherId);
 
             if (voucher == null)
             {
                 return NotFound();
             }
 
-            OfferModel offer = db.OfferRepository.GetByID(offerId);
+            OfferModel offer = db.OffersRepository.GetByID(offerId);
 
             if (offer == null)
             {
@@ -116,7 +121,7 @@ namespace Project_3rd.Controllers
             }
 
             voucher.offerModel = offer;
-            db.VoucherRepository.Update(voucher);
+            db.VouchersRepository.Update(voucher);
             db.Save();
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -129,14 +134,14 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutConnectBillAnUser(int voucherId, int userId)
         {
-            var voucher = db.VoucherRepository.GetByID(voucherId);
+            var voucher = db.VouchersRepository.GetByID(voucherId);
 
             if (voucher == null)
             {
                 return NotFound();
             }
 
-            UserModel user = db.UserRepository.GetByID(userId);
+            UserModel user = db.UsersRepository.GetByID(userId);
 
             if (user == null)
             {
@@ -149,7 +154,7 @@ namespace Project_3rd.Controllers
             }
 
             voucher.userModel = user;
-            db.VoucherRepository.Update(voucher);
+            db.VouchersRepository.Update(voucher);
             db.Save();
 
             return StatusCode(HttpStatusCode.NoContent);

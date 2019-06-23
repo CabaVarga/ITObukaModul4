@@ -1,78 +1,36 @@
 ﻿using Project_3rd.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using Unity.Attributes;
 
 namespace Project_3rd.Repositories
 {
-    public class UnitOfWork : IDisposable
+    public class UnitOfWork : IUnitOfWork, IDisposable
     {
-        private DataAccessContext context = new DataAccessContext();
-        private GenericRepository<UserModel> userRepository;
-        private GenericRepository<OfferModel> offerRepository;
-        private GenericRepository<CategoryModel> categoryRepository;
-        private GenericRepository<BillModel> billRepository;
-        private GenericRepository<VoucherModel> voucherRepository;
-        
-        public GenericRepository<UserModel> UserRepository
+        private DbContext context;
+
+        public UnitOfWork(DbContext context)
         {
-            get
-            {
-                if (this.userRepository == null)
-                {
-                    this.userRepository = new GenericRepository<UserModel>(context);
-                }
-                return userRepository;
-            }
+            this.context = context;
         }
 
-        public GenericRepository<OfferModel> OfferRepository
-        {
-            get
-            {
-                if (this.offerRepository == null)
-                {
-                    this.offerRepository = new GenericRepository<OfferModel>(context);
-                }
-                return offerRepository;
-            }
-        }
-        public GenericRepository<CategoryModel> CategoryRepository
-        {
-            get
-            {
-                if (this.categoryRepository == null)
-                {
-                    this.categoryRepository = new GenericRepository<CategoryModel>(context);
-                }
-                return categoryRepository;
-            }
-        }
+        [Dependency]
+        public IGenericRepository<UserModel> UsersRepository { get; set; }
 
-        public GenericRepository<BillModel> BillRepository
-        {
-            get
-            {
-                if (this.billRepository == null)
-                {
-                    this.billRepository = new GenericRepository<BillModel>(context);
-                }
-                return billRepository;
-            }
-        }
+        [Dependency]
+        public IGenericRepository<CategoryModel> CategoriesRepository { get; set; }
 
-        public GenericRepository<VoucherModel> VoucherRepository
-        {
-            get
-            {
-                if (this.voucherRepository == null)
-                {
-                    this.voucherRepository = new GenericRepository<VoucherModel>(context);
-                }
-                return voucherRepository;
-            }
-        }
+        [Dependency]
+        public IGenericRepository<OfferModel> OffersRepository { get; set; }
+
+        [Dependency]
+        public IGenericRepository<BillModel> BillsRepository { get; set; }
+
+        [Dependency]
+        public IGenericRepository<VoucherModel> VouchersRepository { get; set; }
 
         public void Save()
         {

@@ -16,7 +16,12 @@ namespace Project_3rd.Controllers
 {
     public class UserController : ApiController
     {
-        private UnitOfWork db = new UnitOfWork();
+        private IUnitOfWork db;
+
+        public UserController(IUnitOfWork db)
+        {
+            this.db = db;
+        }
 
         // GET: /project/users
         // ZADATAK 2.1.3
@@ -24,7 +29,7 @@ namespace Project_3rd.Controllers
         [HttpGet]
         public IEnumerable<UserModel> GetuserModels()
         {
-            return db.UserRepository.Get();
+            return db.UsersRepository.Get();
         }
 
         // GET: project/users/4
@@ -34,7 +39,7 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(UserModel))]
         public IHttpActionResult GetUserModel(int id)
         {
-            UserModel userModel = db.UserRepository.GetByID(id);
+            UserModel userModel = db.UsersRepository.GetByID(id);
             if (userModel == null)
             {
                 return NotFound();
@@ -65,10 +70,10 @@ namespace Project_3rd.Controllers
             // Simply for trying out why my commits do not show up....
 
             // ZAHTEV: ne menjati user_role ni password
-            UserModel savedUser = db.UserRepository.GetByID(id);
+            UserModel savedUser = db.UsersRepository.GetByID(id);
 
-            string savedPassword = db.UserRepository.GetByID(id).password;
-            UserModel.UserRoles savedRole = db.UserRepository.GetByID(id).user_role;
+            string savedPassword = db.UsersRepository.GetByID(id).password;
+            UserModel.UserRoles savedRole = db.UsersRepository.GetByID(id).user_role;
             // Let's try this one out
             userModel.password = savedPassword;
             userModel.user_role = savedRole;
@@ -80,8 +85,8 @@ namespace Project_3rd.Controllers
             savedUser.username = userModel.username;
 
             // savedUser = userModel;
-            // db.UserRepository.Update(userModel);
-            db.UserRepository.Update(savedUser);
+            // db.UsersRepository.Update(userModel);
+            db.UsersRepository.Update(savedUser);
             db.Save();
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -103,7 +108,7 @@ namespace Project_3rd.Controllers
             // OVO se zahteva u zadatku 2.1.5
             userModel.user_role = UserModel.UserRoles.ROLE_CUSTOMER;
 
-            db.UserRepository.Insert(userModel);
+            db.UsersRepository.Insert(userModel);
             db.Save();
 
             return CreatedAtRoute("SingleUserById", new { id = userModel.id }, userModel);
@@ -116,13 +121,13 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(UserModel))]
         public IHttpActionResult DeleteUserModel(int id)
         {
-            UserModel userModel = db.UserRepository.GetByID(id);
+            UserModel userModel = db.UsersRepository.GetByID(id);
             if (userModel == null)
             {
                 return NotFound();
             }
 
-            db.UserRepository.Delete(userModel);
+            db.UsersRepository.Delete(userModel);
             db.Save();
 
             return Ok(userModel);
@@ -139,7 +144,7 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(UserModel))]
         public IHttpActionResult ChangeUserRoleForUser(int id, UserModel.UserRoles role)
         {
-            UserModel userModel = db.UserRepository.GetByID(id);
+            UserModel userModel = db.UsersRepository.GetByID(id);
             if (userModel == null)
             {
                 return NotFound();
@@ -161,7 +166,7 @@ namespace Project_3rd.Controllers
         public IHttpActionResult ChangePasswordForUser(int id, [FromBody]Dictionary<string, string> oldNewPass)
         // another scheme, by using the URI: [FromUri]string oldPass, [FromUri]string newPass
         {
-            UserModel userModel = db.UserRepository.GetByID(id);
+            UserModel userModel = db.UsersRepository.GetByID(id);
             if (userModel == null)
             {
                 return NotFound();
@@ -187,7 +192,7 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(UserModel))]
         public IHttpActionResult GetUserByUsername(string username)
         {
-            List<UserModel> userModel = db.UserRepository.Get(
+            List<UserModel> userModel = db.UsersRepository.Get(
                 filter: u => u.username == username).ToList();
 
             if (userModel.Count == 0)

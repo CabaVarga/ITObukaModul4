@@ -16,7 +16,12 @@ namespace Project_3rd.Controllers
 {
     public class OfferController : ApiController
     {
-        private UnitOfWork db = new UnitOfWork();
+        private IUnitOfWork db;
+
+        public OfferController(IUnitOfWork db)
+        {
+            this.db = db;
+        }
 
         // GET: project/offers
         // ZADATAK 2.3.3
@@ -24,7 +29,7 @@ namespace Project_3rd.Controllers
         [HttpGet]
         public IEnumerable<OfferModel> GetofferModels()
         {
-            return db.OfferRepository.Get();
+            return db.OffersRepository.Get();
         }
 
         // GET: project/offers/3
@@ -34,7 +39,7 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(OfferModel))]
         public IHttpActionResult GetOfferModel(int id)
         {
-            OfferModel offerModel = db.OfferRepository.GetByID(id);
+            OfferModel offerModel = db.OffersRepository.GetByID(id);
             if (offerModel == null)
             {
                 return NotFound();
@@ -61,7 +66,7 @@ namespace Project_3rd.Controllers
             }
 
 
-            db.OfferRepository.Update(offerModel);
+            db.OffersRepository.Update(offerModel);
             db.Save();
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -79,7 +84,7 @@ namespace Project_3rd.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.OfferRepository.Insert(offerModel);
+            db.OffersRepository.Insert(offerModel);
             db.Save();
 
             return CreatedAtRoute("SingleOfferById", new { id = offerModel.id }, offerModel);
@@ -92,13 +97,13 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(OfferModel))]
         public IHttpActionResult DeleteOfferModel(int id)
         {
-            OfferModel offerModel = db.OfferRepository.GetByID(id);
+            OfferModel offerModel = db.OffersRepository.GetByID(id);
             if (offerModel == null)
             {
                 return NotFound();
             }
 
-            db.OfferRepository.Delete(offerModel);
+            db.OffersRepository.Delete(offerModel);
             db.Save();
 
             return Ok(offerModel);
@@ -112,14 +117,14 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutOfferModelChangeStatus(int id, OfferModel.OfferStatus status)
         {
-            if (db.OfferRepository.GetByID(id) == null)
+            if (db.OffersRepository.GetByID(id) == null)
             {
                 return NotFound();
             }
 
-            OfferModel savedModel = db.OfferRepository.GetByID(id);
+            OfferModel savedModel = db.OffersRepository.GetByID(id);
             savedModel.offer_status = status;
-            // db.OfferRepository.Update(savedModel);
+            // db.OffersRepository.Update(savedModel);
             db.Save();
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -132,7 +137,7 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(IEnumerable<OfferModel>))]
         public IHttpActionResult GetOffersInGivenPriceRange(decimal lowerPrice, decimal upperPrice)
         {
-            return Ok(db.OfferRepository.Get(
+            return Ok(db.OffersRepository.Get(
                 filter: o => o.action_price >= lowerPrice && o.action_price <= upperPrice));
         }
 
@@ -151,13 +156,13 @@ namespace Project_3rd.Controllers
                 return BadRequest(ModelState);
             }
 
-            OfferModel offerModel = db.OfferRepository.GetByID(id);
+            OfferModel offerModel = db.OffersRepository.GetByID(id);
             if (offerModel == null)
             {
                 return NotFound();
             }
 
-            CategoryModel existingCategory = db.CategoryRepository.Get(
+            CategoryModel existingCategory = db.CategoriesRepository.Get(
                 filter: c => c.category_name == category.category_name &&
                     c.category_description == category.category_description).FirstOrDefault();
 
@@ -170,7 +175,7 @@ namespace Project_3rd.Controllers
                 offerModel.categoryModel = category;
             }
 
-            db.OfferRepository.Update(offerModel);
+            db.OffersRepository.Update(offerModel);
             db.Save();
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -186,14 +191,14 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutOfferAddCreator(int offerId, int userId)
         {
-            OfferModel offerModel = db.OfferRepository.GetByID(offerId);
+            OfferModel offerModel = db.OffersRepository.GetByID(offerId);
             if (offerModel == null)
             {
                 return NotFound();
             }
 
             // Treba li dodati logiku da se ne moze menjati created-by?
-            UserModel aUserModel = db.UserRepository.GetByID(userId);
+            UserModel aUserModel = db.UsersRepository.GetByID(userId);
             if (aUserModel == null)
             {
                 return NotFound();
@@ -206,9 +211,9 @@ namespace Project_3rd.Controllers
 
             // offerModel.offer_created_by = userId;
             offerModel.userModel = aUserModel;
-            // db.UserRepository.Update(userModel);
+            // db.UsersRepository.Update(userModel);
             Debug.WriteLine("OfferModel.UserModel is: " + offerModel.userModel.id);
-            db.OfferRepository.Update(offerModel);
+            db.OffersRepository.Update(offerModel);
 
             db.Save();
 
