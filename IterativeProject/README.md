@@ -1,8 +1,8 @@
-**REMINDER** Always delete the bin folder when copy/pasting existing projects into new solutions! It took me more than an hour to figure out why my defined routes are not working, until this bit gave me a hint, while trying to hit the raw endpoint... the hint is bolded: 
+**REMINDER** Always delete the bin folder when copy/pasting existing projects into new solutions! It took me more than an hour to figure out why my defined routes are not working, until this bit gave me a hint, while trying to hit the raw endpoint... the old namespace prefix remained in parts of my build even after I renamed the namespace and rebuilt the project (multiple times). 
 
 ```
 "Message": "An error has occurred.",
-"ExceptionMessage": "Multiple types were found that match the controller named 'user'. This can happen if the route that services this request ('api/{controller}/{id}') found multiple controllers defined with the same name but differing namespaces, which is not supported.\r\n\r\nThe request for 'user' has found the following matching controllers:\r\n**Project**.Controllers.UserController\r\n**Project_1st**.Controllers.UserController",
+"ExceptionMessage": "Multiple types were found that match the controller named 'user'. This can happen if the route that services this request ('api/{controller}/{id}') found multiple controllers defined with the same name but differing namespaces, which is not supported.\r\n\r\nThe request for 'user' has found the following matching controllers:\r\nProject.Controllers.UserController\r\nProject_1st.Controllers.UserController",
     "ExceptionType": "System.InvalidOperationException",
     "StackTrace": "   at System.Web.Http.Dispatcher.DefaultHttpControllerSelector.SelectController(HttpRequestMessage request)\r\n   at System.Web.Http.Dispatcher.HttpControllerDispatcher.<SendAsync>d__15.MoveNext()"
 ```
