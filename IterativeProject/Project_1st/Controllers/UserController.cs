@@ -10,6 +10,8 @@ namespace Project_1st.Controllers
 {
     public class UserController : ApiController
     {
+        public UserController() : base() { }
+
         private List<UserModel> GetDB() {
             List<UserModel> users = new List<UserModel>
             {
