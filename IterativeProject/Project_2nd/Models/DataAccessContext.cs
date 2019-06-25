@@ -8,7 +8,7 @@ namespace Project_2nd.Models
 {
     public class DataAccessContext : DbContext
     {
-        public DataAccessContext() : base("DataAccesConnection")
+        public DataAccessContext() : base("name=DataAccessConnection")
         {
             Database.SetInitializer<DataAccessContext>(
                 new DropCreateDatabaseIfModelChanges<DataAccessContext>());
