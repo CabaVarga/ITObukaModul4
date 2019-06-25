@@ -155,5 +155,24 @@ namespace Project_2nd.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        // Zadatak 4.9
+        // GET /project/vouchers/findByBuyer/{buyerId}
+        [Route("project/voucher/findByBuyer/{buyerId}")]
+        [HttpGet]
+        public IHttpActionResult GetVouchersByBuyerId(int buyerId)
+        {
+            var vouchers = db
+                .VoucherRepository
+                .Get(filter: v => v.userModel.id == buyerId);
+
+            if (vouchers.Count() == 0)
+            {
+                return NotFound();
+            }
+            
+            return Ok(vouchers);
+        }
+
+
     }
 }
