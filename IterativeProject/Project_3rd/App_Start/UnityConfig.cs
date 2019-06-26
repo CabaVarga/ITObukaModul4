@@ -1,5 +1,6 @@
 using Project_3rd.Models;
 using Project_3rd.Repositories;
+using Project_3rd.Services;
 using System.Data.Entity;
 using System.Web.Http;
 using Unity;
@@ -27,6 +28,8 @@ namespace Project_3rd
 
             container.RegisterType<DbContext, DataAccessContext>(
                 new HierarchicalLifetimeManager());
+
+            container.RegisterType<IUserService, UserService>();
                                  
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
         }

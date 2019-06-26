@@ -264,3 +264,6 @@ __pycache__/
 /App_Data/*.*
 /Dan10/FileUploadAPI/App_Data
 /Dan10/Homework/App_Data
+
+# We don't need Migrations on our public repository
+**/Migrations/*.*

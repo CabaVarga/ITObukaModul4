@@ -76,6 +76,8 @@ namespace Project_1st.Controllers
                     userRole = UserRole.ROLE_SELLER
                 }
             };
+
+
             return users;
         }
 
@@ -101,7 +103,7 @@ namespace Project_1st.Controllers
         public UserModel PostNewUser([FromBody]UserModel user)
         {
             List<UserModel> users = GetDB();
-            users.Add(new UserModel
+            UserModel new_user = new UserModel
             {
                 id = user.id,
                 firstName = user.firstName,
@@ -110,9 +112,14 @@ namespace Project_1st.Controllers
                 password = user.password,
                 email = user.email,
                 userRole = UserRole.ROLE_CUSTOMER
-            });
+            };
 
-            return users.Find(x => x.id == user.id);
+
+
+
+            users.Add(new_user);
+            return new_user;
+            // return users.Find(x => x.id == user.id);
         }
 
         // Zadatak 1.6

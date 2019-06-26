@@ -11,15 +11,18 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Project_3rd.Models;
 using Project_3rd.Repositories;
+using Project_3rd.Services;
 
 namespace Project_3rd.Controllers
 {
     public class UserController : ApiController
     {
+        private IUserService userService;
         private IUnitOfWork db;
 
-        public UserController(IUnitOfWork db)
+        public UserController(IUserService userService, IUnitOfWork db)
         {
+            this.userService = userService;
             this.db = db;
         }
 
@@ -27,9 +30,9 @@ namespace Project_3rd.Controllers
         // ZADATAK 2.1.3
         [Route("project/users")]
         [HttpGet]
-        public IEnumerable<UserModel> GetuserModels()
+        public IEnumerable<UserModel> GetUserModels()
         {
-            return db.UsersRepository.Get();
+            return userService.GetAllUsers();
         }
 
         // GET: project/users/4
@@ -39,7 +42,7 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(UserModel))]
         public IHttpActionResult GetUserModel(int id)
         {
-            UserModel userModel = db.UsersRepository.GetByID(id);
+            UserModel userModel = userService.GetUser(id);
             if (userModel == null)
             {
                 return NotFound();
@@ -101,17 +104,14 @@ namespace Project_3rd.Controllers
         {
             if (!ModelState.IsValid)
             {
-                Debug.WriteLine("Invalid ModelState at PostUserModel");
                 return BadRequest(ModelState);
             }
 
-            // OVO se zahteva u zadatku 2.1.5
-            userModel.user_role = UserModel.UserRoles.ROLE_CUSTOMER;
+            UserModel createdUser = userService.CreateUser(userModel);
 
-            db.UsersRepository.Insert(userModel);
-            db.Save();
+            return Created("", createdUser);
 
-            return CreatedAtRoute("SingleUserById", new { id = userModel.id }, userModel);
+            // return CreatedAtRoute("SingleUserById", new { id = userModel.id }, userModel);
         }
 
         // DELETE: project/users/4
