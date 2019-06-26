@@ -50,8 +50,8 @@ namespace JsonVezba.Controllers
         {
             return GetDummyDB().Select(user =>
             {
-                user.AccesType = EAccesType.Public;
-                user.Address.AccesType = EAccesType.Public;
+                user.AccessType = EAccessType.Public;
+                user.Address.Access = EAccessType.Public;
                 return user;
             });
         }
@@ -61,8 +61,8 @@ namespace JsonVezba.Controllers
         {
             return GetDummyDB().Select(user =>
             {
-                user.AccesType = EAccesType.Private;
-                user.Address.AccesType = EAccesType.Private;
+                user.AccessType = EAccessType.Private;
+                user.Address.Access = EAccessType.Private;
                 return user;
             });
         }
@@ -72,8 +72,8 @@ namespace JsonVezba.Controllers
         {
             return GetDummyDB().Select(user =>
             {
-                user.AccesType = EAccesType.Admin;
-                user.Address.AccesType = EAccesType.Admin;
+                user.AccessType = EAccessType.Admin;
+                user.Address.Access = EAccessType.Admin;
                 return user;
             });
         }

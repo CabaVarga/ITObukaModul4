@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Xml.Serialization;
 
 namespace JsonVezba.Models
 {
@@ -23,21 +24,21 @@ namespace JsonVezba.Models
         public Address Address { get; set; }
 
         [JsonIgnore]
-        public EAccesType AccesType { get; set; }
+        public EAccessType AccessType { get; set; }
 
         public bool ShouldSerializeEmail()
         {
-            return AccesType == EAccesType.Admin; 
+            return AccessType == EAccessType.Admin; 
         }
 
         public bool ShouldSerializeDateOfBirth()
         {
-            return AccesType == EAccesType.Admin;
+            return AccessType == EAccessType.Admin;
         }
 
         public bool ShouldSerializeAddress()
         {
-            return AccesType == EAccesType.Public;
+            return AccessType == EAccessType.Public;
         }
     }
 }

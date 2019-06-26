@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Xml.Serialization;
 
 namespace JsonVezba.Models
 {
@@ -24,33 +25,33 @@ namespace JsonVezba.Models
 
         [JsonIgnore]
         public virtual ICollection<User> Users { get; set; }
-        
+
         [JsonIgnore]
-        public EAccesType AccesType { get; set; }
+        public EAccessType Access { get; set; }
 
         public bool ShouldSerializeId()
         {
-            return AccesType == EAccesType.Public;
+            return Access == EAccessType.Public;
         }
 
         public bool ShouldSerializeStreet()
         {
-            return AccesType == EAccesType.Public;
+            return Access == EAccessType.Public;
         }
 
         public bool ShouldSerializeCity()
         {
-            return AccesType == EAccesType.Public;
+            return Access == EAccessType.Public;
         }
 
         public bool ShouldSerializeCountry()
         {
-            return AccesType == EAccesType.Public;
+            return Access == EAccessType.Public;
         }
 
         public bool ShouldSerializeUsers()
         {
-            return AccesType == EAccesType.Public;
+            return Access == EAccessType.Public;
         }
     }
 }

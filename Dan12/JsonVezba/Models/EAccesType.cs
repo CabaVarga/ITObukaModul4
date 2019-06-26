@@ -5,7 +5,7 @@ using System.Web;
 
 namespace JsonVezba.Models
 {
-    public enum EAccesType
+    public enum EAccessType
     {
         Public,
         Private,
