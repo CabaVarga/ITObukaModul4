@@ -37,7 +37,7 @@ namespace Project_3rd.Controllers
 
         // GET: project/users/4
         // ZADATAK 2.1.4
-        [Route("project/users/{id}")]
+        [Route("project/users/{id}", Name = "SingleUserById")]
         [HttpGet]
         [ResponseType(typeof(UserModel))]
         public IHttpActionResult GetUserModel(int id)
@@ -60,39 +60,22 @@ namespace Project_3rd.Controllers
         {
             if (!ModelState.IsValid)
             {
-                Debug.WriteLine("Invalid ModelState at PutUserModel");
                 return BadRequest(ModelState);
             }
 
             if (id != userModel.id)
             {
-                Debug.WriteLine("Invalid ModelState at PutUserModel, id not found...! OK, we are using some other sutf");
                 return BadRequest();
             }
 
-            // Simply for trying out why my commits do not show up....
+            UserModel updatedUser = userService.UpdateUser(id, userModel.first_name, userModel.last_name, userModel.username, userModel.email);
 
-            // ZAHTEV: ne menjati user_role ni password
-            UserModel savedUser = db.UsersRepository.GetByID(id);
+            if (updatedUser == null)
+            {
+                return NotFound();
+            }
 
-            string savedPassword = db.UsersRepository.GetByID(id).password;
-            UserModel.UserRoles savedRole = db.UsersRepository.GetByID(id).user_role;
-            // Let's try this one out
-            userModel.password = savedPassword;
-            userModel.user_role = savedRole;
-
-            // lets try brute force...
-            savedUser.first_name = userModel.first_name;
-            savedUser.last_name = userModel.last_name;
-            savedUser.email = userModel.email;
-            savedUser.username = userModel.username;
-
-            // savedUser = userModel;
-            // db.UsersRepository.Update(userModel);
-            db.UsersRepository.Update(savedUser);
-            db.Save();
-
-            return StatusCode(HttpStatusCode.NoContent);
+            return Ok(updatedUser);
         }
 
         // POST: project/users
@@ -109,26 +92,25 @@ namespace Project_3rd.Controllers
 
             UserModel createdUser = userService.CreateUser(userModel);
 
-            return Created("", createdUser);
+            // Mladen's solution
+            // return Created("", createdUser);
 
-            // return CreatedAtRoute("SingleUserById", new { id = userModel.id }, userModel);
+            return CreatedAtRoute("SingleUserById", new { id = userModel.id }, userModel);
         }
 
         // DELETE: project/users/4
         // ZADATAK 2.1.9
-        [Route("project/users/{id}", Name = "SingleUserById")]
+        [Route("project/users/{id}")]
         [HttpDelete]
         [ResponseType(typeof(UserModel))]
         public IHttpActionResult DeleteUserModel(int id)
         {
-            UserModel userModel = db.UsersRepository.GetByID(id);
+            UserModel userModel = userService.DeleteUser(id);
+
             if (userModel == null)
             {
                 return NotFound();
             }
-
-            db.UsersRepository.Delete(userModel);
-            db.Save();
 
             return Ok(userModel);
         }
@@ -144,18 +126,14 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(UserModel))]
         public IHttpActionResult ChangeUserRoleForUser(int id, UserModel.UserRoles role)
         {
-            UserModel userModel = db.UsersRepository.GetByID(id);
+            UserModel userModel = userService.UpdateUserRole(id, role);
+
             if (userModel == null)
             {
                 return NotFound();
             }
 
-            userModel.user_role = role;
-            db.Save();
-
             return Ok(userModel);
-
-            // return StatusCode(HttpStatusCode.NoContent);
         }
 
         // PUT project/users/change/3/role/ROLE_ADMIN
@@ -163,26 +141,16 @@ namespace Project_3rd.Controllers
         [Route("project/users/changePassword/{id}")]
         [HttpPut]
         [ResponseType(typeof(UserModel))]
-        public IHttpActionResult ChangePasswordForUser(int id, [FromBody]Dictionary<string, string> oldNewPass)
+        public IHttpActionResult ChangePasswordForUser(int id, [FromUri] string oldPassword, [FromUri] string newPassword)
         // another scheme, by using the URI: [FromUri]string oldPass, [FromUri]string newPass
         {
-            UserModel userModel = db.UsersRepository.GetByID(id);
+            UserModel userModel = userService.UpdatePassword(id, oldPassword, newPassword);
+
             if (userModel == null)
             {
                 return NotFound();
             }
-
-            if (userModel.password != oldNewPass["oldPass"])
-            {
-                return BadRequest("Wrong password!");
-            }
-
-            userModel.password = oldNewPass["newPass"];
-            db.Save();
-
             return Ok(userModel);
-
-            // return StatusCode(HttpStatusCode.NoContent);
         }
 
         // GET: project/users/by-username/blabla
@@ -192,15 +160,14 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(UserModel))]
         public IHttpActionResult GetUserByUsername(string username)
         {
-            List<UserModel> userModel = db.UsersRepository.Get(
-                filter: u => u.username == username).ToList();
+            UserModel user = userService.GetByUsername(username);
 
-            if (userModel.Count == 0)
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return Ok(userModel[0]);
+            return Ok(user);
         }
     }
 }

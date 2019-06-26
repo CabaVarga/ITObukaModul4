@@ -11,16 +11,19 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Project_3rd.Models;
 using Project_3rd.Repositories;
+using Project_3rd.Services;
 
 namespace Project_3rd.Controllers
 {
     public class OfferController : ApiController
     {
         private IUnitOfWork db;
+        private IOfferService offerService;
 
-        public OfferController(IUnitOfWork db)
+        public OfferController(IUnitOfWork db, IOfferService offerService)
         {
             this.db = db;
+            this.offerService = offerService;
         }
 
         // GET: project/offers
@@ -29,7 +32,7 @@ namespace Project_3rd.Controllers
         [HttpGet]
         public IEnumerable<OfferModel> GetofferModels()
         {
-            return db.OffersRepository.Get();
+            return offerService.GetAllOffers();
         }
 
         // GET: project/offers/3
@@ -39,7 +42,8 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(OfferModel))]
         public IHttpActionResult GetOfferModel(int id)
         {
-            OfferModel offerModel = db.OffersRepository.GetByID(id);
+            OfferModel offerModel = offerService.GetOffer(id);
+
             if (offerModel == null)
             {
                 return NotFound();
@@ -55,19 +59,27 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutOfferModel(int id, OfferModel offerModel)
         {
+            // Mladen's model is very different from mine
+            // He's using explicit foreign keys
+            // In the OfferModel these are the CategoryID and SellerID properties
+            // THIS IS PROBABLY AN IMPORTANT QUESTION TO ASK!
+            // These concepts are called INDEPENDENT vs FOREIGN KEY ASSOCIATIONS
+
+            // TODO follow up from here
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            // in the User controller this id check is inside the service
             if (id != offerModel.id)
             {
                 return BadRequest();
             }
 
 
-            db.OffersRepository.Update(offerModel);
-            db.Save();
+            offerService.UpdateOffer(id, offerModel);
 
             return StatusCode(HttpStatusCode.NoContent);
         }
