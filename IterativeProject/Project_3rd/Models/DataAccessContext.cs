@@ -10,8 +10,7 @@ namespace Project_3rd.Models
     {
         public DataAccessContext() : base("name=DataAccessConnection")
         {
-            Database.SetInitializer<DataAccessContext>(
-                new DropCreateDatabaseIfModelChanges<DataAccessContext>());
+            Database.SetInitializer<DataAccessContext>(new ContextSeeder());
         }
 
         public DbSet<UserModel> userModels { get; set; }

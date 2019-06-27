@@ -11,5 +11,10 @@ namespace Project_3rd.Services
         IEnumerable<OfferModel> GetAllOffers();
         OfferModel GetOffer(int id);
         OfferModel UpdateOffer(int id, OfferModel offerModel);
+        OfferModel CreateOffer(OfferModel offer);
+        OfferModel DeleteOffer(int id);
+        OfferModel UpdateOfferStatus(int id, OfferModel.OfferStatus newStatus);
+        IEnumerable<OfferModel> GetOffersByActionPriceRange(decimal lowerPrice, decimal upperPrice);
+        OfferModel UpdateOffer(OfferModel offer, bool isBillCreated);
     }
 }

@@ -30,6 +30,9 @@ namespace Project_3rd
                 new HierarchicalLifetimeManager());
 
             container.RegisterType<IUserService, UserService>();
+            container.RegisterType<IOfferService, OfferService>();
+            container.RegisterType<ICategoryService, CategoryService>();
+            container.RegisterType<IBillService, BillService>();
                                  
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
         }

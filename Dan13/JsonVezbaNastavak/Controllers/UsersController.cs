@@ -49,13 +49,19 @@ namespace JsonVezbaNastavak.Controllers
         }
 
         [Route("api/users/public")]
-        public IEnumerable<User> GetAllPublic()
+        public IEnumerable<PublicUserDTO> GetAllPublic()
         {
             return GetDummyDB().Select(user =>
             {
-                user.AccessType = EAccessType.Public;
-                user.Address.Access = EAccessType.Public;
-                return user;
+                //user.AccessType = EAccessType.Public;
+                //user.Address.Access = EAccessType.Public;
+                PublicUserDTO userDTO = new PublicUserDTO()
+                {
+                    Id = user.Id,
+                    Name = user.Name
+                };
+
+                return userDTO;
             });
         }
 

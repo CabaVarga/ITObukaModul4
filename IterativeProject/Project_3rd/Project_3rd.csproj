@@ -135,9 +135,14 @@
     <Compile Include="Migrations\201906261131567_Initial.Designer.cs">
       <DependentUpon>201906261131567_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906262332222_foreign-keys.cs" />
+    <Compile Include="Migrations\201906262332222_foreign-keys.Designer.cs">
+      <DependentUpon>201906262332222_foreign-keys.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BillModel.cs" />
     <Compile Include="Models\CategoryModel.cs" />
+    <Compile Include="Models\ContextSeeder.cs" />
     <Compile Include="Models\DataAccessContext.cs" />
     <Compile Include="Models\OfferModel.cs" />
     <Compile Include="Models\UserModel.cs" />
@@ -147,6 +152,10 @@
     <Compile Include="Repositories\IGenericRepository.cs" />
     <Compile Include="Repositories\IUnitOfWork.cs" />
     <Compile Include="Repositories\UnitOfWork.cs" />
+    <Compile Include="Services\BillService.cs" />
+    <Compile Include="Services\CategoryService.cs" />
+    <Compile Include="Services\IBillService.cs" />
+    <Compile Include="Services\ICategoryService.cs" />
     <Compile Include="Services\IOfferService.cs" />
     <Compile Include="Services\IUserService.cs" />
     <Compile Include="Services\OfferService.cs" />
@@ -171,6 +180,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906261131567_Initial.resx">
       <DependentUpon>201906261131567_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906262332222_foreign-keys.resx">
+      <DependentUpon>201906262332222_foreign-keys.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

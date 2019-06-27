@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Project_3rd.Models;
@@ -19,11 +14,15 @@ namespace Project_3rd.Controllers
     {
         private IUnitOfWork db;
         private IOfferService offerService;
+        private IUserService userService;
+        private ICategoryService categoryService;
 
-        public OfferController(IUnitOfWork db, IOfferService offerService)
+        public OfferController(IUnitOfWork db, IOfferService offerService, IUserService userService, ICategoryService categoryService)
         {
             this.db = db;
             this.offerService = offerService;
+            this.userService = userService;
+            this.categoryService = categoryService;
         }
 
         // GET: project/offers
@@ -78,7 +77,22 @@ namespace Project_3rd.Controllers
                 return BadRequest();
             }
 
+            // Resenja se ovde razilaze
+            // Kod mene nema provere da li pridruzena kategorija ili prodavac postoje
+            // To ce dovesti do toga da ce sistem napraviti novu kategoriju
+            // kao i novog prodavca
+            // To ce se desiti i kada kategorija ili prodavac postoje
+            // iz razloga jer ne postoji logika koja bi njih povezala sa postojecim entitetima
 
+            // Kako u mom modelu nema CategoryId niti SellerId, logika bi bila ili u servisu ili
+            // u kontroleru, ali znatno zamrsenija...
+
+            // tipa: provera za kategoriju:
+            // offerRepository.Get(filter: o => o.Name == ... && o.Description == ...)
+            // ili pak, kroz Id, GetById((int)... kao i kod Mladena)
+            // ali sa vaznom razlikom da tada moje resenje dodaje nove entitete
+            // sto naravno, nije pozeljno!
+            
             offerService.UpdateOffer(id, offerModel);
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -91,15 +105,48 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(OfferModel))]
         public IHttpActionResult PostOfferModel(OfferModel offerModel)
         {
-            if (!ModelState.IsValid)
+            // Omoguciti dodavanje i izmenu kategorije i prodavca iz ponude
+            // Bez Foreign Key svojstava stvari su mnogo komplikovane..
+            // Sa Foreign Key JSON koji saljemo je znatno svedeniji ali je i logika bolja
+
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
+
+            //if (!ModelState.IsValid || offerModel.categoryId == null || offerModel.userModel == null)
+
+            // Mladen's code:
+
+            // You also need to update your Model classes. Mladen's solution is to use 'normal' property
+            // names and map them to the 'wacky' database column names
+            if (!ModelState.IsValid || offerModel.categoryId == null || offerModel.sellerId == null)
             {
                 return BadRequest(ModelState);
             }
 
-            db.OffersRepository.Insert(offerModel);
-            db.Save();
+            CategoryModel category = categoryService.GetCategory((int)offerModel.categoryId);
+            UserModel seller = userService.GetUser((int)offerModel.sellerId);
+
+            if (category == null || seller == null)
+            {
+                return NotFound();
+            }
+
+            if (seller.user_role != UserModel.UserRoles.ROLE_SELLER)
+            {
+                return BadRequest("User's role must be ROLE_SELLER");
+            }
+
+            offerModel.category = category;
+            offerModel.seller = seller;
+            OfferModel createdOffer = offerService.CreateOffer(offerModel);
+
+            // my old stuff
+            // offerService.CreateOffer(offerModel);
 
             return CreatedAtRoute("SingleOfferById", new { id = offerModel.id }, offerModel);
+
         }
 
         // DELETE: project/offers/3
@@ -109,14 +156,12 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(OfferModel))]
         public IHttpActionResult DeleteOfferModel(int id)
         {
-            OfferModel offerModel = db.OffersRepository.GetByID(id);
+            OfferModel offerModel = offerService.DeleteOffer(id);
+
             if (offerModel == null)
             {
                 return NotFound();
             }
-
-            db.OffersRepository.Delete(offerModel);
-            db.Save();
 
             return Ok(offerModel);
         }
@@ -129,17 +174,14 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutOfferModelChangeStatus(int id, OfferModel.OfferStatus status)
         {
-            if (db.OffersRepository.GetByID(id) == null)
+            OfferModel offer = offerService.UpdateOfferStatus(id, status);
+
+            if (offer == null)
             {
                 return NotFound();
             }
 
-            OfferModel savedModel = db.OffersRepository.GetByID(id);
-            savedModel.offer_status = status;
-            // db.OffersRepository.Update(savedModel);
-            db.Save();
-
-            return StatusCode(HttpStatusCode.NoContent);
+            return Ok(offer);
         }
 
         // GET: project/offers/findByPrice/33.4/and/22.3/
@@ -149,10 +191,13 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(IEnumerable<OfferModel>))]
         public IHttpActionResult GetOffersInGivenPriceRange(decimal lowerPrice, decimal upperPrice)
         {
-            return Ok(db.OffersRepository.Get(
-                filter: o => o.action_price >= lowerPrice && o.action_price <= upperPrice));
+            return Ok(offerService.GetOffersByActionPriceRange(lowerPrice, upperPrice));
         }
 
+        // These are NOT separate, distinct methods!
+        // The logic should be built-in in the post (create) and put (update) methods
+        // As for the bill-created flag and associated logic I need further analysis...
+        #region Update category, associate seller
         // ONE LINE OF COMMENT ADDED.
         // FIRST TIME TO TRY BRANCHING, SAVING THE 'OLD' version
 
@@ -180,11 +225,11 @@ namespace Project_3rd.Controllers
 
             if (existingCategory != null)
             {
-                offerModel.categoryModel = existingCategory;
+                offerModel.category = existingCategory;
             }
             else
             {
-                offerModel.categoryModel = category;
+                offerModel.category = category;
             }
 
             db.OffersRepository.Update(offerModel);
@@ -222,15 +267,15 @@ namespace Project_3rd.Controllers
             }
 
             // offerModel.offer_created_by = userId;
-            offerModel.userModel = aUserModel;
+            offerModel.seller = aUserModel;
             // db.UsersRepository.Update(userModel);
-            Debug.WriteLine("OfferModel.UserModel is: " + offerModel.userModel.id);
+            Debug.WriteLine("OfferModel.UserModel is: " + offerModel.seller.id);
             db.OffersRepository.Update(offerModel);
 
             db.Save();
 
             return StatusCode(HttpStatusCode.NoContent);
         }
-
+        #endregion
     }
 }

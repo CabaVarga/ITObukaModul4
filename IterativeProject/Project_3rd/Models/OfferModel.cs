@@ -43,11 +43,17 @@ namespace Project_3rd.Models
 
         public OfferStatus offer_status { get; set; }
 
+        [ForeignKey("seller")]
+        public int sellerId { get; set; }
+
+        [ForeignKey("category")]
+        public int categoryId { get; set; }
+
         // Navigation properties
         // WITHOUT VIRTUAL JSON WON'T SERIALIZE THE RELATED ENTITIES?
-        public virtual CategoryModel categoryModel { get; set; }
+        public virtual CategoryModel category { get; set; }
 
-        public virtual UserModel userModel { get; set; }
+        public virtual UserModel seller { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<BillModel> billModels { get; set; }

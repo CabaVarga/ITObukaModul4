@@ -10,16 +10,19 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Project_3rd.Models;
 using Project_3rd.Repositories;
+using Project_3rd.Services;
 
 namespace Project_3rd.Controllers
 {
     public class CategoryController : ApiController
     {
         private IUnitOfWork db;
+        private ICategoryService categoryService;
 
-        public CategoryController(IUnitOfWork db)
+        public CategoryController(IUnitOfWork db, ICategoryService categoryService)
         {
             this.db = db;
+            this.categoryService = categoryService;
         }
 
         // GET: project/categories
@@ -28,7 +31,7 @@ namespace Project_3rd.Controllers
         [HttpGet]
         public IEnumerable<CategoryModel> GetcategoryModels()
         {
-            return db.CategoriesRepository.Get();
+            return categoryService.GetAllCategories();
         }
 
         // GET: project/categories/4
@@ -37,7 +40,7 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(CategoryModel))]
         public IHttpActionResult GetCategoryModel(int id)
         {
-            CategoryModel categoryModel = db.CategoriesRepository.GetByID(id);
+            CategoryModel categoryModel = categoryService.GetCategory(id);
             if (categoryModel == null)
             {
                 return NotFound();
@@ -57,15 +60,23 @@ namespace Project_3rd.Controllers
                 return BadRequest(ModelState);
             }
 
+            // Id check in controller, again
             if (id != categoryModel.id)
             {
                 return BadRequest();
             }
 
-            db.CategoriesRepository.Update(categoryModel);
-            db.Save();
+            // The following code is flawed
+            CategoryModel updatedCategory = categoryService.UpdateCategory(categoryModel);
 
-            return StatusCode(HttpStatusCode.NoContent);
+            if (updatedCategory == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(updatedCategory);
+
+            // return StatusCode(HttpStatusCode.NoContent);
         }
 
         // POST: project/categories
@@ -80,10 +91,10 @@ namespace Project_3rd.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.CategoriesRepository.Insert(categoryModel);
-            db.Save();
+            CategoryModel createdCategory = categoryService.CreateCategory(categoryModel);
 
-            return CreatedAtRoute("SingleCategoryById", new { id = categoryModel.id }, categoryModel);
+            // THIS IS IMPORTANT!!! YOU NEED THE CREATED ID, use the fetched entity, not the provided one...
+            return CreatedAtRoute("SingleCategoryById", new { id = createdCategory.id }, createdCategory);
         }
 
         // DELETE: project/categories
@@ -93,14 +104,12 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(CategoryModel))]
         public IHttpActionResult DeleteCategoryModel(int id)
         {
-            CategoryModel categoryModel = db.CategoriesRepository.GetByID(id);
+            CategoryModel categoryModel = categoryService.DeleteCategory(id);
+
             if (categoryModel == null)
             {
                 return NotFound();
             }
-
-            db.CategoriesRepository.Delete(categoryModel);
-            db.Save();
 
             return Ok(categoryModel);
         }

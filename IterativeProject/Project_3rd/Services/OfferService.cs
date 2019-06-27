@@ -41,12 +41,84 @@ namespace Project_3rd.Services
                 offer.image_path = offerModel.image_path;
                 offer.available_offers = offerModel.available_offers;
                 offer.bought_offers = offerModel.bought_offers;
-                offer.categoryModel = offerModel.categoryModel;
-                offer.userModel = offerModel.userModel;
+                offer.category = offerModel.category;
+                offer.seller = offerModel.seller;
 
                 db.OffersRepository.Update(offer);
                 db.Save();
             }
+
+            return offer;
+        }
+
+        public OfferModel CreateOffer(OfferModel offer)
+        {
+            // TODO Extract category & user logic from the controller and put it here....
+            // PRO: cleaning up the controller - it would not need to hold any reference to services other than offerService
+            // CONTRA: this service would need to either hold a reference to user and category services
+            //         or to directly work with db, accessing the user and category repositories...
+            //         serious QUESTION!
+            // Business logic
+            offer.offer_status = OfferModel.OfferStatus.WAIT_FOR_APPROVING;
+            offer.offer_created = DateTime.UtcNow;
+            offer.offer_expires = offer.offer_created.AddDays(10);
+
+            db.OffersRepository.Insert(offer);
+            db.Save();
+
+            return offer;
+        }
+
+        public OfferModel DeleteOffer(int id)
+        {
+            OfferModel offer = db.OffersRepository.GetByID(id);
+
+            if (offer != null)
+            {
+                db.OffersRepository.Delete(id);
+                db.Save();
+            }
+
+            return offer;
+        }
+
+        public OfferModel UpdateOfferStatus(int id, OfferModel.OfferStatus newStatus)
+        {
+            OfferModel offer = db.OffersRepository.GetByID(id);
+
+            if (offer != null)
+            {
+                offer.offer_status = newStatus;
+                db.OffersRepository.Update(offer);
+                db.Save();
+            }
+
+            return offer;
+        }
+
+        public IEnumerable<OfferModel> GetOffersByActionPriceRange(decimal lowerPrice, decimal upperPrice)
+        {
+            IEnumerable<OfferModel> offersInPriceRange = db.OffersRepository.Get(
+                filter: o => o.action_price >= lowerPrice && o.action_price <= upperPrice);
+
+            return offersInPriceRange;
+        }
+
+        public OfferModel UpdateOffer(OfferModel offer, bool isBillCreated)
+        {
+            if (isBillCreated)
+            {
+                offer.available_offers--;
+                offer.bought_offers++;
+            }
+            else
+            {
+                offer.available_offers++;
+                offer.bought_offers--;
+            }
+
+            db.OffersRepository.Update(offer);
+            db.Save();
 
             return offer;
         }
