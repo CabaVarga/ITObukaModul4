@@ -33,6 +33,8 @@ namespace Project_3rd
             container.RegisterType<IOfferService, OfferService>();
             container.RegisterType<ICategoryService, CategoryService>();
             container.RegisterType<IBillService, BillService>();
+            container.RegisterType<IVoucherService, VoucherService>();
+            container.RegisterType<IEmailsService, EmailsService>();
                                  
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
         }

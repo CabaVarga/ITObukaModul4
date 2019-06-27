@@ -16,5 +16,8 @@ namespace Project_3rd.Services
         OfferModel UpdateOfferStatus(int id, OfferModel.OfferStatus newStatus);
         IEnumerable<OfferModel> GetOffersByActionPriceRange(decimal lowerPrice, decimal upperPrice);
         OfferModel UpdateOffer(OfferModel offer, bool isBillCreated);
+        OfferModel UpdateOfferImage(string path, int id);
+        // ADDED FOR 4.2.1
+        IEnumerable<OfferModel> GetOffersByCategoryAndNotExpired(int categoryId, DateTime expiration);
     }
 }

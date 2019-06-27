@@ -17,13 +17,17 @@ namespace Project_3rd.Controllers
         private IBillService billService;
         private IOfferService offerService;
         private IUserService userService;
+        private IVoucherService voucherService;
+        private IEmailsService emailsService;
 
-        public BillController(IUnitOfWork db, IBillService billService, IOfferService offerService, IUserService userService)
+        public BillController(IUnitOfWork db, IBillService billService, IOfferService offerService, IUserService userService, IVoucherService voucherService, IEmailsService emailsService)
         {
             this.db = db;
             this.billService = billService;
             this.offerService = offerService;
             this.userService = userService;
+            this.voucherService = voucherService;
+            this.emailsService = emailsService;
         }
 
         // GET: api/BillModels
@@ -74,6 +78,9 @@ namespace Project_3rd.Controllers
             if (billToChange.paymentMade)
             {
                 // TODO vouchersService.CreateVoucher(updatedBill);
+                VoucherModel newVoucher = voucherService.CreateVoucherAfterBillPayment(billToChange);
+
+                emailsService.SendEmail(newVoucher);
             }
 
             if (billToChange.paymentCancelled)

@@ -44,10 +44,10 @@ namespace Project_3rd.Models
         public OfferStatus offer_status { get; set; }
 
         [ForeignKey("seller")]
-        public int sellerId { get; set; }
+        public int? sellerId { get; set; }
 
         [ForeignKey("category")]
-        public int categoryId { get; set; }
+        public int? categoryId { get; set; }
 
         // Navigation properties
         // WITHOUT VIRTUAL JSON WON'T SERIALIZE THE RELATED ENTITIES?

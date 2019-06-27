@@ -16,5 +16,7 @@ namespace Project_3rd.Services
         IEnumerable<BillModel> GetBillsByBuyer(int buyerId);
         IEnumerable<BillModel> GetBillsByCategory(int categoryId);
         IEnumerable<BillModel> GetBillsByDatePeriod(DateTime startDate, DateTime endDate);
+        // 4.2.1
+        IEnumerable<BillModel> GetBillsByCategoryAndNotExpired(int categoryId, DateTime expiration);
     }
 }

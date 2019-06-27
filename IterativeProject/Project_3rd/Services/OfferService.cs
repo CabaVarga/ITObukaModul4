@@ -122,5 +122,25 @@ namespace Project_3rd.Services
 
             return offer;
         }
+
+        public OfferModel UpdateOfferImage(string path, int id)
+        {
+            OfferModel offer = db.OffersRepository.GetByID(id);
+
+            if (offer != null)
+            {
+                offer.image_path = path;
+                db.OffersRepository.Update(offer);
+                db.Save();
+            }
+
+            return offer;
+        }
+
+        public IEnumerable<OfferModel> GetOffersByCategoryAndNotExpired(int categoryId, DateTime expiration)
+        {
+            return db.OffersRepository.Get(
+                filter: o => o.categoryId == categoryId && o.offer_expires < expiration);
+        }
     }
 }

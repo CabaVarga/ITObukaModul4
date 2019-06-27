@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Project_3rd.Models;
@@ -277,5 +281,44 @@ namespace Project_3rd.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
         #endregion
+
+        [Route("project/offers/uploadImage/{id}")]
+        [HttpPut]
+        public async Task<HttpResponseMessage> PutAttachImage(int id)
+        {
+            if (!Request.Content.IsMimeMultipartContent())
+            {
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+            }
+
+            OfferModel offer = offerService.GetOffer(id);
+
+            if (offer == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            string root = HttpContext.Current.Server.MapPath("~/App_Data");
+            var provider = new MultipartFormDataStreamProvider(root);
+
+            try
+            {
+                await Request.Content.ReadAsMultipartAsync(provider);
+
+                foreach (MultipartFileData file in provider.FileData)
+                {
+                    offerService.UpdateOfferImage(file.LocalFileName, id);
+                }
+
+                // This will probably throw an exception....
+                offer = offerService.GetOffer(id);
+
+                return Request.CreateResponse(offer);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+            }
+        }
     }
 }

@@ -4,23 +4,30 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Project_3rd.Models;
 using Project_3rd.Repositories;
+using Project_3rd.Services;
 
 namespace Project_3rd.Controllers
 {
     public class VoucherController : ApiController
     {
         private IUnitOfWork db;
+        private IVoucherService voucherService;
+        private IOfferService offerService;
+        private IUserService userService;
 
-        public VoucherController(IUnitOfWork db)
+        public VoucherController(IUnitOfWork db, IVoucherService voucherService, IOfferService offerService, IUserService userService)
         {
             this.db = db;
+            this.voucherService = voucherService;
+            this.offerService = offerService;
+            this.userService = userService;
         }
 
         // GET: api/Voucher
         [Route("project/vouchers")]
         public IEnumerable<VoucherModel> GetvoucherModels()
         {
-            return db.VouchersRepository.Get();
+            return voucherService.GetAllVouchers();
         }
 
         // GET: api/Voucher/5
@@ -28,7 +35,8 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(VoucherModel))]
         public IHttpActionResult GetVoucherModel(int id)
         {
-            VoucherModel voucherModel = db.VouchersRepository.GetByID(id);
+            VoucherModel voucherModel = voucherService.GetVoucher(id);
+
             if (voucherModel == null)
             {
                 return NotFound();
@@ -42,7 +50,21 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutVoucherModel(int id, VoucherModel voucherModel)
         {
-            if (!ModelState.IsValid)
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
+
+            //if (id != voucherModel.id)
+            //{
+            //    return BadRequest();
+            //}
+
+            //voucherService.UpdateVoucher(id, voucherModel);
+
+            //return StatusCode(HttpStatusCode.NoContent);
+
+            if (!ModelState.IsValid || voucherModel.offerId == null || voucherModel.userId == null)
             {
                 return BadRequest(ModelState);
             }
@@ -52,26 +74,67 @@ namespace Project_3rd.Controllers
                 return BadRequest();
             }
 
-            db.VouchersRepository.Update(voucherModel);
-            db.Save();
+            OfferModel offer = offerService.GetOffer((int)voucherModel.offerId);
+            UserModel buyer = userService.GetUser((int)voucherModel.userId);
 
-            return StatusCode(HttpStatusCode.NoContent);
+            if (offer == null || buyer == null)
+            {
+                return NotFound();
+            }
+
+            if (buyer.user_role != UserModel.UserRoles.ROLE_CUSTOMER)
+            {
+                return BadRequest("User's role must be ROLE_CUSTOMER");
+            }
+
+            voucherModel.offerModel = offer;
+            voucherModel.userModel = buyer;
+            VoucherModel updatedVoucher = voucherService.UpdateVoucher(id, voucherModel);
+
+            if (updatedVoucher == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(updatedVoucher);
         }
 
         // POST: api/Voucher
         [Route("project/vouchers")]
         [ResponseType(typeof(VoucherModel))]
-        public IHttpActionResult PostVoucherModel(VoucherModel voucherModel)
+        public IHttpActionResult PostVoucherModel(VoucherModel voucher)
         {
-            if (!ModelState.IsValid)
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
+
+            //VoucherModel createdVoucher = voucherService.CreateVoucher(voucherModel);
+
+            //return CreatedAtRoute("SingleVoucherById", new { id = createdVoucher.id }, createdVoucher);
+            if (!ModelState.IsValid || voucher.offerId == null || voucher.userId == null)
             {
                 return BadRequest(ModelState);
             }
 
-            db.VouchersRepository.Insert(voucherModel);
-            db.Save();
+            OfferModel offer = offerService.GetOffer((int)voucher.offerId);
+            UserModel buyer = userService.GetUser((int)voucher.userId);
 
-            return CreatedAtRoute("SingleVoucherById", new { id = voucherModel.id }, voucherModel);
+            if (offer == null || buyer == null)
+            {
+                return NotFound();
+            }
+
+            if (buyer.user_role != UserModel.UserRoles.ROLE_CUSTOMER)
+            {
+                return BadRequest("User's role must be ROLE_CUSTOMER");
+            }
+
+            voucher.offerModel = offer;
+            voucher.userModel = buyer;
+            VoucherModel createdVoucher = voucherService.CreateVoucher(voucher);
+
+            return CreatedAtRoute("PostVoucher", new { id = createdVoucher.id }, createdVoucher);
         }
 
         // DELETE: api/Voucher/5
@@ -80,6 +143,7 @@ namespace Project_3rd.Controllers
         public IHttpActionResult DeleteVoucherModel(int id)
         {
             VoucherModel voucherModel = db.VouchersRepository.GetByID(id);
+
             if (voucherModel == null)
             {
                 return NotFound();
@@ -93,6 +157,7 @@ namespace Project_3rd.Controllers
 
         // ZADACI 4.6 i 4.8
 
+        #region Connect Voucher with user and offer -- I've made a mistake again, there's no need for additional methods!!!
         // ZADATAK 4.6
         // PUT project/vouchers/4/connect-offer/3
         [Route("project/vouchers/{voucherId}/connect-offer/{offerId}")]
@@ -153,6 +218,6 @@ namespace Project_3rd.Controllers
 
             return StatusCode(HttpStatusCode.NoContent);
         }
-
+        #endregion
     }
 }

@@ -16,13 +16,13 @@ namespace Project_3rd.Models
 
         public bool paymentCancelled { get; set; }
 
-        public DateTime billCreated { get; set; }
+        public DateTime billCreated { get; set; } = DateTime.UtcNow;
 
         [ForeignKey("offerModel")]
-        public int offerId { get; set; }
+        public int? offerId { get; set; }
 
         [ForeignKey("userModel")]
-        public int userId { get; set; }
+        public int? userId { get; set; }
 
         // Navigation properties:
         public virtual OfferModel offerModel { get; set; }

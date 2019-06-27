@@ -18,11 +18,15 @@ namespace Project_3rd.Controllers
     {
         private IUnitOfWork db;
         private ICategoryService categoryService;
+        private IBillService billService;
+        private IOfferService offerService;
 
-        public CategoryController(IUnitOfWork db, ICategoryService categoryService)
+        public CategoryController(IUnitOfWork db, ICategoryService categoryService, IBillService billService, IOfferService offerService)
         {
             this.db = db;
             this.categoryService = categoryService;
+            this.billService = billService;
+            this.offerService = offerService;
         }
 
         // GET: project/categories
@@ -104,6 +108,14 @@ namespace Project_3rd.Controllers
         [ResponseType(typeof(CategoryModel))]
         public IHttpActionResult DeleteCategoryModel(int id)
         {
+            // Possible bug here....
+            // Ne dozvoliti brisanje ako povezani racuni i ponude nisu istekli
+            if (billService.GetBillsByCategoryAndNotExpired(id, DateTime.UtcNow).Count() != 0 || 
+                offerService.GetOffersByCategoryAndNotExpired(id, DateTime.UtcNow).Count() != 0)
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
+
             CategoryModel categoryModel = categoryService.DeleteCategory(id);
 
             if (categoryModel == null)

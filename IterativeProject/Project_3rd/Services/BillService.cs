@@ -30,6 +30,7 @@ namespace Project_3rd.Services
         {
             BillModel updatedBill = db.BillsRepository.GetByID(id);
 
+            // Kreiranje racuna ovde ili u kontroleru???
             if (updatedBill != null)
             {
                 updatedBill.paymentMade = bill.paymentMade;
@@ -92,6 +93,13 @@ namespace Project_3rd.Services
         public IEnumerable<BillModel> GetBillsByDatePeriod(DateTime startDate, DateTime endDate)
         {
             return db.BillsRepository.Get(x => x.billCreated >= startDate && x.billCreated <= endDate);
+        }
+
+        public IEnumerable<BillModel> GetBillsByCategoryAndNotExpired(int categoryId, DateTime expiration)
+        {
+            return db.BillsRepository.Get(
+                filter: b => b.offerModel.categoryId == categoryId && b.offerModel.offer_expires < expiration,
+                includeProperties: "offerModel");
         }
     }
 }

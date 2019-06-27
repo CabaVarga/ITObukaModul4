@@ -12,7 +12,7 @@ namespace Project_3rd.Models
             IList<UserModel> users = new List<UserModel>();
             users.Add(new UserModel() { id = 1, first_name = "Mladen", last_name = "Mladenovic", username = "mladen", password = "lozinka", email = "mladen@mail.com", user_role = UserModel.UserRoles.ROLE_CUSTOMER });
             users.Add(new UserModel() { id = 2, first_name = "Ivan", last_name = "Ivanovic", username = "ivan", password = "lozinka", email = "ivan@mail.com", user_role = UserModel.UserRoles.ROLE_CUSTOMER });
-            users.Add(new UserModel() { id = 3, first_name = "Caba", last_name = "Varga", username = "caba", password = "lozinka", email = "caba@mail.com", user_role = UserModel.UserRoles.ROLE_CUSTOMER });
+            users.Add(new UserModel() { id = 3, first_name = "Caba", last_name = "Varga", username = "caba", password = "lozinka", email = "caba.varga@gmail.com", user_role = UserModel.UserRoles.ROLE_CUSTOMER });
             users.Add(new UserModel() { id = 4, first_name = "Dragana", last_name = "Tomic", username = "dragan", password = "lozinka", email = "dragana@mail.com", user_role = UserModel.UserRoles.ROLE_CUSTOMER });
             users.Add(new UserModel() { id = 5, first_name = "Dusan", last_name = "Rodic", username = "dusan", password = "lozinka", email = "dusan@mail.com", user_role = UserModel.UserRoles.ROLE_CUSTOMER });
             context.userModels.AddRange(users);
@@ -36,6 +36,8 @@ namespace Project_3rd.Models
             context.offerModels.AddRange(offers);
 
             // BILLS
+            IList<BillModel> bills = new List<BillModel>();
+            bills.Add(new BillModel() { userId = 3, offerId = 1 });
 
             // VOUCHERS
 

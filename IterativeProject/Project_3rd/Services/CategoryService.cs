@@ -46,6 +46,10 @@ namespace Project_3rd.Services
         {
             CategoryModel category = db.CategoriesRepository.GetByID(id);
 
+            // 2.1 Ne dozvoliti brisanje onih kategorija za koje postoje neistekle ponude i racuni
+
+            // da li ovde ili u kontroleru????
+
             if (category != null)
             {
                 db.CategoriesRepository.Delete(category);
