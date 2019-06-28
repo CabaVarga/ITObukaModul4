@@ -12,44 +12,44 @@ using Homework.Models;
 
 namespace Homework.Controllers
 {
-    public class UsersController : ApiController
+    public class AddressesController : ApiController
     {
         private DataAccessContext db = new DataAccessContext();
 
-        // GET: api/Users
-        public IQueryable<User> GetUsers()
+        // GET: api/Addresses
+        public IQueryable<Address> GetAddresses()
         {
-            return db.Users;
+            return db.Addresses;
         }
 
-        // GET: api/Users/5
-        [ResponseType(typeof(User))]
-        public IHttpActionResult GetUser(int id)
+        // GET: api/Addresses/5
+        [ResponseType(typeof(Address))]
+        public IHttpActionResult GetAddress(int id)
         {
-            User user = db.Users.Find(id);
-            if (user == null)
+            Address address = db.Addresses.Find(id);
+            if (address == null)
             {
                 return NotFound();
             }
 
-            return Ok(user);
+            return Ok(address);
         }
 
-        // PUT: api/Users/5
+        // PUT: api/Addresses/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutUser(int id, User user)
+        public IHttpActionResult PutAddress(int id, Address address)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != user.Id)
+            if (id != address.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(user).State = EntityState.Modified;
+            db.Entry(address).State = EntityState.Modified;
 
             try
             {
@@ -57,7 +57,7 @@ namespace Homework.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!AddressExists(id))
                 {
                     return NotFound();
                 }
@@ -70,35 +70,35 @@ namespace Homework.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Users
-        [ResponseType(typeof(User))]
-        public IHttpActionResult PostUser(User user)
+        // POST: api/Addresses
+        [ResponseType(typeof(Address))]
+        public IHttpActionResult PostAddress(Address address)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Users.Add(user);
+            db.Addresses.Add(address);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = user.Id }, user);
+            return CreatedAtRoute("DefaultApi", new { id = address.Id }, address);
         }
 
-        // DELETE: api/Users/5
-        [ResponseType(typeof(User))]
-        public IHttpActionResult DeleteUser(int id)
+        // DELETE: api/Addresses/5
+        [ResponseType(typeof(Address))]
+        public IHttpActionResult DeleteAddress(int id)
         {
-            User user = db.Users.Find(id);
-            if (user == null)
+            Address address = db.Addresses.Find(id);
+            if (address == null)
             {
                 return NotFound();
             }
 
-            db.Users.Remove(user);
+            db.Addresses.Remove(address);
             db.SaveChanges();
 
-            return Ok(user);
+            return Ok(address);
         }
 
         protected override void Dispose(bool disposing)
@@ -110,9 +110,9 @@ namespace Homework.Controllers
             base.Dispose(disposing);
         }
 
-        private bool UserExists(int id)
+        private bool AddressExists(int id)
         {
-            return db.Users.Count(e => e.Id == id) > 0;
+            return db.Addresses.Count(e => e.Id == id) > 0;
         }
     }
 }

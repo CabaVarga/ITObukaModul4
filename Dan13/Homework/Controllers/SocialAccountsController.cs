@@ -12,44 +12,44 @@ using Homework.Models;
 
 namespace Homework.Controllers
 {
-    public class UsersController : ApiController
+    public class SocialAccountsController : ApiController
     {
         private DataAccessContext db = new DataAccessContext();
 
-        // GET: api/Users
-        public IQueryable<User> GetUsers()
+        // GET: api/SocialAccounts
+        public IQueryable<SocialAccount> GetSocialAccounts()
         {
-            return db.Users;
+            return db.SocialAccounts;
         }
 
-        // GET: api/Users/5
-        [ResponseType(typeof(User))]
-        public IHttpActionResult GetUser(int id)
+        // GET: api/SocialAccounts/5
+        [ResponseType(typeof(SocialAccount))]
+        public IHttpActionResult GetSocialAccount(int id)
         {
-            User user = db.Users.Find(id);
-            if (user == null)
+            SocialAccount socialAccount = db.SocialAccounts.Find(id);
+            if (socialAccount == null)
             {
                 return NotFound();
             }
 
-            return Ok(user);
+            return Ok(socialAccount);
         }
 
-        // PUT: api/Users/5
+        // PUT: api/SocialAccounts/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutUser(int id, User user)
+        public IHttpActionResult PutSocialAccount(int id, SocialAccount socialAccount)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != user.Id)
+            if (id != socialAccount.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(user).State = EntityState.Modified;
+            db.Entry(socialAccount).State = EntityState.Modified;
 
             try
             {
@@ -57,7 +57,7 @@ namespace Homework.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!SocialAccountExists(id))
                 {
                     return NotFound();
                 }
@@ -70,35 +70,35 @@ namespace Homework.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Users
-        [ResponseType(typeof(User))]
-        public IHttpActionResult PostUser(User user)
+        // POST: api/SocialAccounts
+        [ResponseType(typeof(SocialAccount))]
+        public IHttpActionResult PostSocialAccount(SocialAccount socialAccount)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Users.Add(user);
+            db.SocialAccounts.Add(socialAccount);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = user.Id }, user);
+            return CreatedAtRoute("DefaultApi", new { id = socialAccount.Id }, socialAccount);
         }
 
-        // DELETE: api/Users/5
-        [ResponseType(typeof(User))]
-        public IHttpActionResult DeleteUser(int id)
+        // DELETE: api/SocialAccounts/5
+        [ResponseType(typeof(SocialAccount))]
+        public IHttpActionResult DeleteSocialAccount(int id)
         {
-            User user = db.Users.Find(id);
-            if (user == null)
+            SocialAccount socialAccount = db.SocialAccounts.Find(id);
+            if (socialAccount == null)
             {
                 return NotFound();
             }
 
-            db.Users.Remove(user);
+            db.SocialAccounts.Remove(socialAccount);
             db.SaveChanges();
 
-            return Ok(user);
+            return Ok(socialAccount);
         }
 
         protected override void Dispose(bool disposing)
@@ -110,9 +110,9 @@ namespace Homework.Controllers
             base.Dispose(disposing);
         }
 
-        private bool UserExists(int id)
+        private bool SocialAccountExists(int id)
         {
-            return db.Users.Count(e => e.Id == id) > 0;
+            return db.SocialAccounts.Count(e => e.Id == id) > 0;
         }
     }
 }

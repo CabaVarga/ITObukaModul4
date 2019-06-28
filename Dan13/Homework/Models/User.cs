@@ -9,6 +9,11 @@ namespace Homework.Models
 {
     public class User
     {
+        public User()
+        {
+            this.SocialAccounts = new HashSet<SocialAccount>();
+        }
+
         [JsonProperty("id")]
         public int Id { get; set; }
 
@@ -21,24 +26,9 @@ namespace Homework.Models
         [JsonIgnore]
         public string Password { get; set; }
 
-        public Address Address { get; set; }
+        public virtual Address Address { get; set; }
 
-        //[JsonIgnore]
-        //public EAccessType AccessType { get; set; }
-
-        //public bool ShouldSerializeEmail()
-        //{
-        //    return AccessType == EAccessType.Admin;
-        //}
-
-        //public bool ShouldSerializeDateOfBirth()
-        //{
-        //    return AccessType == EAccessType.Admin;
-        //}
-
-        //public bool ShouldSerializeAddress()
-        //{
-        //    return AccessType == EAccessType.Public;
-        //}
+        [JsonIgnore]
+        public virtual ICollection<SocialAccount> SocialAccounts { get; set; }
     }
 }
