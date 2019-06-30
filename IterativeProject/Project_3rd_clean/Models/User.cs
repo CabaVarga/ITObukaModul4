@@ -24,6 +24,7 @@ namespace Project_3rd_clean.Models
         [StringLength(45)]
         public string username { get; set; }
 
+        [JsonIgnore]
         [Required]
         [StringLength(45)]
         public string password { get; set; }
@@ -44,5 +45,16 @@ namespace Project_3rd_clean.Models
 
         [JsonIgnore]
         public virtual ICollection<Voucher> voucherModels { get; set; }
+
+        #region Should Serialize Stuff
+
+        [JsonIgnore]
+        public EAccessType AccessType { get; set; }
+
+        public bool ShouldSerializeEmail()
+        {
+            return AccessType == EAccessType.Admin;
+        }
+        #endregion
     }
 }

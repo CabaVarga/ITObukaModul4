@@ -9,30 +9,52 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Homework.Models;
+using Homework.Services;
 
 namespace Homework.Controllers
 {
     public class AddressesController : ApiController
     {
-        private DataAccessContext db = new DataAccessContext();
+        // private DataAccessContext db = new DataAccessContext();
+        private IAddressesService addressesService;
+
+        public AddressesController(IAddressesService addressesService)
+        {
+            this.addressesService = addressesService;
+        }
 
         // GET: api/Addresses
         public IQueryable<Address> GetAddresses()
         {
-            return db.Addresses;
+            return addressesService.GetAllAddresses().AsQueryable();
         }
 
         // GET: api/Addresses/5
         [ResponseType(typeof(Address))]
         public IHttpActionResult GetAddress(int id)
         {
-            Address address = db.Addresses.Find(id);
+            Address address = addressesService.GetAddress(id);
+
             if (address == null)
             {
                 return NotFound();
             }
 
             return Ok(address);
+        }
+
+        // POST: api/Addresses
+        [ResponseType(typeof(Address))]
+        public IHttpActionResult PostAddress(Address address)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            addressesService.CreateAddress(address);
+
+            return CreatedAtRoute("DefaultApi", new { id = address.Id }, address);
         }
 
         // PUT: api/Addresses/5
@@ -49,70 +71,22 @@ namespace Homework.Controllers
                 return BadRequest();
             }
 
-            db.Entry(address).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AddressExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            addressesService.UpdateAddress(id, address);
 
             return StatusCode(HttpStatusCode.NoContent);
         }
-
-        // POST: api/Addresses
-        [ResponseType(typeof(Address))]
-        public IHttpActionResult PostAddress(Address address)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.Addresses.Add(address);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = address.Id }, address);
-        }
-
         // DELETE: api/Addresses/5
         [ResponseType(typeof(Address))]
         public IHttpActionResult DeleteAddress(int id)
         {
-            Address address = db.Addresses.Find(id);
+            Address address = addressesService.DeleteAddress(id);
+
             if (address == null)
             {
                 return NotFound();
             }
 
-            db.Addresses.Remove(address);
-            db.SaveChanges();
-
             return Ok(address);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool AddressExists(int id)
-        {
-            return db.Addresses.Count(e => e.Id == id) > 0;
         }
     }
 }

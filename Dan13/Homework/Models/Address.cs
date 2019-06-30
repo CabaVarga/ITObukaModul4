@@ -25,33 +25,5 @@ namespace Homework.Models
 
         [JsonIgnore]
         public virtual ICollection<User> Users { get; set; }
-
-        //[JsonIgnore]
-        //public EAccessType Access { get; set; }
-
-        //public bool ShouldSerializeId()
-        //{
-        //    return Access == EAccessType.Public;
-        //}
-
-        //public bool ShouldSerializeStreet()
-        //{
-        //    return Access == EAccessType.Public;
-        //}
-
-        //public bool ShouldSerializeCity()
-        //{
-        //    return Access == EAccessType.Public;
-        //}
-
-        //public bool ShouldSerializeCountry()
-        //{
-        //    return Access == EAccessType.Public;
-        //}
-
-        //public bool ShouldSerializeUsers()
-        //{
-        //    return Access == EAccessType.Public;
-        //}
     }
 }

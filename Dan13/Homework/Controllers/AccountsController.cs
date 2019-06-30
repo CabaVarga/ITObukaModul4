@@ -12,21 +12,21 @@ using Homework.Models;
 
 namespace Homework.Controllers
 {
-    public class SocialAccountsController : ApiController
+    public class AccountsController : ApiController
     {
         private DataAccessContext db = new DataAccessContext();
 
         // GET: api/SocialAccounts
-        public IQueryable<SocialAccount> GetSocialAccounts()
+        public IQueryable<Account> GetSocialAccounts()
         {
-            return db.SocialAccounts;
+            return db.Accounts;
         }
 
         // GET: api/SocialAccounts/5
-        [ResponseType(typeof(SocialAccount))]
+        [ResponseType(typeof(Account))]
         public IHttpActionResult GetSocialAccount(int id)
         {
-            SocialAccount socialAccount = db.SocialAccounts.Find(id);
+            Account socialAccount = db.Accounts.Find(id);
             if (socialAccount == null)
             {
                 return NotFound();
@@ -37,7 +37,7 @@ namespace Homework.Controllers
 
         // PUT: api/SocialAccounts/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutSocialAccount(int id, SocialAccount socialAccount)
+        public IHttpActionResult PutSocialAccount(int id, Account socialAccount)
         {
             if (!ModelState.IsValid)
             {
@@ -71,31 +71,31 @@ namespace Homework.Controllers
         }
 
         // POST: api/SocialAccounts
-        [ResponseType(typeof(SocialAccount))]
-        public IHttpActionResult PostSocialAccount(SocialAccount socialAccount)
+        [ResponseType(typeof(Account))]
+        public IHttpActionResult PostSocialAccount(Account socialAccount)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.SocialAccounts.Add(socialAccount);
+            db.Accounts.Add(socialAccount);
             db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = socialAccount.Id }, socialAccount);
         }
 
         // DELETE: api/SocialAccounts/5
-        [ResponseType(typeof(SocialAccount))]
+        [ResponseType(typeof(Account))]
         public IHttpActionResult DeleteSocialAccount(int id)
         {
-            SocialAccount socialAccount = db.SocialAccounts.Find(id);
+            Account socialAccount = db.Accounts.Find(id);
             if (socialAccount == null)
             {
                 return NotFound();
             }
 
-            db.SocialAccounts.Remove(socialAccount);
+            db.Accounts.Remove(socialAccount);
             db.SaveChanges();
 
             return Ok(socialAccount);
@@ -112,7 +112,7 @@ namespace Homework.Controllers
 
         private bool SocialAccountExists(int id)
         {
-            return db.SocialAccounts.Count(e => e.Id == id) > 0;
+            return db.Accounts.Count(e => e.Id == id) > 0;
         }
     }
 }

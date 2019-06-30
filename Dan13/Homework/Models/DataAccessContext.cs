@@ -17,6 +17,6 @@ namespace Homework.Models
 
         public DbSet<User> Users { get; set; }
         public DbSet<Address> Addresses { get; set; }
-        public DbSet<SocialAccount> SocialAccounts { get; set; }
+        public DbSet<Account> Accounts { get; set; }
     }
 }

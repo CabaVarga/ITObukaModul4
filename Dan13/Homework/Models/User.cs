@@ -11,7 +11,7 @@ namespace Homework.Models
     {
         public User()
         {
-            this.SocialAccounts = new HashSet<SocialAccount>();
+            this.Accounts = new HashSet<Account>();
         }
 
         [JsonProperty("id")]
@@ -29,6 +29,6 @@ namespace Homework.Models
         public virtual Address Address { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<SocialAccount> SocialAccounts { get; set; }
+        public virtual ICollection<Account> Accounts { get; set; }
     }
 }

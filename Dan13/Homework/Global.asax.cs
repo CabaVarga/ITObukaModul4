@@ -12,9 +12,10 @@ namespace Homework
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            UnityConfig.RegisterComponents();
 
             GlobalConfiguration.Configuration.Formatters
-                .JsonFormatter.SerializerSettings.DateFormatString = "dd-MM-yyyy hh:mm:ss";
+                .JsonFormatter.SerializerSettings.DateFormatString = "dd-MM-yyyy";
         }
     }
 }

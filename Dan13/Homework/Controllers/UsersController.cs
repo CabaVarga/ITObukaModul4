@@ -9,30 +9,114 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Homework.Models;
+using Homework.Models.DTOs.User;
+using Homework.Repositories;
+using Homework.Services;
+using Homework.Utilities;
 
 namespace Homework.Controllers
 {
     public class UsersController : ApiController
     {
-        private DataAccessContext db = new DataAccessContext();
+        // private DataAccessContext db = new DataAccessContext();
+        // private IUnitOfWork db;
+        private IUsersService usersService;
+
+        public UsersController(IUsersService usersService)
+        {
+            this.usersService = usersService;
+        }
+
 
         // GET: api/Users
-        public IQueryable<User> GetUsers()
+        public IEnumerable<User> GetUsers()
         {
-            return db.Users;
+            return usersService.GetAllUsers();
         }
+
+        #region PPA Get all users
+        [Route("api/users/public")]
+        [HttpGet]
+        public IEnumerable<PublicUserDTO> GetAllUsersPublic()
+        {
+            return usersService.GetAllUsers().Select(user =>
+            {
+                return DTOConverter.PublicUserDTO(user);
+            });
+        }
+
+        [Route("api/users/private", Name = "PrivateUserEndpoint")]
+        [HttpGet]
+        public IEnumerable<PrivateUserDTO> GetAllUsersPrivate()
+        {
+            return usersService.GetAllUsers().Select(user =>
+            {
+                return DTOConverter.PrivateUserDTO(user);
+            });
+        }
+
+        [Route("api/users/admin")]
+        [HttpGet]
+        public IEnumerable<AdminUserDTO> GetAllUsersAdmin()
+        {
+            return usersService.GetAllUsers().Select(user =>
+            {
+                return DTOConverter.AdminUserDTO(user);
+            });
+        }
+        #endregion
 
         // GET: api/Users/5
         [ResponseType(typeof(User))]
         public IHttpActionResult GetUser(int id)
         {
-            User user = db.Users.Find(id);
+            User user = usersService.GetUser(id);
+
             if (user == null)
             {
                 return NotFound();
             }
 
             return Ok(user);
+        }
+
+        #region PPA Get a single user by ID
+
+        // GET api/users/public/1
+        [Route("api/users/public/{id}")]
+        [ResponseType(typeof(PrivateUserDTO))]
+        [HttpGet]
+        public IHttpActionResult GetUserPublic(int id)
+        {
+            User user = usersService.GetUser(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(DTOConverter.PublicUserDTO(user));
+
+            // this would also work
+            // return Ok(new PublicUserDTO() { Id = user.Id, Name = user.Name });
+            // another approach is to return DTO directly from the service
+        }
+        #endregion
+
+
+        // POST: api/Users
+        [ResponseType(typeof(User))]
+        public IHttpActionResult PostUser(User user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            usersService.CreateUser(user);
+
+            // The CreatedAtRoute will not show the real Id ...
+            return CreatedAtRoute("DefaultApi", new { id = user.Id }, user);
         }
 
         // PUT: api/Users/5
@@ -49,70 +133,57 @@ namespace Homework.Controllers
                 return BadRequest();
             }
 
-            db.Entry(user).State = EntityState.Modified;
+            User updatedUser = usersService.UpdateUser(id, user);
 
-            try
+            if (updatedUser == null)
             {
-                db.SaveChanges();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+           
             return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/Users
-        [ResponseType(typeof(User))]
-        public IHttpActionResult PostUser(User user)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.Users.Add(user);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = user.Id }, user);
         }
 
         // DELETE: api/Users/5
         [ResponseType(typeof(User))]
         public IHttpActionResult DeleteUser(int id)
         {
-            User user = db.Users.Find(id);
+            User user = usersService.DeleteUser(id);
+
             if (user == null)
             {
                 return NotFound();
             }
 
-            db.Users.Remove(user);
-            db.SaveChanges();
-
             return Ok(user);
         }
 
-        protected override void Dispose(bool disposing)
+        #region Register new user
+        // POST api/users/register
+        [Route("api/users/register")]
+        [HttpPost]
+        public IHttpActionResult PostRegisterUser(RegisterUserDTO newUser)
         {
-            if (disposing)
+            if (!ModelState.IsValid)
             {
-                db.Dispose();
+                return BadRequest("Request body is not in valid format.");
             }
-            base.Dispose(disposing);
-        }
 
-        private bool UserExists(int id)
-        {
-            return db.Users.Count(e => e.Id == id) > 0;
+            // If username or email exists new user can not be created
+            // 1. Through DTOConverter
+            // usersService.CreateUser(Utilities.DTOConverter.UserDTO(newUser));
+            // 2. Directly through Service
+            try
+            {
+                User createdUser = usersService.CreateUser(newUser);
+
+                return CreatedAtRoute("PrivateUserEndpoint", new { id = createdUser.Id }, DTOConverter.PublicUserDTO(createdUser));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
+        #endregion
+
     }
 }

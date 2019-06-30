@@ -8,7 +8,7 @@ namespace Homework.Models
 {
     public enum AccountProvider { FACEBOOK, TWITTER, GOOGLE, MICROSOFT }
 
-    public class SocialAccount
+    public class Account
     {
         public int Id { get; set; }
         

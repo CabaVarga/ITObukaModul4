@@ -162,7 +162,7 @@ namespace Homework.Controllers
         // Zadatak tj primer sa strane 91
         // [Route("register")]
         [HttpPost]
-        public HttpResponseMessage PostRegisterUser([FromBody]UserRegisterDTO user)
+        public HttpResponseMessage PostRegisterUser([FromBody]RegisterUserDTO user)
         {
             User ue = new User();
             ue.Id = 3;

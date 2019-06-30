@@ -132,6 +132,14 @@
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\ContextSeeder.cs" />
     <Compile Include="Models\DataAccessContext.cs" />
+    <Compile Include="Models\DTOs\Bill\PrivateBillDTO.cs" />
+    <Compile Include="Models\DTOs\Bill\PublicBillDTO.cs" />
+    <Compile Include="Models\DTOs\Category\PublicCategoryDTO.cs" />
+    <Compile Include="Models\DTOs\Offer\PublicOfferDTO.cs" />
+    <Compile Include="Models\DTOs\User\AdminUserDTO.cs" />
+    <Compile Include="Models\DTOs\User\PrivateUserDTO.cs" />
+    <Compile Include="Models\DTOs\User\PublicUserDTO.cs" />
+    <Compile Include="Models\EAccessType.cs" />
     <Compile Include="Models\Offer.cs" />
     <Compile Include="Models\OfferStatus.cs" />
     <Compile Include="Models\User.cs" />
@@ -167,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\DTOs\Voucher\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -90,17 +90,32 @@ namespace JsonVezbaNastavak.Controllers
         }
 
         [Route("api/users/admin")]
-        public IEnumerable<PublicUserDTO> GetAllAdmin()
+        public IEnumerable<AdminUserDTO> GetAllAdmin()
         {
             return GetDummyDB().Select(user =>
             {
-                //user.AccessType = EAccessType.Admin;
-                //user.Address.Access = EAccessType.Admin;
-                PublicUserDTO userDTO = new PublicUserDTO();
-                userDTO.Id = user.Id;
-                userDTO.Name = user.Name;
+                ////user.AccessType = EAccessType.Admin;
+                ////user.Address.Access = EAccessType.Admin;
+                //PublicUserDTO userDTO = new PublicUserDTO();
+                //userDTO.Id = user.Id;
+                //userDTO.Name = user.Name;
 
-                return userDTO;
+                AdminUserDTO adminUser = new AdminUserDTO()
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    Email = user.Email,
+                    DateOfBirth = user.DateOfBirth,
+                    Address = new PrivateAddressDTO()
+                    {
+                        Id = user.Address.Id,
+                        Street = user.Address.Street,
+                        City = user.Address.City,
+                        Country = user.Address.Country
+                    }
+                };
+
+                return adminUser;
             });
         }
 
@@ -131,7 +146,10 @@ namespace JsonVezbaNastavak.Controllers
         //    }
         //}
 
+       
 
+
+        [Route("api/users/{id}")]
         public IHttpActionResult Get(int id)
         {
             try
