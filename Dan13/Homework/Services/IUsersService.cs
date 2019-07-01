@@ -12,6 +12,8 @@ namespace Homework.Services
         #region CRUD
         IEnumerable<User> GetAllUsers();
 
+        // IEnumerable<TEntity> GetAllUsers<TEntity>();
+
         User GetUser(int id);
 
         User CreateUser(User user);

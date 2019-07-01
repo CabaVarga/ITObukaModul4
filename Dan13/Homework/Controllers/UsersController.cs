@@ -45,7 +45,7 @@ namespace Homework.Controllers
             });
         }
 
-        [Route("api/users/private", Name = "PrivateUserEndpoint")]
+        [Route("api/users/private")]
         [HttpGet]
         public IEnumerable<PrivateUserDTO> GetAllUsersPrivate()
         {
@@ -67,6 +67,7 @@ namespace Homework.Controllers
         #endregion
 
         // GET: api/Users/5
+        [Route("api/users/{id}", Name = "PrivateUserEndpoint")]
         [ResponseType(typeof(User))]
         public IHttpActionResult GetUser(int id)
         {
@@ -170,6 +171,9 @@ namespace Homework.Controllers
 
             // If username or email exists new user can not be created
             // 1. Through DTOConverter
+
+            User user = DTOConverter.UserFromDTO(newUser);
+
             // usersService.CreateUser(Utilities.DTOConverter.UserDTO(newUser));
             // 2. Directly through Service
             try
