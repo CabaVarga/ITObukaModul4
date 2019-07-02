@@ -34,22 +34,47 @@ namespace Homework.Services
 
         public User GetUser(int id)
         {
-            throw new NotImplementedException();
+            return db.UsersRepository.GetByID(id);
         }
 
         public User CreateUser(User user)
         {
-            throw new NotImplementedException();
+            db.UsersRepository.Insert(user);
+            db.Save();
+
+            return user;
         }
 
         public User UpdateUser(int id, User user)
         {
-            throw new NotImplementedException();
+            User updatedUser = db.UsersRepository.GetByID(id);
+
+            if (updatedUser != null)
+            {
+                updatedUser.Name = user.Name;
+                updatedUser.Email = user.Email;
+                updatedUser.DateOfBirth = user.DateOfBirth;
+                updatedUser.Password = user.Password;
+                updatedUser.Address = user.Address;
+
+                db.UsersRepository.Update(updatedUser);
+                db.Save();
+            }
+
+            return updatedUser;
         }
 
         public User DeleteUser(int id)
         {
-            throw new NotImplementedException();
+            User userToDelete = db.UsersRepository.GetByID(id);
+
+            if (userToDelete != null)
+            {
+                db.UsersRepository.Delete(userToDelete);
+                db.Save();
+            }
+
+            return userToDelete;
         }
 
         public User CreateUser(RegisterUserDTO user)

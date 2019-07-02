@@ -23,22 +23,45 @@ namespace Homework.Services
 
         public Address GetAddress(int id)
         {
-            throw new NotImplementedException();
+            return db.AddressesRepository.GetByID(id);
         }
 
         public Address CreateAddress(Address address)
         {
-            throw new NotImplementedException();
+            db.AddressesRepository.Insert(address);
+            db.Save();
+
+            return address;
         }
 
         public Address UpdateAddress(int id, Address address)
         {
-            throw new NotImplementedException();
+            Address updatedAddress = db.AddressesRepository.GetByID(id);
+
+            if (updatedAddress != null)
+            {
+                updatedAddress.Street = address.Street;
+                updatedAddress.City = address.City;
+                updatedAddress.Country = address.Country;
+
+                db.AddressesRepository.Update(updatedAddress);
+                db.Save();
+            }
+
+            return updatedAddress;
         }
 
         public Address DeleteAddress(int id)
         {
-            throw new NotImplementedException();
+            Address address = db.AddressesRepository.GetByID(id);
+
+            if (address != null)
+            {
+                db.AddressesRepository.Delete(address);
+                db.Save();
+            }
+
+            return address;
         }
     }
 }

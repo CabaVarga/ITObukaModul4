@@ -18,27 +18,51 @@ namespace Homework.Services
 
         public IEnumerable<Account> GetAllAccounts()
         {
-            throw new NotImplementedException();
+            return db.AccountsRepository.Get();
         }
 
         public Account GetAccount(int id)
         {
-            throw new NotImplementedException();
+            return db.AccountsRepository.GetByID(id); 
         }
 
         public Account CreateAccount(Account account)
         {
-            throw new NotImplementedException();
+            db.AccountsRepository.Insert(account);
+            db.Save();
+
+            return account;
         }
 
         public Account UpdateAccount(int id, Account account)
         {
-            throw new NotImplementedException();
+            Account updatedAccount = db.AccountsRepository.GetByID(id);
+
+            if (updatedAccount != null)
+            {
+                updatedAccount.Description = account.Description;
+                updatedAccount.Link = account.Description;
+                updatedAccount.Link = account.Link;
+                updatedAccount.UserId = account.UserId;
+
+                db.AccountsRepository.Update(updatedAccount);
+                db.Save();
+            }
+
+            return updatedAccount;
         }
 
         public Account DeleteAccount(int id)
         {
-            throw new NotImplementedException();
+            Account account = db.AccountsRepository.GetByID(id);
+
+            if (account != null)
+            {
+                db.AccountsRepository.Delete(account);
+                db.Save();
+            }
+
+            return account;
         }
     }
 }

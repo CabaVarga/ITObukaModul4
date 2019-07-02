@@ -192,5 +192,23 @@ namespace Homework.Utilities
             };
         }
         #endregion
+
+        public static T DTOConverterr<T>(object obj) where T : new()
+        {
+            T dto = new T();
+            foreach (var dtoProp in dto.GetType().GetProperties())
+            {
+                foreach (var objProp in obj.GetType().GetProperties())
+                {
+                    if (dtoProp.Name == objProp.Name)
+                    {
+
+                        object objValue = objProp.GetValue(obj);
+                        dtoProp.SetValue(dto, objValue);
+                    }
+                }
+            }
+            return dto;
+        }
     }
 }
