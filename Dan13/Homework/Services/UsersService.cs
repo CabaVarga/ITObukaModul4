@@ -24,10 +24,10 @@ namespace Homework.Services
             IEnumerable<User> users =  db.UsersRepository.Get(includeProperties: "Address,Accounts");
             // IEnumerable<User> users = db.UsersRepository.Get();
 
-            foreach (var u in users)
-            {
-                Debug.WriteLine(u.Address.City);
-            }
+            //foreach (var u in users)
+            //{
+            //    Debug.WriteLine(u.Address.City);
+            //}
 
             return users;
         }

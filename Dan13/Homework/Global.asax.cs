@@ -14,8 +14,8 @@ namespace Homework
             GlobalConfiguration.Configure(WebApiConfig.Register);
             UnityConfig.RegisterComponents();
 
-            GlobalConfiguration.Configuration.Formatters
-                .JsonFormatter.SerializerSettings.DateFormatString = "dd-MM-yyyy";
+            //GlobalConfiguration.Configuration.Formatters
+            //    .JsonFormatter.SerializerSettings.DateFormatString = "dd-MM-yyyy";
         }
     }
 }

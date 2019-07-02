@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Homework.Utilities.JSONConverters;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,8 @@ using System.Xml.Serialization;
 
 namespace Homework.Models
 {
+    // You need to read up on this, how it's used, especially the read part...
+    // [JsonConverter(typeof(UserConverter))]
     public class User
     {
         public User()
@@ -19,6 +22,7 @@ namespace Homework.Models
 
         public string Name { get; set; }
 
+        [JsonConverter(typeof(DateTimeConverter))]
         public DateTime DateOfBirth { get; set; }
 
         public string Email { get; set; }

@@ -155,6 +155,8 @@
     <Compile Include="Services\IUsersService.cs" />
     <Compile Include="Services\UsersService.cs" />
     <Compile Include="Utilities\DTOConverter.cs" />
+    <Compile Include="Utilities\JSONConverters\DateTimeConverter.cs" />
+    <Compile Include="Utilities\JSONConverters\UserConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Models.cd" />
@@ -168,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Utilities\Exceptions\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
