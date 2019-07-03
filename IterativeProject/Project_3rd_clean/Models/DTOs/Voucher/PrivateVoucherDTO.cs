@@ -5,12 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Project_3rd_clean.Models.DTOs.Bill
+namespace Project_3rd_clean.Models.DTOs.Voucher
 {
-    public class PrivateBillDTO : PublicBillDTO
+    public class PrivateVoucherDTO : PublicVoucherDTO
     {
-        public PrivateUserDTO Buyer { get; set; }
-
+        public PrivateUserDTO Customer { get; set; }
         public PublicOfferDTO Offer { get; set; }
     }
 }

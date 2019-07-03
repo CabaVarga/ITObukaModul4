@@ -18,17 +18,21 @@ namespace Homework.Utilities.JSONConverters
         {
             string s = reader.DateFormatString = "dd-MM-yyyy";
             DateTime dt;
+
             bool parse = DateTime.TryParse(s, out dt);
             if (parse)
             {
                 return dt;
             }
+
             return new DateTime(2000, 1, 1);
         }
 
         public override void WriteJson(JsonWriter writer, DateTime value, JsonSerializer serializer)
         {
-            writer.WriteValue(value.ToShortDateString());
+            // writer.WriteValue(value.ToShortDateString());
+            writer.DateFormatString = "dd-MM-yyyy";
+            writer.WriteValue(value.Date);
         }
     }
 }

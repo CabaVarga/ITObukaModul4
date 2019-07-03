@@ -13,9 +13,11 @@ using Homework.Models.DTOs.User;
 using Homework.Repositories;
 using Homework.Services;
 using Homework.Utilities;
+using Homework.Utilities.Exceptions;
 
 namespace Homework.Controllers
 {
+    [RoutePrefix("api/users")]
     public class UsersController : ApiController
     {
         // private DataAccessContext db = new DataAccessContext();
@@ -29,13 +31,15 @@ namespace Homework.Controllers
 
 
         // GET: api/Users
+        [Route("")]
         public IEnumerable<User> GetUsers()
         {
-            return usersService.GetAllUsers();
+            IEnumerable<User> stuff = usersService.GetAllUsers();
+            return stuff;
         }
 
         #region PPA Get all users
-        [Route("api/users/public")]
+        [Route("public")]
         [HttpGet]
         public IEnumerable<PublicUserDTO> GetAllUsersPublic()
         {
@@ -45,7 +49,7 @@ namespace Homework.Controllers
             });
         }
 
-        [Route("api/users/private")]
+        [Route("private")]
         [HttpGet]
         public IEnumerable<PrivateUserDTO> GetAllUsersPrivate()
         {
@@ -55,7 +59,7 @@ namespace Homework.Controllers
             });
         }
 
-        [Route("api/users/admin")]
+        [Route("admin")]
         [HttpGet]
         public IEnumerable<AdminUserDTO> GetAllUsersAdmin()
         {
@@ -67,7 +71,7 @@ namespace Homework.Controllers
         #endregion
 
         // GET: api/Users/5
-        [Route("api/users/{id}", Name = "PrivateUserEndpoint")]
+        [Route("{id}", Name = "PrivateUserEndpoint")]
         [ResponseType(typeof(User))]
         public IHttpActionResult GetUser(int id)
         {
@@ -84,8 +88,8 @@ namespace Homework.Controllers
         #region PPA Get a single user by ID
 
         // GET api/users/public/1
-        [Route("api/users/public/{id}")]
-        [ResponseType(typeof(PrivateUserDTO))]
+        [Route("public/{id}")]
+        [ResponseType(typeof(PublicUserDTO))]
         [HttpGet]
         public IHttpActionResult GetUserPublic(int id)
         {
@@ -106,6 +110,8 @@ namespace Homework.Controllers
 
 
         // POST: api/Users
+        [Route("")]
+        [HttpPost]
         [ResponseType(typeof(User))]
         public IHttpActionResult PostUser(User user)
         {
@@ -115,12 +121,12 @@ namespace Homework.Controllers
             }
 
             usersService.CreateUser(user);
-
-            // The CreatedAtRoute will not show the real Id ...
+                        
             return CreatedAtRoute("DefaultApi", new { id = user.Id }, user);
         }
 
         // PUT: api/Users/5
+        [Route("")]
         [ResponseType(typeof(void))]
         public IHttpActionResult PutUser(int id, User user)
         {
@@ -145,6 +151,8 @@ namespace Homework.Controllers
         }
 
         // DELETE: api/Users/5
+        [Route("{id}")]
+        [HttpDelete]
         [ResponseType(typeof(User))]
         public IHttpActionResult DeleteUser(int id)
         {
@@ -160,7 +168,7 @@ namespace Homework.Controllers
 
         #region Register new user
         // POST api/users/register
-        [Route("api/users/register")]
+        [Route("register")]
         [HttpPost]
         public IHttpActionResult PostRegisterUser(RegisterUserDTO newUser)
         {
@@ -172,7 +180,7 @@ namespace Homework.Controllers
             // If username or email exists new user can not be created
             // 1. Through DTOConverter
 
-            User user = DTOConverter.UserFromDTO(newUser);
+            // User user = DTOConverter.UserFromDTO(newUser);
 
             // usersService.CreateUser(Utilities.DTOConverter.UserDTO(newUser));
             // 2. Directly through Service
@@ -182,10 +190,19 @@ namespace Homework.Controllers
 
                 return CreatedAtRoute("PrivateUserEndpoint", new { id = createdUser.Id }, DTOConverter.PublicUserDTO(createdUser));
             }
-            catch (Exception e)
+            catch (NameAlreadyExistsException e)
             {
                 return BadRequest(e.Message);
             }
+            catch (EmailAlreadyExistsException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+
         }
         #endregion
 

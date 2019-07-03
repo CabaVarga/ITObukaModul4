@@ -1,4 +1,5 @@
 ﻿using Homework.Models;
+using Homework.Models.DTOs.Account;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,9 @@ namespace Homework.Services
 
         Account DeleteAccount(int id);
         #endregion
+
+        IEnumerable<PublicAccountDTO> GetAllAccountsPublic();
+        IEnumerable<PrivateAccountDTO> GetAllAccountsPrivate();
+        IEnumerable<AdminAccountDTO> GetAllAccountsAdmin();
     }
 }

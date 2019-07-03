@@ -12,6 +12,7 @@ namespace Project_3rd_clean
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            // ZADATAK 1.1 Formatiranje datuma
             GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.DateFormatString = "dd-MM-yyyy";
             UnityConfig.RegisterComponents();
         }

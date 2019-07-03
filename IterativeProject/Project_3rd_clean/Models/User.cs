@@ -24,6 +24,7 @@ namespace Project_3rd_clean.Models
         [StringLength(45)]
         public string username { get; set; }
 
+        // ZADATAK 1.2 Iskljuciti korisnicku lozinku iz procesa serijalizacije 
         [JsonIgnore]
         [Required]
         [StringLength(45)]

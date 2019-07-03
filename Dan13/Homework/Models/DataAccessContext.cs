@@ -12,7 +12,7 @@ namespace Homework.Models
         {
             // HERE: https://stackoverflow.com/a/42874541/4486196
             // and for the line: https://www.entityframeworktutorial.net/lazyloading-in-entity-framework.aspx
-            this.Configuration.LazyLoadingEnabled = false;
+            // this.Configuration.LazyLoadingEnabled = false;
         }
 
         public DbSet<User> Users { get; set; }

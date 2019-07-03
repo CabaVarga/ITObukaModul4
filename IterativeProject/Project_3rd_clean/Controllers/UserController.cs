@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Project_3rd_clean.Models;
+using Project_3rd_clean.Models.DTOs.User;
 using Project_3rd_clean.Repositories;
 using Project_3rd_clean.Services;
 
@@ -169,5 +170,12 @@ namespace Project_3rd_clean.Controllers
 
             return Ok(user);
         }
+
+        #region PPA Get all users
+        // GET project/users/public
+        [Route("project/users/public")]
+        [HttpGet]
+        [ResponseType(typeof(PublicUserDTO))]
+        #endregion
     }
 }

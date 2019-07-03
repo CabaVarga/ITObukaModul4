@@ -2,6 +2,7 @@
 using Homework.Models.DTOs.User;
 using Homework.Repositories;
 using Homework.Utilities;
+using Homework.Utilities.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,7 +22,7 @@ namespace Homework.Services
 
         public IEnumerable<User> GetAllUsers()
         {
-            IEnumerable<User> users =  db.UsersRepository.Get(includeProperties: "Address,Accounts");
+            IEnumerable<User> users = db.UsersRepository.Get(); // includeProperties: "Address,Accounts");
             // IEnumerable<User> users = db.UsersRepository.Get();
 
             //foreach (var u in users)
@@ -81,17 +82,17 @@ namespace Homework.Services
         {
             // TEMPORARILY TURN OFF - for testing purposes
 
-            //// check name
-            //if (db.UsersRepository.Get(filter: u => u.Name == user.Name).FirstOrDefault() != null)
-            //{
-            //    throw new Exception("Name has to be unique");
-            //}
+            // check name
+            if (db.UsersRepository.Get(filter: u => u.Name == user.Name).FirstOrDefault() != null)
+            {
+                throw new NameAlreadyExistsException(String.Format("The provided name ({0}) has already been taken by another user. Please pick another name.", user.Name));
+            }
 
-            //// check email
-            //if (db.UsersRepository.Get(filter: u => u.Email == user.Email).FirstOrDefault() != null)
-            //{
-            //    throw new Exception("Email already exists.");
-            //}
+            // check email
+            if (db.UsersRepository.Get(filter: u => u.Email == user.Email).FirstOrDefault() != null)
+            {
+                throw new EmailAlreadyExistsException(String.Format("The provided email ({0}) has already been taken by another user. Please pick another email.", user.Email));
+            }
 
             User newUser = new User()
             {
@@ -101,11 +102,11 @@ namespace Homework.Services
                 DateOfBirth = DateTime.UtcNow
             };
 
-            Debug.WriteLine(String.Format("User ID of created user: {0}", newUser.Id));
+            // Debug.WriteLine(String.Format("User ID of created user: {0}", newUser.Id));
             // id is 0
             db.UsersRepository.Insert(newUser);
 
-            Debug.WriteLine(String.Format("User ID of created user, after inserting: {0}", newUser.Id));
+            // Debug.WriteLine(String.Format("User ID of created user, after inserting: {0}", newUser.Id));
             // id is still 0
 
             db.Save();
@@ -113,7 +114,7 @@ namespace Homework.Services
             // email notification with unique link and or token for confirmation sent here...
             // in real scenario a pending status would be attached to the account / user...
 
-            Debug.WriteLine(String.Format("User ID of created user, after saving: {0}", newUser.Id));
+            // Debug.WriteLine(String.Format("User ID of created user, after saving: {0}", newUser.Id));
             // id is 8... so after the save operation it will autoupdate the id, nice!
             // this is btw a fine reason for sending back the full model to the controller
             // otherwise the controller would not know the id of the new resource...

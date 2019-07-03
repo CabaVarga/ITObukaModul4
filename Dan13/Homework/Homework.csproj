@@ -128,6 +128,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\AccountProvider.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\DataAccessContext.cs" />
     <Compile Include="Models\DTOs\Account\AdminAccountDTO.cs" />
@@ -155,6 +156,8 @@
     <Compile Include="Services\IUsersService.cs" />
     <Compile Include="Services\UsersService.cs" />
     <Compile Include="Utilities\DTOConverter.cs" />
+    <Compile Include="Utilities\Exceptions\EmailAlreadyExistsException.cs" />
+    <Compile Include="Utilities\Exceptions\NameAlreadyExistsException.cs" />
     <Compile Include="Utilities\JSONConverters\DateTimeConverter.cs" />
     <Compile Include="Utilities\JSONConverters\UserConverter.cs" />
   </ItemGroup>
@@ -170,7 +173,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Utilities\Exceptions\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

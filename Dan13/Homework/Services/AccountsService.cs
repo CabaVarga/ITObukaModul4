@@ -1,5 +1,7 @@
 ﻿using Homework.Models;
+using Homework.Models.DTOs.Account;
 using Homework.Repositories;
+using Homework.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +46,7 @@ namespace Homework.Services
                 updatedAccount.Link = account.Description;
                 updatedAccount.Link = account.Link;
                 updatedAccount.UserId = account.UserId;
+                updatedAccount.Provider = account.Provider;
 
                 db.AccountsRepository.Update(updatedAccount);
                 db.Save();
@@ -64,5 +67,40 @@ namespace Homework.Services
 
             return account;
         }
+
+        #region Methods returning DTOs
+        public IEnumerable<PublicAccountDTO> GetAllAccountsPublic()
+        {
+            return db.AccountsRepository.Get()
+                .Select(a =>
+                {
+                    return DTOConverter.PublicAccountDTO(a);
+                });
+        }
+
+        public IEnumerable<PrivateAccountDTO> GetAllAccountsPrivate()
+        {
+            return db.AccountsRepository.Get()
+                .Select(a =>
+                {
+                    return DTOConverter.PrivateAccountDTO(a);
+                });
+        }
+
+        public IEnumerable<AdminAccountDTO> GetAllAccountsAdmin()
+        {
+            return db.AccountsRepository.Get()
+                .Select(a =>
+                {
+                    return new AdminAccountDTO()
+                    {
+                        Id = a.Id,
+                        Description = a.Description,
+                        Link = a.Link,
+                        Provider = a.Provider
+                    };
+                });
+        }
+        #endregion
     }
 }

@@ -9,110 +9,118 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Homework.Models;
+using Homework.Models.DTOs.Account;
+using Homework.Services;
 
 namespace Homework.Controllers
 {
+    [RoutePrefix("api/accounts")]
     public class AccountsController : ApiController
     {
-        private DataAccessContext db = new DataAccessContext();
+        private IAccountsService accountsService;
 
-        // GET: api/SocialAccounts
-        public IQueryable<Account> GetSocialAccounts()
+        public AccountsController(IAccountsService accountsService)
         {
-            return db.Accounts;
+            this.accountsService = accountsService;
         }
 
-        // GET: api/SocialAccounts/5
-        [ResponseType(typeof(Account))]
-        public IHttpActionResult GetSocialAccount(int id)
+        // GET: api/Accounts
+        public IQueryable<Account> GetAccounts()
         {
-            Account socialAccount = db.Accounts.Find(id);
-            if (socialAccount == null)
+            return accountsService.GetAllAccounts().AsQueryable();
+        }
+
+        #region PPA Get all accounts
+        [Route("public")]
+        [ResponseType(typeof(PublicAccountDTO))]
+        [HttpGet]
+        public IHttpActionResult GetAllAccountsPublic()
+        {
+            return Ok(accountsService.GetAllAccountsPublic());
+        }
+
+        [Route("private")]
+        [ResponseType(typeof(PublicAccountDTO))]
+        [HttpGet]
+        public IHttpActionResult GetAllAccountsPrivate()
+        {
+            return Ok(accountsService.GetAllAccountsPrivate());
+        }
+
+        [Route("admin")]
+        [ResponseType(typeof(PublicAccountDTO))]
+        [HttpGet]
+        public IHttpActionResult GetAllAccountsAdmin()
+        {
+            return Ok(accountsService.GetAllAccountsAdmin());
+        }
+        #endregion
+
+
+
+        // GET: api/Accounts/5
+        [ResponseType(typeof(Account))]
+        public IHttpActionResult GetAccount(int id)
+        {
+            Account account = accountsService.GetAccount(id);
+            if (account == null)
             {
                 return NotFound();
             }
 
-            return Ok(socialAccount);
+            return Ok(account);
         }
 
-        // PUT: api/SocialAccounts/5
+        // PUT: api/Accounts/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutSocialAccount(int id, Account socialAccount)
+        public IHttpActionResult PutAccount(int id, Account account)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != socialAccount.Id)
+            if (id != account.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(socialAccount).State = EntityState.Modified;
+            Account updatedAccount = accountsService.UpdateAccount(id, account);
 
-            try
+            if (updatedAccount == null)
             {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SocialAccountExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            return Ok(updatedAccount);
         }
 
-        // POST: api/SocialAccounts
+        // POST: api/Accounts
         [ResponseType(typeof(Account))]
-        public IHttpActionResult PostSocialAccount(Account socialAccount)
+        public IHttpActionResult PostAccount(Account account)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Accounts.Add(socialAccount);
-            db.SaveChanges();
+            accountsService.CreateAccount(account);
 
-            return CreatedAtRoute("DefaultApi", new { id = socialAccount.Id }, socialAccount);
+            return CreatedAtRoute("DefaultApi", new { id = account.Id }, account);
         }
 
-        // DELETE: api/SocialAccounts/5
+        // DELETE: api/Accounts/5
         [ResponseType(typeof(Account))]
-        public IHttpActionResult DeleteSocialAccount(int id)
+        public IHttpActionResult DeleteAccount(int id)
         {
-            Account socialAccount = db.Accounts.Find(id);
-            if (socialAccount == null)
+            Account account = accountsService.DeleteAccount(id);
+
+            if (account == null)
             {
                 return NotFound();
             }
 
-            db.Accounts.Remove(socialAccount);
-            db.SaveChanges();
-
-            return Ok(socialAccount);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool SocialAccountExists(int id)
-        {
-            return db.Accounts.Count(e => e.Id == id) > 0;
+            return Ok(account);
         }
     }
 }
