@@ -1,4 +1,5 @@
 ﻿using Project_3rd_clean.Models;
+using Project_3rd_clean.Models.DTOs.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,11 @@ namespace Project_3rd_clean.Services
         User UpdatePassword(int id, string oldPassword, string newPassword);
         User UpdateUserRole(int id, User.UserRoles newRole);
         User GetByUsername(string userName);
+
+        // PPA
+
+        IEnumerable<PublicUserDTO> GetAllUsersPublic();
+        IEnumerable<PrivateUserDTO> GetAllUsersPrivate();
+        IEnumerable<AdminUserDTO> GetAllUsersAdmin();
     }
 }

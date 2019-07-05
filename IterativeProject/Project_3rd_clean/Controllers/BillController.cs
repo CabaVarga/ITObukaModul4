@@ -6,6 +6,7 @@ using System.Net;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Project_3rd_clean.Models;
+using Project_3rd_clean.Models.DTOs.Reports;
 using Project_3rd_clean.Repositories;
 using Project_3rd_clean.Services;
 
@@ -293,6 +294,26 @@ namespace Project_3rd_clean.Controllers
             //return Ok(db.BillsRepository.Get(
             //    filter: b => b.billCreated >= startDate && b.billCreated <= endDate));
             return Ok(billService.GetBillsByDatePeriod(startDate, endDate));
+        }
+
+
+        // ZADATAK 5.2.3
+        // GET project/bills/generateReport/{startDate}/and/{endDate}
+        [Route("project/bills/generateReport/{startDate}/and/{endDate}")]
+        [HttpGet]
+        [ResponseType(typeof(ReportDTO))]
+        public IHttpActionResult GetSalesReportByDate(DateTime startDate, DateTime endDate)
+        {
+            return Ok(billService.GetSalesReportByDate(startDate, endDate));
+        }
+
+        // GET project/bills/generateReport/{startDate}/and/{endDate}
+        [Route("project/bills/generateReport/{startDate}/and/{endDate}/category/{categoryId}")]
+        [HttpGet]
+        [ResponseType(typeof(ReportDTO))]
+        public IHttpActionResult GetSalesReportByDateAndCategory(DateTime startDate, DateTime endDate, int categoryId)
+        {
+            return Ok(billService.GetSalesReportByDateAndCategory(startDate, endDate, categoryId));
         }
     }
 }

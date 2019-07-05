@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Project_3rd_clean.Models;
+using Project_3rd_clean.Models.DTOs.Offer;
 using Project_3rd_clean.Repositories;
 using Project_3rd_clean.Services;
 
@@ -320,5 +321,55 @@ namespace Project_3rd_clean.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
             }
         }
+
+        #region PPA
+        // GET project/offers/public
+        [Route("project/offers/public")]
+        [HttpGet]
+        [ResponseType(typeof(IEnumerable<PublicOfferDTO>))]
+        public IHttpActionResult GetAllOffersPublic()
+        {
+            try
+            {
+                return Ok(offerService.GetAllOffersPublic());
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
+        
+        // GET project/offers/private
+        [Route("project/offers/private")]
+        [HttpGet]
+        [ResponseType(typeof(IEnumerable<PrivateOfferDTO>))]
+        public IHttpActionResult GetAllOffersPrivate()
+        {
+            try
+            {
+                return Ok(offerService.GetAllOffersPrivate());
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
+
+        // GET project/offers/admin
+        [Route("project/offers/admin")]
+        [HttpGet]
+        [ResponseType(typeof(IEnumerable<AdminOfferDTO>))]
+        public IHttpActionResult GetAllOffersAdmin()
+        {
+            try
+            {
+                return Ok(offerService.GetAllOffersAdmin());
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
+        #endregion
     }
 }

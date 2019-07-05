@@ -135,8 +135,14 @@
     <Compile Include="Models\DTOs\Bill\AdminBillDTO.cs" />
     <Compile Include="Models\DTOs\Bill\PrivateBillDTO.cs" />
     <Compile Include="Models\DTOs\Bill\PublicBillDTO.cs" />
+    <Compile Include="Models\DTOs\Category\AdminCategoryDTO.cs" />
+    <Compile Include="Models\DTOs\Category\PrivateCategoryDTO.cs" />
     <Compile Include="Models\DTOs\Category\PublicCategoryDTO.cs" />
+    <Compile Include="Models\DTOs\Offer\AdminOfferDTO.cs" />
+    <Compile Include="Models\DTOs\Offer\PrivateOfferDTO.cs" />
     <Compile Include="Models\DTOs\Offer\PublicOfferDTO.cs" />
+    <Compile Include="Models\DTOs\Reports\ReportDTO.cs" />
+    <Compile Include="Models\DTOs\Reports\ReportItemDTO.cs" />
     <Compile Include="Models\DTOs\User\AdminUserDTO.cs" />
     <Compile Include="Models\DTOs\User\PrivateUserDTO.cs" />
     <Compile Include="Models\DTOs\User\PublicUserDTO.cs" />

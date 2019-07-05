@@ -1,4 +1,5 @@
 ﻿using Project_3rd_clean.Models;
+using Project_3rd_clean.Models.DTOs.Reports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,9 @@ namespace Project_3rd_clean.Services
         IEnumerable<Bill> GetBillsByDatePeriod(DateTime startDate, DateTime endDate);
         // 4.2.1
         IEnumerable<Bill> GetBillsByCategoryAndNotExpired(int categoryId, DateTime expiration);
+
+        // 5.2.3
+        ReportDTO GetSalesReportByDate(DateTime startDate, DateTime endDate);
+        ReportDTO GetSalesReportByDateAndCategory(DateTime startDate, DateTime endDate, int categoryId);
     }
 }

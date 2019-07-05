@@ -6,9 +6,11 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Project_3rd_clean.Models;
+using Project_3rd_clean.Models.DTOs.Category;
 using Project_3rd_clean.Repositories;
 using Project_3rd_clean.Services;
 
@@ -125,5 +127,55 @@ namespace Project_3rd_clean.Controllers
 
             return Ok(categoryModel);
         }
+
+        #region PPA
+        // GET project/categories/public
+        [Route("project/categories/public")]
+        [HttpGet]
+        [ResponseType(typeof(IEnumerable<PublicCategoryDTO>))]
+        public IHttpActionResult GetAllCategoriesPublic()
+        {
+            try
+            {
+                return Ok(categoryService.GetAllCategoriesPublic());
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
+
+        // GET project/categories/private
+        [Route("project/categories/private")]
+        [HttpGet]
+        [ResponseType(typeof(IEnumerable<PrivateCategoryDTO>))]
+        public IHttpActionResult GetAllCategoriesPrivate()
+        {
+            try
+            {
+                return Ok(categoryService.GetAllCategoriesPrivate());
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
+
+        // GET project/categories/admin
+        [Route("project/categories/admin")]
+        [HttpGet]
+        [ResponseType(typeof(IEnumerable<AdminCategoryDTO>))]
+        public IHttpActionResult GetAllCategoriesAdmin()
+        {
+            try
+            {
+                return Ok(categoryService.GetAllCategoriesAdmin());
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
+        #endregion
     }
 }

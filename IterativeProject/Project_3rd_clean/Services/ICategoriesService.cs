@@ -1,4 +1,5 @@
 ﻿using Project_3rd_clean.Models;
+using Project_3rd_clean.Models.DTOs.Category;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,10 @@ namespace Project_3rd_clean.Services
         Category CreateCategory(Category category);
         Category UpdateCategory(Category category);
         Category DeleteCategory(int id);
+
+        // PPA
+        IEnumerable<PublicCategoryDTO> GetAllCategoriesPublic();
+        IEnumerable<PrivateCategoryDTO> GetAllCategoriesPrivate();
+        IEnumerable<AdminCategoryDTO> GetAllCategoriesAdmin();
     }
 }

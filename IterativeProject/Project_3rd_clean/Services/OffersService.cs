@@ -1,4 +1,7 @@
 ﻿using Project_3rd_clean.Models;
+using Project_3rd_clean.Models.DTOs.Category;
+using Project_3rd_clean.Models.DTOs.Offer;
+using Project_3rd_clean.Models.DTOs.User;
 using Project_3rd_clean.Repositories;
 using System;
 using System.Collections.Generic;
@@ -141,6 +144,109 @@ namespace Project_3rd_clean.Services
         {
             return db.OffersRepository.Get(
                 filter: o => o.categoryId == categoryId && o.offer_expires < expiration);
+        }
+
+        public IEnumerable<PublicOfferDTO> GetAllOffersPublic()
+        {
+            return db.OffersRepository.Get()
+                .Select(o =>
+                {
+                    return new PublicOfferDTO()
+                    {
+                        Id = o.id,
+                        Name = o.offer_name,
+                        Description = o.offer_description,
+                        Created = o.offer_created,
+                        ExpirationDate = o.offer_expires,
+                        RegularPrice = o.regular_price,
+                        ActionPrice = o.action_price,
+                        AvailableOffers = o.available_offers,
+                        BoughtOffers = o.bought_offers,
+                        ImagePath = o.image_path,
+                        Category = new PublicCategoryDTO()
+                        {
+                            Description = o.category.category_description,
+                            Id = o.category.id,
+                            Name = o.offer_name
+                        },
+                        Seller = new PublicUserDTO()
+                        {
+                            Id = o.seller.id,
+                            UserName = o.seller.username
+                        },
+                        Status = o.offer_status
+                    };
+                });
+        }
+
+        public IEnumerable<PrivateOfferDTO> GetAllOffersPrivate()
+        {
+            return db.OffersRepository.Get()
+                .Select(o =>
+                {
+                    return new PrivateOfferDTO()
+                    {
+                        Id = o.id,
+                        Name = o.offer_name,
+                        Description = o.offer_description,
+                        Created = o.offer_created,
+                        ExpirationDate = o.offer_expires,
+                        RegularPrice = o.regular_price,
+                        ActionPrice = o.action_price,
+                        AvailableOffers = o.available_offers,
+                        BoughtOffers = o.bought_offers,
+                        ImagePath = o.image_path,
+                        Category = new PrivateCategoryDTO()
+                        {
+                            Description = o.category.category_description,
+                            Id = o.category.id,
+                            Name = o.offer_name
+                        },
+                        Seller = new PrivateUserDTO()
+                        {
+                            Id = o.seller.id,
+                            UserName = o.seller.username,
+                            FirstName = o.seller.first_name,
+                            LastName = o.seller.last_name
+                        },
+                        Status = o.offer_status
+                    };
+                });
+        }
+
+        public IEnumerable<AdminOfferDTO> GetAllOffersAdmin()
+        {
+            return db.OffersRepository.Get()
+                .Select(o =>
+                {
+                    return new AdminOfferDTO()
+                    {
+                        Id = o.id,
+                        Name = o.offer_name,
+                        Description = o.offer_description,
+                        Created = o.offer_created,
+                        ExpirationDate = o.offer_expires,
+                        RegularPrice = o.regular_price,
+                        ActionPrice = o.action_price,
+                        AvailableOffers = o.available_offers,
+                        BoughtOffers = o.bought_offers,
+                        ImagePath = o.image_path,
+                        Category = new AdminCategoryDTO()
+                        {
+                            Description = o.category.category_description,
+                            Id = o.category.id,
+                            Name = o.offer_name
+                        },
+                        Seller = new AdminUserDTO()
+                        {
+                            Id = o.seller.id,
+                            UserName = o.seller.username,
+                            LastName = o.seller.last_name,
+                            FirstName = o.seller.first_name
+                        },
+                        Status = o.offer_status
+                    };
+                });
         }
     }
 }

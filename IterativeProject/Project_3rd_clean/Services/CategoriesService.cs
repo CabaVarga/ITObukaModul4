@@ -1,4 +1,5 @@
 ﻿using Project_3rd_clean.Models;
+using Project_3rd_clean.Models.DTOs.Category;
 using Project_3rd_clean.Repositories;
 using System;
 using System.Collections.Generic;
@@ -57,6 +58,48 @@ namespace Project_3rd_clean.Services
             }
 
             return category;
+        }
+
+        public IEnumerable<PublicCategoryDTO> GetAllCategoriesPublic()
+        {
+            return db.CategoriesRepository.Get()
+                .Select(c =>
+                {
+                    return new PublicCategoryDTO()
+                    {
+                        Description = c.category_description,
+                        Id = c.id,
+                        Name = c.category_name
+                    };
+                });
+        }
+
+        public IEnumerable<PrivateCategoryDTO> GetAllCategoriesPrivate()
+        {
+            return db.CategoriesRepository.Get()
+                .Select(c =>
+                {
+                    return new PrivateCategoryDTO()
+                    {
+                        Description = c.category_description,
+                        Id = c.id,
+                        Name = c.category_name
+                    };
+                });
+        }
+
+        public IEnumerable<AdminCategoryDTO> GetAllCategoriesAdmin()
+        {
+            return db.CategoriesRepository.Get()
+                .Select(c =>
+                {
+                    return new AdminCategoryDTO()
+                    {
+                        Description = c.category_description,
+                        Id = c.id,
+                        Name = c.category_name
+                    };
+                });
         }
     }
 }

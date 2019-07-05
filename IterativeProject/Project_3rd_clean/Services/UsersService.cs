@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Project_3rd_clean.Models;
+using Project_3rd_clean.Models.DTOs.User;
 using Project_3rd_clean.Repositories;
 
 namespace Project_3rd_clean.Services
@@ -105,6 +106,50 @@ namespace Project_3rd_clean.Services
             return db
                 .UsersRepository.Get(filter: u => u.username == userName)
                 .FirstOrDefault();
+        }
+
+        public IEnumerable<PublicUserDTO> GetAllUsersPublic()
+        {
+            return db.UsersRepository.Get()
+                .Select(u =>
+                {
+                    return new PublicUserDTO()
+                    {
+                        Id = u.id,
+                        UserName = u.username
+                    };
+                });
+        }
+
+        public IEnumerable<PrivateUserDTO> GetAllUsersPrivate()
+        {
+            return db.UsersRepository.Get()
+                .Select(u =>
+                {
+                    return new PrivateUserDTO()
+                    {
+                        Id = u.id,
+                        UserName = u.username,
+                        FirstName = u.first_name,
+                        LastName = u.last_name
+                    };
+                });
+        }
+
+        public IEnumerable<AdminUserDTO> GetAllUsersAdmin()
+        {
+            return db.UsersRepository.Get()
+                .Select(u =>
+                {
+                    return new AdminUserDTO()
+                    {
+                        Id = u.id,
+                        UserName = u.username,
+                        FirstName = u.first_name,
+                        LastName = u.last_name,
+                        UserRole = u.user_role
+                    };
+                });
         }
     }
 }

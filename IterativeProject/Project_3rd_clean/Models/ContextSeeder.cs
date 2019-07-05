@@ -27,17 +27,22 @@ namespace Project_3rd_clean.Models
 
             // OFFERS
             IList<Offer> offers = new List<Offer>();
-            offers.Add(new Offer() { offer_name = "Basket", offer_description = "Basket description", regular_price = 10.0M, action_price = 8.0M, available_offers = 10, bought_offers = 5, offer_created = new DateTime(2019, 5, 1), offer_expires = new DateTime(2019, 6, 1), offer_status = Offer.OfferStatus.WAIT_FOR_APPROVING, sellerId = 1, categoryId = 1 });
-            offers.Add(new Offer() { offer_name = "Chair", offer_description = "Chair description", regular_price = 15.0M, action_price = 13.0M, available_offers = 10, bought_offers = 5, offer_created = new DateTime(2019, 4, 1), offer_expires = new DateTime(2019, 6, 1), offer_status = Offer.OfferStatus.WAIT_FOR_APPROVING, sellerId = 3, categoryId = 3 });
-            offers.Add(new Offer() { offer_name = "Table", offer_description = "Table description", regular_price = 20.0M, action_price = 15.0M, available_offers = 10, bought_offers = 5, offer_created = new DateTime(2019, 3, 1), offer_expires = new DateTime(2019, 5, 1), offer_status = Offer.OfferStatus.WAIT_FOR_APPROVING, sellerId = 2, categoryId = 1 });
-            offers.Add(new Offer() { offer_name = "Trousers", offer_description = "Trousers description", regular_price = 20.0M, action_price = 8.0M, available_offers = 10, bought_offers = 5, offer_created = new DateTime(2019, 1, 1), offer_expires = new DateTime(2019, 6, 1), offer_status = Offer.OfferStatus.WAIT_FOR_APPROVING, sellerId = 2, categoryId = 2 });
-            offers.Add(new Offer() { offer_name = "Keyboard", offer_description = "Keyboard description", regular_price = 5.0M, action_price = 3.0M, available_offers = 10, bought_offers = 5, offer_created = new DateTime(2019, 2, 1), offer_expires = new DateTime(2019, 4, 1), offer_status = Offer.OfferStatus.WAIT_FOR_APPROVING, sellerId = 2, categoryId = 1 });
+            offers.Add(new Offer() { id = 1, offer_name = "Basket", offer_description = "Basket description", regular_price = 10.0M, action_price = 8.0M, available_offers = 10, bought_offers = 5, offer_created = new DateTime(2019, 5, 1), offer_expires = new DateTime(2019, 6, 1), offer_status = Offer.OfferStatus.WAIT_FOR_APPROVING, sellerId = 1, categoryId = 1 });
+            offers.Add(new Offer() { id = 2, offer_name = "Chair", offer_description = "Chair description", regular_price = 15.0M, action_price = 13.0M, available_offers = 10, bought_offers = 5, offer_created = new DateTime(2019, 4, 1), offer_expires = new DateTime(2019, 6, 1), offer_status = Offer.OfferStatus.WAIT_FOR_APPROVING, sellerId = 3, categoryId = 3 });
+            offers.Add(new Offer() { id = 3, offer_name = "Table", offer_description = "Table description", regular_price = 20.0M, action_price = 15.0M, available_offers = 10, bought_offers = 5, offer_created = new DateTime(2019, 3, 1), offer_expires = new DateTime(2019, 5, 1), offer_status = Offer.OfferStatus.WAIT_FOR_APPROVING, sellerId = 2, categoryId = 1 });
+            offers.Add(new Offer() { id = 4, offer_name = "Trousers", offer_description = "Trousers description", regular_price = 20.0M, action_price = 8.0M, available_offers = 10, bought_offers = 5, offer_created = new DateTime(2019, 1, 1), offer_expires = new DateTime(2019, 6, 1), offer_status = Offer.OfferStatus.WAIT_FOR_APPROVING, sellerId = 2, categoryId = 2 });
+            offers.Add(new Offer() { id = 5, offer_name = "Keyboard", offer_description = "Keyboard description", regular_price = 5.0M, action_price = 3.0M, available_offers = 10, bought_offers = 5, offer_created = new DateTime(2019, 2, 1), offer_expires = new DateTime(2019, 4, 1), offer_status = Offer.OfferStatus.WAIT_FOR_APPROVING, sellerId = 2, categoryId = 1 });
 
             context.offerModels.AddRange(offers);
 
             // BILLS
             IList<Bill> bills = new List<Bill>();
-            bills.Add(new Bill() { userId = 3, offerId = 1 });
+            bills.Add(new Bill() { userId = 3, offerId = 1, billCreated = new DateTime(2019, 7, 1) });
+            bills.Add(new Bill() { userId = 3, offerId = 1, billCreated = new DateTime(2019, 7, 2) });
+            bills.Add(new Bill() { userId = 3, offerId = 2, billCreated = new DateTime(2019, 7, 2) });
+            bills.Add(new Bill() { userId = 3, offerId = 1, billCreated = new DateTime(2019, 7, 1) });
+            bills.Add(new Bill() { userId = 1, offerId = 2, billCreated = new DateTime(2019, 7, 3) });
+            context.billModels.AddRange(bills);
 
             // VOUCHERS
 

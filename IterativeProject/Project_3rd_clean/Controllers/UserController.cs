@@ -175,7 +175,50 @@ namespace Project_3rd_clean.Controllers
         // GET project/users/public
         [Route("project/users/public")]
         [HttpGet]
-        [ResponseType(typeof(PublicUserDTO))]
+        [ResponseType(typeof(IEnumerable<PublicUserDTO>))]
+        public IHttpActionResult GetAllUsersPublic()
+        {
+            try
+            {
+                return Ok(userService.GetAllUsersPublic());
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
+
+        // GET project/users/private
+        [Route("project/users/private")]
+        [HttpGet]
+        [ResponseType(typeof(IEnumerable<PrivateUserDTO>))]
+        public IHttpActionResult GetAllUsersPrivate()
+        {
+            try
+            {
+                return Ok(userService.GetAllUsersPrivate());
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
+
+        // GET project/users/admin
+        [Route("project/users/admin")]
+        [HttpGet]
+        [ResponseType(typeof(IEnumerable<AdminUserDTO>))]
+        public IHttpActionResult GetAllUsersAdmin()
+        {
+            try
+            {
+                return Ok(userService.GetAllUsersAdmin());
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
         #endregion
     }
 }

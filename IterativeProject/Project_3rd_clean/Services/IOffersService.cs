@@ -1,4 +1,5 @@
 ﻿using Project_3rd_clean.Models;
+using Project_3rd_clean.Models.DTOs.Offer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,10 @@ namespace Project_3rd_clean.Services
         Offer UpdateOfferImage(string path, int id);
         // ADDED FOR 4.2.1
         IEnumerable<Offer> GetOffersByCategoryAndNotExpired(int categoryId, DateTime expiration);
+
+        // PPA
+        IEnumerable<PublicOfferDTO> GetAllOffersPublic();
+        IEnumerable<PrivateOfferDTO> GetAllOffersPrivate();
+        IEnumerable<AdminOfferDTO> GetAllOffersAdmin();
     }
 }
