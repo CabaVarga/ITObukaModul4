@@ -19,9 +19,9 @@ namespace Project_3rd_clean.Models
 
             // CATEGORIES
             IList<Category> categories = new List<Category>();
-            categories.Add(new Category() { id = 1, category_name = "a", category_description = "a desc" });
-            categories.Add(new Category() { id = 2, category_name = "b", category_description = "b desc" });
-            categories.Add(new Category() { id = 3, category_name = "c", category_description = "c desc" });
+            categories.Add(new Category() { id = 1, category_name = "Movies", category_description = "a desc" });
+            categories.Add(new Category() { id = 2, category_name = "Video Games", category_description = "b desc" });
+            categories.Add(new Category() { id = 3, category_name = "Books", category_description = "c desc" });
 
             context.categoryModels.AddRange(categories);
 
@@ -40,7 +40,12 @@ namespace Project_3rd_clean.Models
             bills.Add(new Bill() { userId = 3, offerId = 1, billCreated = new DateTime(2019, 7, 1) });
             bills.Add(new Bill() { userId = 3, offerId = 1, billCreated = new DateTime(2019, 7, 2) });
             bills.Add(new Bill() { userId = 3, offerId = 2, billCreated = new DateTime(2019, 7, 2) });
-            bills.Add(new Bill() { userId = 3, offerId = 1, billCreated = new DateTime(2019, 7, 1) });
+            bills.Add(new Bill() { userId = 3, offerId = 4, billCreated = new DateTime(2019, 7, 1) });
+            bills.Add(new Bill() { userId = 1, offerId = 2, billCreated = new DateTime(2019, 7, 3) });
+            bills.Add(new Bill() { userId = 2, offerId = 1, billCreated = new DateTime(2019, 7, 1) });
+            bills.Add(new Bill() { userId = 1, offerId = 1, billCreated = new DateTime(2019, 7, 2) });
+            bills.Add(new Bill() { userId = 3, offerId = 4, billCreated = new DateTime(2019, 7, 2) });
+            bills.Add(new Bill() { userId = 2, offerId = 1, billCreated = new DateTime(2019, 7, 1) });
             bills.Add(new Bill() { userId = 1, offerId = 2, billCreated = new DateTime(2019, 7, 3) });
             context.billModels.AddRange(bills);
 

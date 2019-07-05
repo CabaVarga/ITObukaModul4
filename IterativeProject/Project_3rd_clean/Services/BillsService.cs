@@ -228,7 +228,7 @@ namespace Project_3rd_clean.Services
 
             ReportDTO report = new ReportDTO()
             {
-                reportItems = grouped.ToList(),
+                reportItems = grouped.OrderBy(b => b.date).ThenBy(b => b.categoryName).ToList(),
                 sumOfIncomes = grouped.Select(p => p.income).Sum(),
                 totalNumberOfSoldOffers = grouped.Select(p => p.numberOfOffers).Sum()
             };
@@ -255,7 +255,7 @@ namespace Project_3rd_clean.Services
 
             ReportDTO report = new ReportDTO()
             {
-                reportItems = prodaja2.ToList(),
+                reportItems = prodaja2.OrderBy(b => b.date).ToList(),
                 sumOfIncomes = prodaja2.Select(p => p.income).Sum(),
                 totalNumberOfSoldOffers = prodaja2.Select(p => p.numberOfOffers).Sum()
             };
