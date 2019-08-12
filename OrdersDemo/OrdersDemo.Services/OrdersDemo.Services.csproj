@@ -60,13 +60,13 @@
       <Project>{3b8db3b0-7663-475e-93af-07b75fd3ab45}</Project>
       <Name>OrdersDemo.DataTransfer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OrdersDemo.Domain\OrdersDemo.Domain.csproj">
+      <Project>{92036df9-a12d-4c36-9bbe-88420bef763e}</Project>
+      <Name>OrdersDemo.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OrdersDemo.Repository\OrdersDemo.Repository.csproj">
       <Project>{6f1d4a4e-b313-4b85-93ad-9ee5ebc8a719}</Project>
       <Name>OrdersDemo.Repository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OrdersDemo\OrdersDemo.Domain.csproj">
-      <Project>{92036df9-a12d-4c36-9bbe-88420bef763e}</Project>
-      <Name>OrdersDemo.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

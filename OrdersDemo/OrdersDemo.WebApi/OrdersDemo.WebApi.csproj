@@ -137,6 +137,10 @@
       <Project>{3b8db3b0-7663-475e-93af-07b75fd3ab45}</Project>
       <Name>OrdersDemo.DataTransfer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OrdersDemo.Domain\OrdersDemo.Domain.csproj">
+      <Project>{92036df9-a12d-4c36-9bbe-88420bef763e}</Project>
+      <Name>OrdersDemo.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OrdersDemo.Persistence\OrdersDemo.Persistence.csproj">
       <Project>{a4292f9c-a818-4b57-8a29-cbb50400d2c5}</Project>
       <Name>OrdersDemo.Persistence</Name>
@@ -148,10 +152,6 @@
     <ProjectReference Include="..\OrdersDemo.Services\OrdersDemo.Services.csproj">
       <Project>{b22b6432-b6a6-4624-b674-6e3d27d29310}</Project>
       <Name>OrdersDemo.Services</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OrdersDemo\OrdersDemo.Domain.csproj">
-      <Project>{92036df9-a12d-4c36-9bbe-88420bef763e}</Project>
-      <Name>OrdersDemo.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
