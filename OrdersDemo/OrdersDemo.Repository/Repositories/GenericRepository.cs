@@ -1,19 +1,19 @@
-﻿using Project_3rd_clean.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Project_3rd_clean.Repositories
+namespace OrdersDemo.Repository.Repositories
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
         internal DbContext context;
         internal DbSet<TEntity> dbSet;
 
-        public GenericRepository(DataAccessContext context)
+        public GenericRepository(DbContext context)
         {
             this.context = context;
             this.dbSet = context.Set<TEntity>();
@@ -78,4 +78,5 @@ namespace Project_3rd_clean.Repositories
             context.Entry(entityToUpdate).State = EntityState.Modified;
         }
     }
+
 }

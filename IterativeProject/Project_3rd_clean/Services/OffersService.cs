@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using static Project_3rd_clean.Models.Offer;
 
 namespace Project_3rd_clean.Services
 {
@@ -85,7 +86,7 @@ namespace Project_3rd_clean.Services
             return offer;
         }
 
-        public Offer UpdateOfferStatus(int id, Offer.OfferStatus newStatus)
+        public Offer UpdateOfferStatus(int id, OfferStatus newStatus)
         {
             Offer offer = db.OffersRepository.GetByID(id);
 
@@ -93,6 +94,22 @@ namespace Project_3rd_clean.Services
             {
                 offer.offer_status = newStatus;
                 db.OffersRepository.Update(offer);
+                db.Save();
+            }
+
+            // ukoliko se ponuda proglasi isteklom potrebno je otkazati sve racune koji sadrze tu ponudu
+            if (newStatus == OfferStatus.EXPIRED)
+            {
+                // racuni koji sadrze ponudu
+                var bills = db.BillsRepository.Get(
+                    filter: b => b.offerId == id);
+
+                foreach (var bill in bills)
+                {
+                    bill.paymentCancelled = true;
+                    db.BillsRepository.Update(bill);
+                }
+
                 db.Save();
             }
 

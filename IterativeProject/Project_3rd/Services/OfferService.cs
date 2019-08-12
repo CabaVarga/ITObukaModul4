@@ -93,6 +93,22 @@ namespace Project_3rd.Services
                 db.Save();
             }
 
+            // ukoliko se ponuda proglasi isteklom potrebno je otkazati sve racune koji sadrze tu ponudu
+            if (newStatus == OfferModel.OfferStatus.EXPIRED)
+            {
+                // racuni koji sadrze ponudu
+                var bills = db.BillsRepository.Get(
+                    filter: b => b.offerId == id);
+
+                foreach (var bill in bills)
+                {
+                    bill.paymentCancelled = true;
+                    db.BillsRepository.Update(bill);
+                }
+
+                db.Save();
+            }
+
             return offer;
         }
 
